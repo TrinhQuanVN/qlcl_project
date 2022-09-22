@@ -117,9 +117,9 @@ class hang_muc:
     
 class work_time:
     def __init__(self,work_id:str,start:datetime.datetime,end:datetime.datetime) -> None:
-        self.work_id = work_id
-        self.start = start
-        self.end = end
+        self.work_id = work_id 
+        self.start = start if not isinstance(start,str) else (datetime.datetime.fromtimestamp(float(start)) if start else None)
+        self.end = end if not isinstance(end,str) else (datetime.datetime.fromtimestamp(eval(end)) if end else None)
         
     def npd(self):
         return (self.end - self.start).days + 1
@@ -128,4 +128,4 @@ class work_time:
         return [self.work_id,self.start,self.end]
 
     def to_save_list(self):
-        return [self.__class__.__name__,self.work_id,self.start,self.end]
+        return [self.__class__.__name__,self.work_id,self.start.timestamp() if self.start else None,self.end.timestamp() if self.end else None]

@@ -63,7 +63,7 @@ def tab_work_layout():
     return layout
 
 def tab_time_layout():
-    left_col = [sg.Tree(sg.TreeData(),k='-TREE TIME-',expand_x=True,expand_y=True,headings=['Start','End'],col0_heading='ID',enable_events=True)]
+    left_col = [sg.Tree(sg.TreeData(),k='-TREE TIME-',expand_x=True,expand_y=True,headings=['Start','End'],col0_heading='ID',enable_events=True,col0_width=5,col_widths=[10,10])]
     right_col = [sg.Graph(GRAPH_SIZE,(0,0),GRAPH_SIZE,background_color="black", key='-GRAPH-', enable_events=True,pad=(0,0))]
     layout = [
         [Text('Start',(5,1)).GUI,Combo([],k='-COMBO START-',expand_x=False),Text('End',(5,1)).GUI,Combo([],k='-COMBO START-',expand_x=False),sg.Button('Refresh',s=(10,1),k='-REFRESH TIME BUTTON-')],

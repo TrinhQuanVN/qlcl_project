@@ -57,6 +57,25 @@ class base_controller:
         self._draw_work_time(start,end)
 
     def _draw_work_time(self,start:datetime=None,end:datetime=None):
+        class coordinate:
+            def __init__(self,x,y) -> None:
+                self.x = x
+                self.y = y
+            def add_x(self,x):
+                self.x += x
+                
+            def add_y(self,y):
+                self.y += y
+                
+            def to_set(self):
+                return (self.x,self.y)
+            
+            def __add__(self, other):
+                return self.__class__(*[self.x+other.x,self.y+other.y])
+            
+            def __repr__(self) -> set:
+                return (self.x,self.y)
+                        
         def plus(location1,location2):
             return (location1[0] + location2[0],location1[1] + location2[1])
         wts = self.Repository.get_work_time_by_start_end(start,end) if start and end else self.Repository.work_time
@@ -81,8 +100,8 @@ class base_controller:
         CAO_KHUNG_1 = 120
         CAO_KHUNG_2 = max_y - DISTANCE_VIEN_KHUNG*2 - DISTANCE_GIUA_2_KHUNG
         
-        goc_toa_do_1 = (DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET)
-        goc_toa_do_2 = (DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1+DISTANCE_GIUA_2_KHUNG+HEIGHT_CHU_VIET)
+        goc_toa_do_1 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET)
+        goc_toa_do_2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1+DISTANCE_GIUA_2_KHUNG+HEIGHT_CHU_VIET)
         graph = self.window['-GRAPH-']
         # xóa
         graph.erase()

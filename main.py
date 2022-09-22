@@ -134,7 +134,7 @@ def register():
     Route.Register('work do delete',lambda p: controller.delete_work(p['id']))
     Route.Register('work create copy',lambda p: controller.create_copy_work(p['id']))
 
-#################################################### workER work    
+#################################################### worker work    
     Route.Register('worker work do create',lambda p: controller.create_worker_work(to_worker_work(p)))
     Route.Register('worker work do delete by work id',lambda p: controller.delete_worker_work_by_work_id(p['work_id']))
     Route.Register('worker work do delete',lambda p: controller.delete_worker_work(p['work_id'],p['id']))
