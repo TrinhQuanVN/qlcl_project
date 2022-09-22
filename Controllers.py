@@ -66,8 +66,8 @@ class base_controller:
                 
             def add_y(self,y):
                 self.y += y
-                
-            def to_set(self):
+            @property
+            def coordinate(self):
                 return (self.x,self.y)
             
             def __add__(self, other):
@@ -75,9 +75,17 @@ class base_controller:
             
             def __repr__(self) -> set:
                 return (self.x,self.y)
+            
+        def draw_line(graph,point_from:coordinate,point_to:coordinate,color='white',width=1):
+            graph.draw_line(point_from=point_from.coordinate,point_to=point_to.coordinate,color=color,width=width)
+
+        def draw_rectangle(graph,top_left:coordinate,bottom_right:coordinate,line_color='blue',line_width=1,fill_color=None):
+            graph.draw_rectangle(top_left=top_left.coordinate,bottom_right=bottom_right.coordinate,line_color=line_color,line_width=1,fill_color=fill_color)
+            
+        def draw_text(graph,text,location:coordinate,color='white',font=('Any',9),angle=0,text_location=sg.TEXT_LOCATION_RIGHT):
+            graph.draw_text(text=text,location=location.coordinate,color=color,font=font,angle=angle,text_location=text_location)
                         
-        def plus(location1,location2):
-            return (location1[0] + location2[0],location1[1] + location2[1])
+
         wts = self.Repository.get_work_time_by_start_end(start,end) if start and end else self.Repository.work_time
         wts_time_not_null = Enumerable(wts).where(lambda x: x.start and x.end).to_list()
         work_count = len(wts)
@@ -106,26 +114,35 @@ class base_controller:
         # xóa
         graph.erase()
         # vẽ khung đồ thị 1
-        graph.draw_rectangle(top_left=(DISTANCE_VIEN_KHUNG,CAO_KHUNG_1+DISTANCE_VIEN_KHUNG),bottom_right=(max_x-DISTANCE_VIEN_KHUNG,DISTANCE_VIEN_KHUNG),line_color='blue',line_width=1,fill_color=None)
-        
+        top_left=coordinate(DISTANCE_VIEN_KHUNG,CAO_KHUNG_1+DISTANCE_VIEN_KHUNG)
+        bottom_right=coordinate(max_x-DISTANCE_VIEN_KHUNG,DISTANCE_VIEN_KHUNG)
+        draw_rectangle(graph,top_left,bottom_right)
         # vẽ khung đồ thị 2
-        graph.draw_rectangle(top_left=(DISTANCE_VIEN_KHUNG,max_y-DISTANCE_VIEN_KHUNG),bottom_right=(max_x-DISTANCE_VIEN_KHUNG,CAO_KHUNG_1+DISTANCE_GIUA_2_KHUNG+DISTANCE_VIEN_KHUNG),line_color='blue',line_width=1,fill_color=None)
+        top_left=coordinate(DISTANCE_VIEN_KHUNG,max_y-DISTANCE_VIEN_KHUNG)
+        bottom_right=coordinate(max_x-DISTANCE_VIEN_KHUNG,CAO_KHUNG_1+DISTANCE_GIUA_2_KHUNG+DISTANCE_VIEN_KHUNG)
+        draw_rectangle(graph,top_left,bottom_right)
         
         # vẽ trục tọa độ đồ thị 1
-        graph.draw_line(point_from=goc_toa_do_1,point_to=(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET),color='white',width=1)
-        graph.draw_line(point_from=goc_toa_do_1,point_to=(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1-5),color='white',width=1)
+        point_to1 = coordinate(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET)
+        point_to2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1-5)
+        draw_line(graph,goc_toa_do_1,point_to1)
+        draw_line(graph,goc_toa_do_1,point_to2)
         
         # vẽ trục tọa độ đồ thị 2
-        graph.draw_line(point_from=goc_toa_do_2,point_to=(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1+HEIGHT_CHU_VIET+DISTANCE_GIUA_2_KHUNG),color='white',width=1)
-        graph.draw_line(point_from=goc_toa_do_2,point_to=(DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET,max_y-DISTANCE_VIEN_KHUNG-5),color='white',width=1)        
+        point_to1 = coordinate(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1+HEIGHT_CHU_VIET+DISTANCE_GIUA_2_KHUNG)
+        point_to2 = coordinate(DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET,max_y-DISTANCE_VIEN_KHUNG-5)
+        draw_line(graph,goc_toa_do_2,point_to1)
+        draw_line(graph,goc_toa_do_2,point_to2)
+        
         if wts:
             cao_between = min_cao_between if min_cao_between > CAO_KHUNG_2/work_count else CAO_KHUNG_2/work_count
             rong_between = min_rong_between if min_rong_between > RONG_KHUNG_2/day_count else RONG_KHUNG_2/day_count
             
             for num, wt in enumerate(wts):
-                graph.draw_text(text=wt.work_id,location=plus(goc_toa_do_2,(0,(num+1)*cao_between)),color='white',font=('Any',9),angle=0,text_location=sg.TEXT_LOCATION_RIGHT)
+                text = wt.work_id
+                location=(goc_toa_do_2+coordinate(0,(num+1)*cao_between))
+                draw_text(graph,text,location)
                 
-                print('haha')
     def create_work_time(self,model:Models.work_time):
         self.Repository.insert_work_time(model)
         

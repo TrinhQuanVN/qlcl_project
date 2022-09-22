@@ -85,7 +85,6 @@ class worker_work:
     def amount(self,amount):
         self._amount = amount
     
-    
     def to_list(self):
         return [self.work_id,self.id,self.amount]   
 
@@ -110,7 +109,7 @@ class hang_muc:
         return self.id
         
     def __repr__(self) -> str:
-        return self.name
+        return (self.x,self.y)
 
     def to_save_list(self):
         return [self.__class__.__name__,self.name,self.id]

@@ -113,7 +113,7 @@ def GUI():
     window['-NORM SEARCH INPUT-'].bind('<Return>', '_Enter')
     window['-WORK SEARCH INPUT-'].bind('<Return>', '_Enter')
     
-    window.set_min_size((1600,900))
+    window.set_min_size((800,600))
     
     #------------------------------------WINDOW BIND------------------------------------
     # window[InputDinhMucTim.key].bind("<Return>", "_Enter")
