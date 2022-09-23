@@ -1,0 +1,1675 @@
+worker&N5307&Nhân công bậc 3,0/7 - Nhóm 5&công
+worker&N2357&Nhân công bậc 3,5/7 - Nhóm 2&công
+worker&N5407&Nhân công bậc 4,0/7 - Nhóm 5&công
+worker&N1307&Nhân công bậc 3,0/7 - Nhóm 1&công
+worker&N2307&Nhân công bậc 3,0/7 - Nhóm 2&công
+worker&N3357&Nhân công bậc 3,5/7 - Nhóm 3&công
+worker&N3407&Nhân công bậc 4,0/7 - Nhóm 3&công
+worker&N2407&Nhân công bậc 4,0/7 - Nhóm 2&công
+worker&N3307&Nhân công bậc 3,0/7 - Nhóm 3&công
+machine&M1419&Máy trộn bê tông 250 lít&ca
+machine&M0667&Máy đầm dùi 1,5kW&ca
+machine&M0596&Máy cắt uốn cốt thép 5kW&ca
+machine&M0934&Máy hàn điện 23kW&ca
+machine&M1170&Máy mài 2,7kW&ca
+machine&M1087&Máy khoan đứng 2,5kW&ca
+machine&ZM999&Máy khác&%
+machine&M0893&Máy ép cọc trước 150T&ca
+machine&M0217&Cần cẩu bánh xích 10T&ca
+machine&M1031&Máy khoan bê tông 1,5kW&ca
+machine&M0697&Máy đào 0,8m3&ca
+machine&M0639&Máy đầm bàn 1kW&ca
+machine&M0446A&Máy bơm bê tông 50m3/h&ca
+machine&M1431&Máy trộn vữa 150l&ca
+machine&M0663&Máy đầm đất cầm tay 70kg&ca
+machine&M1598&Ô tô tự đổ 10T&ca
+machine&M0143&Cần cẩu bánh hơi 6T&ca
+machine&M2830&Máy vận thăng 2T&ca
+machine&M1834&Máy vận thăng 0,8T&ca
+machine&M1479&Máy vận thăng lồng 3T&ca
+machine&M02680&Cần trục tháp 25T&ca
+machine&M1088&Máy khoan đứng 4,5kW&ca
+machine&M0571&Máy cắt gạch đá 1,7kW&ca
+machine&M1034&Máy khoan bê tông 0,62kW&ca
+machine&M1169&Máy mài 1kW&ca
+machine&M0922&Máy hàn điện 14kW&ca
+machine&M2950&Máy hàn nhiệt cầm tay&ca
+machine&M0137&Cần cẩu 6T&ca
+machine&M1453&Máy ủi 110CV&ca
+machine&M0695&Máy đào 0,5m3&ca
+machine&M2132&Máy gia nhiệt D315&ca
+machine&M0140&Cần cẩu bánh hơi 16T&ca
+machine&M1235&Máy nén khí diezel 360m3/h&ca
+machine&M0694&Máy đào 0,4m3&ca
+machine&M0254&Cần trục ô tô 3T&ca
+machine&M1885&Xe nâng 12m&ca
+machine&M0555&Máy cắt bê tông 1,5kW&ca
+material&12595&Xi măng PCB40&kg
+material&01897&Cát vàng&m3
+material&04513&Đá 1x2&m3
+material&07969&Nước&lít
+material&ZV999&Vât liệu khác&%
+material&06684&Gỗ ván&m3
+material&06607&Gỗ đà nẹp&m3
+material&05648&Đinh&kg
+material&11428&Thép tròn Fi ≤10mm&kg
+material&05429&Dây thép&kg
+material&11430&Thép tròn Fi ≤18mm&kg
+material&10166&Que hàn&kg
+material&11436&Thép tròn Fi >18mm&kg
+material&11400&Thép tấm&kg
+material&11424&Thép tròn&kg
+material&08117&Oxy&chai
+material&06287&Khí gas&kg
+material&04587&Đá mài&viên
+material&02505&Cọc bê tông 25x25cm&m
+material&12592&Xi măng PCB30&kg
+material&04515&Đá 4x6&m3
+material&06594&Gỗ chống&m3
+material&25970&Gạch xi măng cốt liệu 6,5 x 10,5 x 22cm&viên
+material&01892&Cát mịn ML=1,5÷2,0&m3
+material&01886&Cát nền&m3
+material&06687&Gỗ ván (cả nẹp)&m3
+material&01890&Cát mịn ML=0,7 ÷ 1,4&m3
+material&12579&Xi măng&kg
+material&06656&Gỗ nẹp, chống&m3
+material&05663&Đinh đỉa&cái
+material&25790&Dung dịch chống thấm&kg
+material&11434&Thép tròn Fi >10mm&kg
+material&11330&Thép hình U&kg
+material&01349&Bu lông&cái
+material&10480&Sơn chống gỉ&kg
+material&23570&Sơn phủ sắt thép&kg
+material&04600&Đá trắng nhỏ&kg
+material&01267&Bột đá&kg
+material&12596&Xi măng trắng&kg
+material&01275&Bột màu&kg
+material&04575&Đá granít tự nhiên&m2
+material&05915&Gạch lát granit KT 600x600mm&m2
+material&06208&Gạch ốp tường KT300x600mm&m2
+material&06205&Gạch ốp chân tường granit KT120x600mm&m2
+material&06173&Đá ốp trang trí KT100x200mm&m2
+material&07086&Keo dán đá granít&kg
+material&10378&Silicon chít mạch&kg
+material&09136&Ống nhựa PVC miệng bát D90mm&m
+material&03342&Cồn rửa&kg
+material&07945&Nhựa dán&kg
+material&03318&Cút nhựa D90mm&cái
+material&07083&Keo dán&kg
+material&05481B&Thép mạ kẽm U52&m
+material&25481&Thép mạ kẽm C14&m
+material&10745&Tấm thạch cao 9mm&m2
+material&25483&Tiren + Ecu 6&bộ
+material&00228&Bật sắt fi 6&cái
+material&00227&Bật sắt fi 10&cái
+material&11264&Inox 304&kg
+material&116543&Tôn múi dày 0,45ly&m2
+material&05690&Đinh, đinh vít&cái
+material&01249&Bột bả ngoại thất Dulux Professional Diamond&kg
+material&06455&Giấy ráp&m2
+material&23571&Sơn lót Dulux nội thất Professional A500 (hoặc tương đương)&lít
+material&23572&Sơn phủ nội thất Dulux Professional lau chùi hiệu quả (hoặc tương đương)&lít
+material&23573&Sơn lót Dulux ngoại thất Professional E700 (hoặc tương đương)&lít
+material&23574&Sơn phủ ngoại thất Dulux Professional E700 (hoặc tương đương)&lít
+material&0688642&Đèn huỳnh quang LED 2x18W 1,2m 2 bóng và phụ kiện&bộ
+material&05610&Đèn ốp trần RD02 bóng LED&bộ
+material&02037&Chao chụp&bộ
+material&10156&Quạt trần&cái
+material&07046&Hộp số&cái
+material&03605&Công tắc 1 hạt&cái
+material&03607&Công tắc 2 hạt&cái
+material&03609&Công tắc 3 hạt&cái
+material&08097&Ổ cắm đôi&cái
+material&04936&Dây dẫn điện 2 ruột 2x1,5 mm2&m
+material&04938&Dây dẫn điện 2 ruột 2x6 mm2&m
+material&04940&Dây dẫn điện Cu/PVC/PVC 2x16mm2&m
+material&050141&Cáp Cu/XLPE/PVC 3x25+1x16 mm2&m
+material&04892&Dây dẫn điện 1 ruột 1x6mm2&m
+material&08884&Ống nhựa D=16mm&m
+material&08891&Ống nhựa D=25mm&m
+material&00053&Aptomat 1 pha =15A&cái
+material&00047&Aptomat 1 pha =63A&cái
+material&00051&Aptomat 1 pha =150A&cái
+material&01939&Cầu dao = 200A&bộ
+material&29887&Tủ điện KT300x250x130mm&cái
+material&05617&Đèn led panel 300x1200 - 48w&bộ
+material&05618&Đèn led tròn 12w; D=138x36&bộ
+material&11251&Thép&kg
+material&07198&Kim thu sét L=1,0m&cái
+material&05447&Dây thép D12mm&kg
+material&02524&Cọc chống sét&cái
+material&06373&Giá đỡ máy điều hòa&cái
+material&25080&Ống các loại và dây điện&m
+material&050111&Cáp Cu/XLPE/PVC 3x10+1x6 mm2&m
+material&08895&Ống nhựa D=32mm&m
+material&29885&Hộp nối, hộp phân dây KT 100x100x50&cái
+material&08448&Ống đồng D9,5mm&m
+material&10177&Que hàn đồng&kg
+material&11560&Thuốc hàn&kg
+material&08428&Ống đồng D15,9mm&m
+material&00072&Aptomat 3 pha =100A&cái
+material&09106&Ống nhựa PVC miệng bát D21mm&m
+material&03306&Cút nhựa PVC miệng bát D21mm&cái
+material&04896&Cáp mạng CommScope AMP cat.6 UTP&m
+material&26001&Ống nhựa PPR đường kính 20mm&m
+material&36001&Măng sông nhựa PPR đường kính 20mm&cái
+material&26005&Ống nhựa PPR đường kính 25mm&m
+material&36005&Măng sông nhựa PPR đường kính 25mm&cái
+material&26008&Ống nhựa PPR đường kính 32mm&m
+material&36008&Măng sông nhựa PPR đường kính 32mm&cái
+material&26012&Ống nhựa PPR đường kính 40mm&m
+material&36012&Măng sông nhựa PPR đường kính 40mm&cái
+material&26016&Ống nhựa PPR đường kính 50mm&m
+material&36016&Măng sông nhựa PPR đường kính 50mm&cái
+material&26020&Ống nhựa PPR đường kính 63mm&m
+material&36020&Măng sông nhựa PPR đường kính 63mm&cái
+material&31801&Cút nhựa PPR ĐK20mm&cái
+material&31805&Cút nhựa PPR ĐK25mm&cái
+material&31809&Cút nhựa PPR ĐK32mm&cái
+material&31813&Cút nhựa PPR ĐK40mm&cái
+material&31817&Cút nhựa PPR ĐK50mm&cái
+material&31821&Cút nhựa PPR ĐK63mm&cái
+material&11940&Van PPR ĐK 63mm&cái
+material&01418&Bu lông M16&bộ
+material&01722&Cao su tấm&m2
+material&11935&Van PPR ĐK 40mm&cái
+material&02055&La va bô âm bàn đá&bộ
+material&12275&Vòi lavabô Inax LFV-632S&cái
+material&02069&Bồn Cầu Inax 1 Khối AC-939 ( hoặc tương đương)&bộ
+material&02062&Chậu tiểu nam Inax AU-411V&bộ
+material&06761&Gương soi dày 5ly KT 1200x2180mm&cái
+material&11521&Bình nước nóng 20l&bộ
+material&00252&Bể chứa nước Inox 2,5m3&bể
+material&09093&Ống nhựa PVC miệng bát D110mm&m
+material&09129&Ống nhựa PVC miệng bát D60mm&m
+material&09127&Ống nhựa PVC miệng bát D48mm&m
+material&03290&Tê nhựa D110/90mm&cái
+material&03293&Cút nhựa D110mm&cái
+material&03314&Cút nhựa D60mm&cái
+material&03311&Cút nhựa D48mm&cái
+material&06203&Gạch ốp 45x145&m2
+material&05619&Đèn tường ánh sáng hắt&bộ
+material&06262&Đá tấm băm mặt trừ viền KT 400x40040mm&m2
+material&08A31&Ống bê tông D 400mm, L=1m&đoạn
+material&026621&Cọc tre L ≤2,5m&m
+material&13693A7&Ống nhựa HDPE D32mm, L=200m&m
+material&43220&Cút HDPE đường kính 32&cái
+material&04628&Đai khởi thủy D60mm&cái
+material&01423&Bu lông M16-M20&bộ
+material&05731&Đồng hồ đo lưu lượng D≤100mm&cái
+material&01422&Bu lông M16-M20&cái
+material&05686&Đinh tán Fi 22&cái
+material&06589&Gỗ chèn&m3
+material&02657&Cọc tiếp địa có râu&bộ
+material&01825&Cáp ngầm CXV/DSTA - 4x10 - 0.6/1kV&m
+material&27363&Cột đèn thân gang đế nhôm C08 cao 3,4m&cột
+material&02086&Cần chùm đèn CH026/4+1&bộ
+material&27361&Cột thép Bát giác, Tròn côn liền cần đơn,D150/58mm, H=8m tôn dày 3mm&cột
+material&00155&Bảng điện&bảng
+material&03803&Cửa cột&cửa
+material&05087&Dây điện&m
+material&27600&Đầu cốt đồng&bộ
+material&04535&Đá cắt&viên
+material&00077&Aptomat 3 pha =200A&cái
+material&01934&Cầu dao 3 pha 300A&bộ
+worker_norm&AG.11113&N5307&1.37
+worker_norm&AG.31121&N2357&28.71
+worker_norm&AG.13111&N2357&13.54
+worker_norm&AG.13121&N2357&7.19
+worker_norm&AG.13131&N2357&6.59
+worker_norm&AI.13111&N5407&24.43
+worker_norm&AC.25213&N2357&8.75
+worker_norm&AC.29321&N2357&0.34
+worker_norm&AA.22211&N1307&2.02
+worker_norm&AB.25111&N1307&2.92
+worker_norm&AB.11321&N1307&0.62
+worker_norm&AF.11111&N2307&1.07
+worker_norm&AF.81111&N2357&13.61
+worker_norm&AF.31113&N2307&0.55
+worker_norm&AF.81122&N2357&29.7
+worker_norm&AF.81141&N2357&27.5
+worker_norm&AF.12233&N2357&2.84
+worker_norm&AF.81132&N2357&31.9
+worker_norm&AF.12312&N2357&2.67
+worker_norm&AF.61110&N2357&10.75
+worker_norm&AF.61120&N2357&7.67
+worker_norm&AF.61130&N2357&5.59
+worker_norm&AF.61511&N2357&15.39
+worker_norm&AF.61521&N2357&9.24
+worker_norm&AF.61531&N2357&8.01
+worker_norm&AE.21113&N2357&1.42
+worker_norm&AB.65120&N1307&6.19
+worker_norm&AB.66142&N1307&4.18
+worker_norm&AF.11212&N2307&1.23
+worker_norm&AG.11412&N5307&1.93
+worker_norm&AG.31311&N2357&25.62
+worker_norm&AG.13231&N2357&16.25
+worker_norm&AG.41610&N2307&0.03
+worker_norm&AK.21233&N3357&0.22
+worker_norm&AK.41213&N3407&0.09
+worker_norm&AF.32313&N2357&1.66
+worker_norm&AF.12213&N2357&3.15
+worker_norm&AF.12222&N2357&3.37
+worker_norm&AF.12512&N2357&2.66
+worker_norm&AF.12123&N2357&2.95
+worker_norm&AF.12612&N2357&2.03
+worker_norm&AF.81152&N2357&28.47
+worker_norm&AF.81151&N2357&26.95
+worker_norm&AF.81311&N2357&27.78
+worker_norm&AF.81161&N2357&38.9
+worker_norm&AK.23113&N3407&0.35
+worker_norm&AK.22123&N3407&0.52
+worker_norm&AK.21223&N3357&0.2
+worker_norm&AK.23213&N3407&0.5
+worker_norm&AK.21133&N3357&0.32
+worker_norm&AK.41114&N3407&0.07
+worker_norm&AK.92111&N2357&0.03
+worker_norm&AK.24313&N3407&0.12
+worker_norm&AK.24113&N3407&0.2
+worker_norm&AK.24213&N3407&0.25
+worker_norm&AF.61411&N2357&14.14
+worker_norm&AF.61421&N2357&9.22
+worker_norm&AF.61431&N2357&7.46
+worker_norm&AF.61412&N2357&14.5
+worker_norm&AF.61422&N2357&9.37
+worker_norm&AF.61432&N2357&7.79
+worker_norm&AF.61512&N2357&15.74
+worker_norm&AF.61522&N2357&9.58
+worker_norm&AF.61532&N2357&8.07
+worker_norm&AF.61611&N2357&18.46
+worker_norm&AF.61621&N2357&15.68
+worker_norm&AF.61612&N2357&18.79
+worker_norm&AF.61622&N2357&15.95
+worker_norm&AF.61811&N2357&17.22
+worker_norm&AF.61821&N2357&13.26
+worker_norm&AF.61711&N2357&13.9
+worker_norm&AI.11221&N5407&5.62
+worker_norm&AI.61131&N5407&2.73
+worker_norm&AK.83510&N3357&0.07
+worker_norm&AI.11421&N3407&25.75
+worker_norm&AI.63211&N3407&0.4
+worker_norm&AI.11411&N3407&20.73
+worker_norm&AK.26213&N3407&2.93
+worker_norm&AB.11312&N1307&0.82
+worker_norm&AE.28113&N2357&3.6
+worker_norm&AB.13111&N1307&0.56
+worker_norm&AK.56210&N3407&0.32
+worker_norm&AE.22213&N2357&1.63
+worker_norm&AE.22223&N2357&1.67
+worker_norm&AE.22123&N2357&2.07
+worker_norm&AE.23123&N2357&4.0
+worker_norm&AK.22133&N3407&0.57
+worker_norm&AK.56220&N3407&0.35
+worker_norm&AF.11311&N2307&1.19
+worker_norm&AK.51280&N3407&0.14
+worker_norm&AK.31150&N3407&0.34
+worker_norm&AK.31130&N3407&0.39
+worker_norm&AK.31210&N3407&0.45
+worker_norm&AK.32120&N3407&0.48
+worker_norm&BB.41107&N3357&6.32
+worker_norm&BB.75105&N3357&0.05
+worker_norm&AK.66210&N3407&0.42
+worker_norm&AH.31211&N3357&0.22
+worker_norm&AH.32111&N3357&0.25
+worker_norm&AI.63121&N3407&0.3
+worker_norm&AI.63231&N3407&0.5
+worker_norm&AI.11610&N3407&19.04
+worker_norm&AI.63221&N3407&0.2
+worker_norm&AK.12222&N2357&4.5
+worker_norm&AK.82510&N3357&0.09
+worker_norm&AK.82520&N3357&0.11
+worker_norm&AK.84112&N3357&0.06
+worker_norm&AK.84114&N3357&0.07
+worker_norm&BA.13320&N3357&0.19
+worker_norm&BA.13102&N3357&0.12
+worker_norm&BA.11110&N3357&0.2
+worker_norm&BA.17101&N3357&0.08
+worker_norm&BA.17102&N3357&0.09
+worker_norm&BA.17103&N3357&0.1
+worker_norm&BA.17202&N3357&0.1
+worker_norm&BA.16202&N3357&0.03
+worker_norm&BA.16203&N3357&0.03
+worker_norm&BA.16204&N3357&0.04
+worker_norm&BA.16404&N3357&0.06
+worker_norm&BA.16104&N3357&0.03
+worker_norm&BA.14401&N3357&0.11
+worker_norm&BA.14402&N3357&0.15
+worker_norm&BA.18202&N3357&0.15
+worker_norm&BA.18203&N3357&0.23
+worker_norm&BA.18204&N3357&0.24
+worker_norm&BA.17403&N3357&0.4
+worker_norm&BA.15404&N3357&0.3
+worker_norm&BA.13605&N3357&0.15
+worker_norm&BA.13604&N3357&0.12
+worker_norm&AB.11512&N1307&0.91
+worker_norm&BA.19402&N3357&0.24
+worker_norm&BA.19502&N3357&0.78
+worker_norm&BA.19303&N3357&0.12
+worker_norm&BA.19203&N3357&0.02
+worker_norm&BA.19101&N3357&0.5
+worker_norm&BA.12110&N3357&0.78
+worker_norm&BA.16403&N3357&0.05
+worker_norm&BA.14403&N3357&0.17
+worker_norm&BA.15402&N3357&0.21
+worker_norm&BB.51002&N3357&15.9
+worker_norm&BB.51004&N3357&18.39
+worker_norm&BA.18303&N3357&0.42
+worker_norm&BB.41101&N3357&2.49
+worker_norm&BB.75101&N3357&0.03
+worker_norm&BA.16106&N3357&0.04
+worker_norm&BB.42011&N3357&5.31
+worker_norm&BB.42021&N3357&5.84
+worker_norm&BB.42031&N3357&6.38
+worker_norm&BB.42041&N3357&6.92
+worker_norm&BB.42051&N3357&8.0
+worker_norm&BB.42061&N3357&9.1
+worker_norm&BB.80111&N3357&0.07
+worker_norm&BB.80121&N3357&0.08
+worker_norm&BB.80131&N3357&0.08
+worker_norm&BB.80141&N3357&0.08
+worker_norm&BB.80151&N3357&0.09
+worker_norm&BB.80161&N3357&0.09
+worker_norm&BB.86103&N3407&0.5
+worker_norm&BB.86101&N3407&0.35
+worker_norm&BB.91101&N3357&0.5
+worker_norm&BB.91501&N3357&0.17
+worker_norm&BB.91201&N3357&1.5
+worker_norm&BB.91301&N3357&1.5
+worker_norm&BB.91901&N3357&0.13
+worker_norm&BB.91601&N3357&2.18
+worker_norm&BB.92105&N3357&2.56
+worker_norm&BB.41108&N3357&7.69
+worker_norm&BB.41106&N3357&5.98
+worker_norm&BB.41105&N3357&5.48
+worker_norm&BB.75106&N3357&0.06
+worker_norm&BB.75107&N3357&0.07
+worker_norm&BB.75104&N3357&0.04
+worker_norm&BB.75103&N3357&0.04
+worker_norm&AB.25114&N1307&4.96
+worker_norm&AE.21213&N2357&1.26
+worker_norm&AF.12212&N2357&3.15
+worker_norm&AE.22113&N2357&1.9
+worker_norm&AE.23113&N2357&3.0
+worker_norm&AK.21123&N3357&0.26
+worker_norm&AK.31110&N3407&0.48
+worker_norm&AK.83520&N3357&0.09
+worker_norm&BA.13601&N3357&0.18
+worker_norm&AA.22212&N1307&1.88
+worker_norm&AB.11322&N1307&0.88
+worker_norm&SA.11213&N1307&0.09
+worker_norm&SA.11221&N1307&1.92
+worker_norm&AB.13411&N1307&0.45
+worker_norm&AF.11312&N2307&1.19
+worker_norm&AK.55110&N3407&0.15
+worker_norm&AG.42112&N2307&0.07
+worker_norm&AB.25112&N1307&3.8
+worker_norm&AF.11211&N2307&1.23
+worker_norm&AB.65130&N1307&7.13
+worker_norm&AK.41113&N3407&0.07
+worker_norm&BB.11211&N3357&0.26
+worker_norm&AB.31124&N1307&4.89
+worker_norm&AA.22221&N1307&1.65
+worker_norm&AB.11371&N1307&0.54
+worker_norm&AC.12111&N2307&0.27
+worker_norm&AF.32113&N2357&1.66
+worker_norm&AF.61311&N2357&12.95
+worker_norm&AF.61321&N2357&10.28
+worker_norm&AF.61721&N2357&10.04
+worker_norm&AK.41214&N3407&0.09
+worker_norm&BB.45121&N3357&2.42
+worker_norm&BB.78111&N3357&0.2
+worker_norm&BB.83501&N3357&0.12
+worker_norm&BB.85102&N3407&0.84
+worker_norm&AB.25214&N1307&3.94
+worker_norm&AB.11411&N1307&0.76
+worker_norm&AI.11131&N5407&7.6
+worker_norm&AI.61111&N5407&9.71
+worker_norm&AI.11121&N2407&29.75
+worker_norm&AI.61121&N2407&5.2
+worker_norm&AB.11442&N1307&1.04
+worker_norm&BA.25101&N3357&0.31
+worker_norm&AB.11502&N1307&1.09
+worker_norm&AB.25102&N1307&3.9
+worker_norm&AB.13412&N1307&0.58
+worker_norm&BA.33001&N3357&0.98
+worker_norm&BA.21203&N3357&1.38
+worker_norm&BA.23301&N3357&0.26
+worker_norm&BA.21204&N2357&1.63
+worker_norm&BA.34001&N3357&0.13
+worker_norm&BA.35101&N3307&0.1
+worker_norm&BA.35201&N3357&0.2
+worker_norm&BA.36201&N3357&1.3
+worker_norm&BA.32001&N3357&0.2
+worker_norm&SA.32211&N2357&0.31
+worker_norm&AB.11412&N1307&1.19
+worker_norm&AF.17212&N2357&1.95
+worker_norm&AF.64110&N2357&19.48
+worker_norm&AE.26213&N2357&3.2
+worker_norm&BA.18305&N3357&0.9
+worker_norm&BA.17404&N3357&0.6
+machine_norm&AG.11113&M1419&0.1
+machine_norm&AG.11113&M0667&0.18
+machine_norm&AG.13111&M0596&0.4
+machine_norm&AG.13121&M0934&1.13
+machine_norm&AG.13121&M0596&0.32
+machine_norm&AG.13131&M0934&1.09
+machine_norm&AG.13131&M0596&0.16
+machine_norm&AI.13111&M0934&3.23
+machine_norm&AI.13111&M1170&1.55
+machine_norm&AI.13111&M1087&1.55
+machine_norm&AI.13111&ZM999&1.0
+machine_norm&AC.25213&M0893&1.75
+machine_norm&AC.25213&M0217&1.75
+machine_norm&AC.25213&ZM999&3.0
+machine_norm&AC.29321&M0934&0.38
+machine_norm&AC.29321&ZM999&3.0
+machine_norm&AA.22211&M1031&1.05
+machine_norm&AA.22211&M0934&0.23
+machine_norm&AB.25111&M0697&0.32
+machine_norm&AF.11111&M1419&0.1
+machine_norm&AF.11111&M0639&0.09
+machine_norm&AF.31113&M0446A&0.03
+machine_norm&AF.31113&M0667&0.09
+machine_norm&AF.31113&ZM999&1.0
+machine_norm&AF.12233&M1419&0.1
+machine_norm&AF.12233&M0667&0.2
+machine_norm&AF.12312&M1419&0.1
+machine_norm&AF.12312&M0667&0.18
+machine_norm&AF.61110&M0596&0.4
+machine_norm&AF.61120&M0934&1.12
+machine_norm&AF.61120&M0596&0.32
+machine_norm&AF.61130&M0934&1.27
+machine_norm&AF.61130&M0596&0.16
+machine_norm&AF.61511&M0596&0.4
+machine_norm&AF.61521&M0934&1.13
+machine_norm&AF.61521&M0596&0.32
+machine_norm&AF.61531&M0934&1.46
+machine_norm&AF.61531&M0596&0.16
+machine_norm&AE.21113&M1431&0.04
+machine_norm&AB.65120&M0663&3.85
+machine_norm&AB.41431&M1598&0.68
+machine_norm&AB.66142&M0663&2.04
+machine_norm&AB.66142&ZM999&1.5
+machine_norm&AF.11212&M1419&0.1
+machine_norm&AF.11212&M0667&0.09
+machine_norm&AG.11412&M1419&0.1
+machine_norm&AG.13231&M0596&0.4
+machine_norm&AG.41610&M0143&0.01
+machine_norm&AK.21233&M1431&0.0
+machine_norm&AK.41213&M1431&0.0
+machine_norm&AF.32313&M0446A&0.03
+machine_norm&AF.32313&M0667&0.18
+machine_norm&AF.32313&ZM999&1.0
+machine_norm&AF.12213&M1419&0.1
+machine_norm&AF.12213&M0667&0.18
+machine_norm&AF.12222&M1419&0.1
+machine_norm&AF.12222&M0667&0.18
+machine_norm&AF.12222&M2830&0.11
+machine_norm&AF.12512&M1419&0.1
+machine_norm&AF.12512&M0667&0.09
+machine_norm&AF.12512&M1834&0.11
+machine_norm&AF.12123&M1419&0.1
+machine_norm&AF.12123&M0667&0.18
+machine_norm&AF.12123&M2830&0.11
+machine_norm&AF.12612&M1419&0.1
+machine_norm&AF.12612&M0667&0.09
+machine_norm&AF.12612&M1834&0.11
+machine_norm&AK.23113&M1431&0.0
+machine_norm&AK.22123&M1431&0.0
+machine_norm&AK.21223&M1431&0.0
+machine_norm&AK.23213&M1431&0.0
+machine_norm&AK.21133&M1431&0.0
+machine_norm&AK.41114&M1431&0.0
+machine_norm&AF.61411&M0596&0.4
+machine_norm&AF.61421&M0934&1.16
+machine_norm&AF.61421&M0596&0.32
+machine_norm&AF.61431&M0934&1.49
+machine_norm&AF.61431&M0596&0.16
+machine_norm&AF.61412&M0596&0.4
+machine_norm&AF.61412&M1479&0.01
+machine_norm&AF.61412&M02680&0.01
+machine_norm&AF.61412&ZM999&2.0
+machine_norm&AF.61422&M0934&1.16
+machine_norm&AF.61422&M0596&0.32
+machine_norm&AF.61422&M1479&0.01
+machine_norm&AF.61422&M02680&0.01
+machine_norm&AF.61422&ZM999&2.0
+machine_norm&AF.61432&M0934&1.49
+machine_norm&AF.61432&M0596&0.16
+machine_norm&AF.61432&M1479&0.01
+machine_norm&AF.61432&M02680&0.01
+machine_norm&AF.61432&ZM999&2.0
+machine_norm&AF.61512&M0596&0.4
+machine_norm&AF.61512&M1479&0.01
+machine_norm&AF.61512&M02680&0.01
+machine_norm&AF.61512&ZM999&2.0
+machine_norm&AF.61522&M0934&1.13
+machine_norm&AF.61522&M0596&0.32
+machine_norm&AF.61522&M1479&0.01
+machine_norm&AF.61522&M02680&0.01
+machine_norm&AF.61522&ZM999&2.0
+machine_norm&AF.61532&M0934&1.46
+machine_norm&AF.61532&M0596&0.16
+machine_norm&AF.61532&M1479&0.01
+machine_norm&AF.61532&M02680&0.01
+machine_norm&AF.61532&ZM999&2.0
+machine_norm&AF.61611&M0596&0.4
+machine_norm&AF.61621&M0934&1.12
+machine_norm&AF.61621&M0596&0.32
+machine_norm&AF.61612&M0596&0.4
+machine_norm&AF.61612&M1479&0.01
+machine_norm&AF.61612&M02680&0.01
+machine_norm&AF.61612&ZM999&2.0
+machine_norm&AF.61622&M0934&1.12
+machine_norm&AF.61622&M0596&0.32
+machine_norm&AF.61622&M1479&0.01
+machine_norm&AF.61622&M02680&0.01
+machine_norm&AF.61622&ZM999&2.0
+machine_norm&AF.61811&M0596&0.4
+machine_norm&AF.61821&M0934&1.12
+machine_norm&AF.61821&M0596&0.32
+machine_norm&AF.61711&M0596&0.4
+machine_norm&AF.61711&M1479&0.02
+machine_norm&AF.61711&M02680&0.02
+machine_norm&AF.61711&ZM999&2.0
+machine_norm&AI.61131&M0217&0.34
+machine_norm&AI.61131&M0934&2.0
+machine_norm&AI.11421&M0934&5.6
+machine_norm&AI.63211&M0934&0.07
+machine_norm&AI.11411&M0934&6.15
+machine_norm&AI.11411&M1088&1.75
+machine_norm&AE.28113&M1431&0.03
+machine_norm&AK.56210&M0571&0.2
+machine_norm&AE.22213&M1431&0.04
+machine_norm&AE.22223&M1431&0.04
+machine_norm&AE.22223&M1479&0.01
+machine_norm&AE.22223&M02680&0.01
+machine_norm&AE.22123&M1431&0.03
+machine_norm&AE.22123&M1479&0.01
+machine_norm&AE.22123&M02680&0.01
+machine_norm&AE.23123&M1431&0.04
+machine_norm&AE.23123&M1479&0.01
+machine_norm&AE.23123&M02680&0.01
+machine_norm&AK.22133&M1431&0.0
+machine_norm&AK.56220&M0571&0.2
+machine_norm&AF.11311&M1419&0.1
+machine_norm&AF.11311&M0639&0.09
+machine_norm&AK.51280&M0571&0.04
+machine_norm&AK.31150&M0571&0.2
+machine_norm&AK.31130&M0571&0.2
+machine_norm&AK.31210&M0571&0.1
+machine_norm&AK.32120&M0571&0.25
+machine_norm&AK.32120&ZM999&5.0
+machine_norm&AI.11610&M0934&2.64
+machine_norm&AI.11610&M1170&2.21
+machine_norm&AI.11610&M0596&2.21
+machine_norm&AI.11610&ZM999&1.0
+machine_norm&BA.11110&M1034&0.15
+machine_norm&BA.14401&M1034&0.01
+machine_norm&BA.14402&M1034&0.01
+machine_norm&BA.17403&M1034&0.1
+machine_norm&BA.15404&M1034&0.02
+machine_norm&BA.19402&M1169&0.05
+machine_norm&BA.19502&M0922&0.18
+machine_norm&BA.19303&M0922&0.01
+machine_norm&BA.19303&M1034&0.05
+machine_norm&BA.19203&M0922&0.01
+machine_norm&BA.12110&M1034&0.3
+machine_norm&BA.14403&M1034&0.01
+machine_norm&BA.15402&M1034&0.02
+machine_norm&BB.42011&M2950&0.4
+machine_norm&BB.42021&M2950&0.48
+machine_norm&BB.42031&M2950&0.58
+machine_norm&BB.42041&M2950&0.67
+machine_norm&BB.42051&M2950&0.84
+machine_norm&BB.42061&M2950&1.03
+machine_norm&BB.80111&M2950&0.01
+machine_norm&BB.80121&M2950&0.01
+machine_norm&BB.80131&M2950&0.02
+machine_norm&BB.80141&M2950&0.02
+machine_norm&BB.80151&M2950&0.03
+machine_norm&BB.80161&M2950&0.03
+machine_norm&BB.91901&M1034&0.02
+machine_norm&BB.91601&M1034&0.1
+machine_norm&AB.25114&M0697&0.6
+machine_norm&AE.21213&M1431&0.04
+machine_norm&AF.12212&M1419&0.1
+machine_norm&AF.12212&M0667&0.18
+machine_norm&AE.22113&M1431&0.03
+machine_norm&AE.23113&M1431&0.04
+machine_norm&AK.21123&M1431&0.0
+machine_norm&AK.31110&M0571&0.2
+machine_norm&AA.22212&M1031&0.72
+machine_norm&AF.11312&M1419&0.1
+machine_norm&AF.11312&M0639&0.09
+machine_norm&AB.25112&M0697&0.37
+machine_norm&AF.11211&M1419&0.1
+machine_norm&AF.11211&M0667&0.09
+machine_norm&AB.65130&M0663&4.43
+machine_norm&AK.41113&M1431&0.0
+machine_norm&BB.11211&M0137&0.04
+machine_norm&BB.11211&ZM999&5.0
+machine_norm&AB.31124&M0697&0.57
+machine_norm&AB.31124&M1453&0.08
+machine_norm&AB.41434&M1598&0.98
+machine_norm&AA.22221&M1031&0.65
+machine_norm&AC.12111&M0695&0.09
+machine_norm&AF.32113&M0446A&0.03
+machine_norm&AF.32113&M0667&0.18
+machine_norm&AF.32113&ZM999&1.0
+machine_norm&AF.61311&M0596&0.4
+machine_norm&AF.61321&M0934&1.12
+machine_norm&AF.61321&M0596&0.32
+machine_norm&AF.61721&M0934&1.12
+machine_norm&AF.61721&M0596&0.32
+machine_norm&AF.61721&M1479&0.01
+machine_norm&AF.61721&M02680&0.01
+machine_norm&AF.61721&ZM999&2.0
+machine_norm&AK.41214&M1431&0.0
+machine_norm&BB.78111&M2132&0.04
+machine_norm&AB.25214&M0697&0.57
+machine_norm&AI.11131&M0934&1.2
+machine_norm&AI.11131&M0596&0.5
+machine_norm&AI.11131&M1088&1.5
+machine_norm&AI.11131&M0217&0.32
+machine_norm&AI.11131&ZM999&1.0
+machine_norm&AI.61111&M0140&0.32
+machine_norm&AI.61111&M0934&1.2
+machine_norm&AI.61111&M1088&0.9
+machine_norm&AI.61111&M1235&0.25
+machine_norm&AI.61111&ZM999&1.0
+machine_norm&AI.11121&M0934&3.7
+machine_norm&AI.11121&M1088&2.74
+machine_norm&AI.11121&M0217&0.72
+machine_norm&AI.11121&ZM999&1.0
+machine_norm&AI.61121&M0140&0.3
+machine_norm&AI.61121&M0934&1.4
+machine_norm&AI.61121&M1088&0.5
+machine_norm&AI.61121&M1235&0.1
+machine_norm&AI.61121&ZM999&1.0
+machine_norm&BA.25101&M0934&0.1
+machine_norm&AB.25102&M0694&0.63
+machine_norm&BA.21203&M0254&0.1
+machine_norm&BA.23301&M1885&0.13
+machine_norm&BA.21204&M0254&0.1
+machine_norm&BA.35201&M0934&0.1
+machine_norm&SA.32211&M0555&0.07
+machine_norm&SA.32211&M1169&0.03
+machine_norm&SA.32211&ZM999&5.0
+machine_norm&AF.17212&M1419&0.1
+machine_norm&AF.17212&M0667&0.09
+machine_norm&AF.64110&M0596&0.4
+machine_norm&AE.26213&M1431&0.04
+machine_norm&BA.17404&M1034&0.12
+material_norm&AG.11113&12595&305.51
+material_norm&AG.11113&01897&0.53
+material_norm&AG.11113&04513&0.87
+material_norm&AG.11113&07969&185.75
+material_norm&AG.11113&ZV999&0.5
+material_norm&AG.31121&06684&0.08
+material_norm&AG.31121&06607&0.0
+material_norm&AG.31121&05648&10.0
+material_norm&AG.31121&ZV999&1.0
+material_norm&AG.13111&11428&1005.0
+material_norm&AG.13111&05429&16.07
+material_norm&AG.13121&11430&1020.0
+material_norm&AG.13121&05429&9.28
+material_norm&AG.13121&10166&4.7
+material_norm&AG.13131&11436&1020.0
+material_norm&AG.13131&05429&7.85
+material_norm&AG.13131&10166&4.7
+material_norm&AI.13111&11400&825.0
+material_norm&AI.13111&11424&275.5
+material_norm&AI.13111&08117&3.3
+material_norm&AI.13111&06287&6.6
+material_norm&AI.13111&04587&0.7
+material_norm&AI.13111&10166&13.57
+material_norm&AI.13111&ZV999&0.5
+material_norm&AC.25213&02505&101.0
+material_norm&AC.25213&ZV999&1.0
+material_norm&AC.29321&11400&6.1
+material_norm&AC.29321&10166&1.92
+material_norm&AC.29321&ZV999&3.0
+material_norm&AA.22211&10166&0.96
+material_norm&AF.11111&12592&241.9
+material_norm&AF.11111&01897&0.56
+material_norm&AF.11111&04515&0.91
+material_norm&AF.11111&07969&166.05
+material_norm&AF.81111&06684&0.79
+material_norm&AF.81111&06607&0.09
+material_norm&AF.81111&06594&0.46
+material_norm&AF.81111&05648&12.0
+material_norm&AF.81111&ZV999&1.0
+material_norm&AF.31113&ZV999&1.0
+material_norm&AF.81122&06684&0.79
+material_norm&AF.81122&06607&0.21
+material_norm&AF.81122&06594&0.34
+material_norm&AF.81122&05648&15.0
+material_norm&AF.81122&ZV999&1.0
+material_norm&AF.81141&06684&0.79
+material_norm&AF.81141&06607&0.19
+material_norm&AF.81141&06594&0.96
+material_norm&AF.81141&05648&14.29
+material_norm&AF.81141&ZV999&1.0
+material_norm&AF.12233&12595&308.52
+material_norm&AF.12233&01897&0.53
+material_norm&AF.12233&04513&0.88
+material_norm&AF.12233&07969&187.57
+material_norm&AF.12233&ZV999&5.0
+material_norm&AF.81132&06684&0.79
+material_norm&AF.81132&06607&0.15
+material_norm&AF.81132&06594&0.5
+material_norm&AF.81132&05648&15.0
+material_norm&AF.81132&ZV999&1.0
+material_norm&AF.12312&12592&321.85
+material_norm&AF.12312&01897&0.53
+material_norm&AF.12312&04513&0.87
+material_norm&AF.12312&07969&187.57
+material_norm&AF.12312&ZV999&1.0
+material_norm&AF.61110&11428&1005.0
+material_norm&AF.61110&05429&16.07
+material_norm&AF.61120&11430&1020.0
+material_norm&AF.61120&05429&9.28
+material_norm&AF.61120&10166&4.64
+material_norm&AF.61130&11436&1020.0
+material_norm&AF.61130&05429&7.85
+material_norm&AF.61130&10166&5.3
+material_norm&AF.61511&11428&1005.0
+material_norm&AF.61511&05429&16.07
+material_norm&AF.61521&11430&1020.0
+material_norm&AF.61521&05429&9.28
+material_norm&AF.61521&10166&4.7
+material_norm&AF.61531&11436&1020.0
+material_norm&AF.61531&05429&7.85
+material_norm&AF.61531&10166&6.04
+material_norm&AE.21113&25970&550.0
+material_norm&AE.21113&01892&0.33
+material_norm&AE.21113&07969&78.88
+material_norm&AE.21113&12592&98.02
+material_norm&AB.66142&01886&122.0
+material_norm&AF.11212&12592&321.85
+material_norm&AF.11212&01897&0.53
+material_norm&AF.11212&04513&0.87
+material_norm&AF.11212&07969&187.57
+material_norm&AF.11212&ZV999&1.0
+material_norm&AG.11412&12592&318.71
+material_norm&AG.11412&01897&0.52
+material_norm&AG.11412&04513&0.86
+material_norm&AG.11412&07969&185.75
+material_norm&AG.11412&ZV999&0.5
+material_norm&AG.31311&06687&0.12
+material_norm&AG.31311&05648&16.0
+material_norm&AG.31311&ZV999&1.0
+material_norm&AG.13231&11424&1020.0
+material_norm&AG.13231&05429&16.07
+material_norm&AK.21233&01890&0.03
+material_norm&AK.21233&07969&6.33
+material_norm&AK.21233&12592&8.86
+material_norm&AK.21233&ZV999&0.5
+material_norm&AK.41213&01890&0.03
+material_norm&AK.41213&07969&6.88
+material_norm&AK.41213&12592&9.62
+material_norm&AK.41213&12579&0.3
+material_norm&AF.32313&ZV999&1.0
+material_norm&AF.12213&12595&308.52
+material_norm&AF.12213&01897&0.53
+material_norm&AF.12213&04513&0.88
+material_norm&AF.12213&07969&187.57
+material_norm&AF.12213&ZV999&5.0
+material_norm&AF.12222&12592&321.85
+material_norm&AF.12222&01897&0.53
+material_norm&AF.12222&04513&0.87
+material_norm&AF.12222&07969&187.57
+material_norm&AF.12222&ZV999&5.0
+material_norm&AF.12512&12592&321.85
+material_norm&AF.12512&01897&0.53
+material_norm&AF.12512&04513&0.87
+material_norm&AF.12512&07969&187.57
+material_norm&AF.12512&ZV999&1.0
+material_norm&AF.12123&12595&308.52
+material_norm&AF.12123&01897&0.53
+material_norm&AF.12123&04513&0.88
+material_norm&AF.12123&07969&187.57
+material_norm&AF.12123&ZV999&5.0
+material_norm&AF.12612&12592&321.85
+material_norm&AF.12612&01897&0.53
+material_norm&AF.12612&04513&0.87
+material_norm&AF.12612&07969&187.57
+material_norm&AF.12612&ZV999&1.0
+material_norm&AF.81152&06684&0.79
+material_norm&AF.81152&06607&0.11
+material_norm&AF.81152&06594&0.67
+material_norm&AF.81152&05648&8.05
+material_norm&AF.81152&ZV999&1.0
+material_norm&AF.81151&06684&0.79
+material_norm&AF.81151&06607&0.11
+material_norm&AF.81151&06594&0.67
+material_norm&AF.81151&05648&8.05
+material_norm&AF.81151&ZV999&1.0
+material_norm&AF.81311&06684&0.79
+material_norm&AF.81311&06607&0.19
+material_norm&AF.81311&06594&0.36
+material_norm&AF.81311&05648&17.13
+material_norm&AF.81311&ZV999&0.5
+material_norm&AF.81161&06684&0.79
+material_norm&AF.81161&06656&0.98
+material_norm&AF.81161&05648&11.45
+material_norm&AF.81161&05663&29.0
+material_norm&AF.81161&ZV999&1.0
+material_norm&AK.23113&01890&0.02
+material_norm&AK.23113&07969&4.95
+material_norm&AK.23113&12592&6.93
+material_norm&AK.23113&ZV999&0.5
+material_norm&AK.22123&01890&0.02
+material_norm&AK.22123&07969&4.95
+material_norm&AK.22123&12592&6.93
+material_norm&AK.22123&ZV999&0.5
+material_norm&AK.21223&01890&0.02
+material_norm&AK.21223&07969&4.67
+material_norm&AK.21223&12592&6.54
+material_norm&AK.21223&ZV999&0.5
+material_norm&AK.23213&01890&0.02
+material_norm&AK.23213&07969&4.95
+material_norm&AK.23213&12592&6.93
+material_norm&AK.23213&ZV999&0.5
+material_norm&AK.21133&01890&0.03
+material_norm&AK.21133&07969&6.33
+material_norm&AK.21133&12592&8.86
+material_norm&AK.21133&ZV999&0.5
+material_norm&AK.41114&01892&0.03
+material_norm&AK.41114&07969&6.75
+material_norm&AK.41114&12592&10.75
+material_norm&AK.92111&25790&2.21
+material_norm&AK.92111&ZV999&2.0
+material_norm&AK.24313&01890&0.0
+material_norm&AK.24313&07969&0.69
+material_norm&AK.24313&12592&0.96
+material_norm&AK.24313&ZV999&9.5
+material_norm&AK.24113&01890&0.01
+material_norm&AK.24113&07969&3.02
+material_norm&AK.24113&12592&4.24
+material_norm&AK.24113&ZV999&1.5
+material_norm&AK.24213&01890&0.01
+material_norm&AK.24213&07969&3.58
+material_norm&AK.24213&12592&5.0
+material_norm&AK.24213&ZV999&9.5
+material_norm&AF.61411&11424&1005.0
+material_norm&AF.61411&05429&16.07
+material_norm&AF.61421&11430&1020.0
+material_norm&AF.61421&05429&9.28
+material_norm&AF.61421&10166&4.82
+material_norm&AF.61431&11436&1020.0
+material_norm&AF.61431&05429&7.85
+material_norm&AF.61431&10166&6.2
+material_norm&AF.61412&11424&1005.0
+material_norm&AF.61412&05429&16.07
+material_norm&AF.61422&11430&1020.0
+material_norm&AF.61422&05429&9.28
+material_norm&AF.61422&10166&4.82
+material_norm&AF.61432&11436&1020.0
+material_norm&AF.61432&05429&7.85
+material_norm&AF.61432&10166&6.2
+material_norm&AF.61512&11428&1005.0
+material_norm&AF.61512&05429&16.07
+material_norm&AF.61522&11430&1020.0
+material_norm&AF.61522&05429&9.28
+material_norm&AF.61522&10166&4.7
+material_norm&AF.61532&11436&1020.0
+material_norm&AF.61532&05429&7.85
+material_norm&AF.61532&10166&6.04
+material_norm&AF.61611&11428&1005.0
+material_norm&AF.61611&05429&16.07
+material_norm&AF.61621&11434&1020.0
+material_norm&AF.61621&05429&9.28
+material_norm&AF.61621&10166&4.62
+material_norm&AF.61612&11428&1005.0
+material_norm&AF.61612&05429&16.07
+material_norm&AF.61622&11434&1020.0
+material_norm&AF.61622&05429&9.28
+material_norm&AF.61622&10166&4.62
+material_norm&AF.61811&11428&1005.0
+material_norm&AF.61811&05429&16.07
+material_norm&AF.61821&11434&1020.0
+material_norm&AF.61821&05429&9.28
+material_norm&AF.61821&10166&4.62
+material_norm&AF.61711&11428&1005.0
+material_norm&AF.61711&05429&16.07
+material_norm&AI.11221&11330&1025.0
+material_norm&AI.11221&08117&0.23
+material_norm&AI.11221&06287&0.46
+material_norm&AI.11221&ZV999&0.5
+material_norm&AI.61131&01349&48.0
+material_norm&AI.61131&10166&6.0
+material_norm&AI.61131&11330&0.15
+material_norm&AI.61131&ZV999&1.0
+material_norm&AK.83510&10480&0.11
+material_norm&AK.83510&23570&0.11
+material_norm&AK.83510&ZV999&1.0
+material_norm&AI.11421&11330&654.82
+material_norm&AI.11421&11400&316.0
+material_norm&AI.11421&11424&61.4
+material_norm&AI.11421&10166&22.66
+material_norm&AI.11421&08117&0.78
+material_norm&AI.11421&06287&1.56
+material_norm&AI.63211&01897&0.0
+material_norm&AI.63211&07969&0.81
+material_norm&AI.63211&12592&0.93
+material_norm&AI.63211&10166&0.2
+material_norm&AI.63211&ZV999&5.0
+material_norm&AI.11411&11330&618.4
+material_norm&AI.11411&11424&416.5
+material_norm&AI.11411&10166&24.5
+material_norm&AI.11411&08117&0.48
+material_norm&AI.11411&06287&0.96
+material_norm&AK.26213&01890&0.02
+material_norm&AK.26213&07969&4.4
+material_norm&AK.26213&12592&6.16
+material_norm&AK.26213&04600&19.14
+material_norm&AK.26213&01267&12.1
+material_norm&AK.26213&12596&8.42
+material_norm&AK.26213&01275&0.11
+material_norm&AE.28113&25970&573.0
+material_norm&AE.28113&01892&0.32
+material_norm&AE.28113&07969&76.16
+material_norm&AE.28113&12592&94.64
+material_norm&AE.28113&ZV999&5.0
+material_norm&AK.56210&04575&1.05
+material_norm&AK.56210&01890&0.03
+material_norm&AK.56210&07969&6.88
+material_norm&AK.56210&12592&9.62
+material_norm&AK.56210&12596&0.15
+material_norm&AK.56210&ZV999&0.5
+material_norm&AE.22213&25970&550.0
+material_norm&AE.22213&01892&0.33
+material_norm&AE.22213&07969&78.88
+material_norm&AE.22213&12592&98.02
+material_norm&AE.22213&ZV999&5.0
+material_norm&AE.22223&25970&550.0
+material_norm&AE.22223&01892&0.33
+material_norm&AE.22223&07969&78.88
+material_norm&AE.22223&12592&98.02
+material_norm&AE.22223&ZV999&5.0
+material_norm&AE.22123&25970&643.0
+material_norm&AE.22123&01892&0.26
+material_norm&AE.22123&07969&62.56
+material_norm&AE.22123&12592&77.74
+material_norm&AE.22123&ZV999&5.0
+material_norm&AE.23123&25970&539.0
+material_norm&AE.23123&01892&0.34
+material_norm&AE.23123&07969&81.6
+material_norm&AE.23123&12592&101.4
+material_norm&AE.23123&ZV999&5.0
+material_norm&AK.22133&01890&0.03
+material_norm&AK.22133&07969&6.88
+material_norm&AK.22133&12592&9.62
+material_norm&AK.22133&ZV999&0.5
+material_norm&AK.56220&04575&1.05
+material_norm&AK.56220&01890&0.03
+material_norm&AK.56220&07969&6.88
+material_norm&AK.56220&12592&9.62
+material_norm&AK.56220&12596&0.15
+material_norm&AK.56220&ZV999&0.5
+material_norm&AF.11311&12592&272.65
+material_norm&AF.11311&01897&0.54
+material_norm&AF.11311&04513&0.89
+material_norm&AF.11311&07969&187.57
+material_norm&AF.11311&ZV999&1.0
+material_norm&AK.51280&05915&1.01
+material_norm&AK.51280&01890&0.03
+material_norm&AK.51280&07969&6.88
+material_norm&AK.51280&12592&9.62
+material_norm&AK.51280&12579&0.65
+material_norm&AK.51280&12596&0.1
+material_norm&AK.51280&ZV999&0.5
+material_norm&AK.31150&06208&1.01
+material_norm&AK.31150&01890&0.01
+material_norm&AK.31150&07969&3.58
+material_norm&AK.31150&12592&5.0
+material_norm&AK.31150&12579&0.85
+material_norm&AK.31150&12596&0.12
+material_norm&AK.31150&ZV999&1.0
+material_norm&AK.31130&06205&1.01
+material_norm&AK.31130&01890&0.01
+material_norm&AK.31130&07969&3.58
+material_norm&AK.31130&12592&5.0
+material_norm&AK.31130&12579&0.75
+material_norm&AK.31130&12596&0.15
+material_norm&AK.31130&ZV999&1.0
+material_norm&AK.31210&06173&1.01
+material_norm&AK.31210&12579&2.5
+material_norm&AK.31210&ZV999&0.5
+material_norm&AK.32120&04575&1.01
+material_norm&AK.32120&07086&4.7
+material_norm&AK.32120&10378&0.33
+material_norm&AK.32120&ZV999&0.5
+material_norm&BB.41107&09136&101.0
+material_norm&BB.41107&03342&0.29
+material_norm&BB.41107&07945&0.09
+material_norm&BB.41107&ZV999&0.01
+material_norm&BB.75105&03318&1.0
+material_norm&BB.75105&03342&0.04
+material_norm&BB.75105&07083&0.01
+material_norm&BB.75105&ZV999&0.1
+material_norm&AK.66210&05481B&1.17
+material_norm&AK.66210&25481&2.57
+material_norm&AK.66210&10745&1.05
+material_norm&AK.66210&25483&1.17
+material_norm&AK.66210&ZV999&2.5
+material_norm&AH.31211&01892&0.01
+material_norm&AH.31211&07969&1.68
+material_norm&AH.31211&12592&0.8
+material_norm&AH.31211&00228&4.0
+material_norm&AI.63121&12579&1.2
+material_norm&AI.63121&00227&2.0
+material_norm&AI.63231&01897&0.0
+material_norm&AI.63231&07969&0.54
+material_norm&AI.63231&12592&0.62
+material_norm&AI.63231&ZV999&5.0
+material_norm&AI.11610&11264&1010.0
+material_norm&AI.11610&10166&9.38
+material_norm&AI.11610&04587&3.27
+material_norm&AI.11610&ZV999&0.5
+material_norm&AI.63221&01897&0.0
+material_norm&AI.63221&07969&0.54
+material_norm&AI.63221&12592&0.62
+material_norm&AI.63221&00227&2.0
+material_norm&AI.63221&ZV999&5.0
+material_norm&AK.12222&116543&118.5
+material_norm&AK.12222&05690&450.0
+material_norm&AK.82510&01249&0.66
+material_norm&AK.82510&06455&0.02
+material_norm&AK.82510&ZV999&1.0
+material_norm&AK.82520&01249&0.66
+material_norm&AK.82520&06455&0.02
+material_norm&AK.82520&ZV999&1.0
+material_norm&AK.84112&23571&0.12
+material_norm&AK.84112&23572&0.2
+material_norm&AK.84112&ZV999&1.0
+material_norm&AK.84114&23573&0.12
+material_norm&AK.84114&23574&0.19
+material_norm&AK.84114&ZV999&1.0
+material_norm&BA.13320&0688642&1.0
+material_norm&BA.13320&ZV999&1.0
+material_norm&BA.13102&05610&1.0
+material_norm&BA.13102&02037&1.0
+material_norm&BA.13102&ZV999&5.0
+material_norm&BA.11110&10156&1.0
+material_norm&BA.11110&07046&1.0
+material_norm&BA.11110&ZV999&1.0
+material_norm&BA.17101&03605&1.0
+material_norm&BA.17101&ZV999&0.5
+material_norm&BA.17102&03607&1.0
+material_norm&BA.17102&ZV999&0.5
+material_norm&BA.17103&03609&1.0
+material_norm&BA.17103&ZV999&0.5
+material_norm&BA.17202&08097&1.0
+material_norm&BA.17202&ZV999&0.5
+material_norm&BA.16202&04936&1.01
+material_norm&BA.16202&ZV999&3.0
+material_norm&BA.16203&04938&1.01
+material_norm&BA.16203&ZV999&3.0
+material_norm&BA.16204&04940&1.01
+material_norm&BA.16204&ZV999&3.0
+material_norm&BA.16404&050141&1.01
+material_norm&BA.16404&ZV999&3.0
+material_norm&BA.16104&04892&1.01
+material_norm&BA.16104&ZV999&3.0
+material_norm&BA.14401&08884&1.02
+material_norm&BA.14401&ZV999&15.0
+material_norm&BA.14402&08891&1.02
+material_norm&BA.14402&ZV999&15.0
+material_norm&BA.18202&00053&1.0
+material_norm&BA.18202&ZV999&3.0
+material_norm&BA.18203&00047&1.0
+material_norm&BA.18203&ZV999&2.0
+material_norm&BA.18204&00051&1.0
+material_norm&BA.18204&ZV999&2.0
+material_norm&BA.17403&01939&1.0
+material_norm&BA.17403&ZV999&2.0
+material_norm&BA.15404&29887&1.0
+material_norm&BA.15404&ZV999&5.0
+material_norm&BA.13605&05617&1.0
+material_norm&BA.13605&ZV999&3.0
+material_norm&BA.13604&05618&1.0
+material_norm&BA.13604&ZV999&3.0
+material_norm&BA.19402&11251&3.13
+material_norm&BA.19402&ZV999&10.0
+material_norm&BA.19502&07198&1.0
+material_norm&BA.19502&10166&0.2
+material_norm&BA.19502&ZV999&10.0
+material_norm&BA.19303&05447&0.9
+material_norm&BA.19303&10166&0.02
+material_norm&BA.19303&ZV999&18.0
+material_norm&BA.19203&05447&2.0
+material_norm&BA.19203&10166&0.02
+material_norm&BA.19203&ZV999&10.0
+material_norm&BA.19101&02524&1.0
+material_norm&BA.19101&ZV999&5.0
+material_norm&BA.12110&06373&1.0
+material_norm&BA.12110&25080&0.0
+material_norm&BA.12110&ZV999&5.0
+material_norm&BA.16403&050111&1.01
+material_norm&BA.16403&ZV999&3.0
+material_norm&BA.14403&08895&1.02
+material_norm&BA.14403&ZV999&15.0
+material_norm&BA.15402&29885&1.0
+material_norm&BA.15402&ZV999&5.0
+material_norm&BB.51002&08448&100.5
+material_norm&BB.51002&10177&0.09
+material_norm&BB.51002&08117&0.0
+material_norm&BB.51002&06287&0.01
+material_norm&BB.51002&11560&0.01
+material_norm&BB.51002&ZV999&0.01
+material_norm&BB.51004&08428&100.5
+material_norm&BB.51004&10177&0.12
+material_norm&BB.51004&08117&0.01
+material_norm&BB.51004&06287&0.01
+material_norm&BB.51004&11560&0.01
+material_norm&BB.51004&ZV999&0.01
+material_norm&BA.18303&00072&1.0
+material_norm&BA.18303&ZV999&1.0
+material_norm&BB.41101&09106&101.0
+material_norm&BB.41101&03342&0.11
+material_norm&BB.41101&07945&0.02
+material_norm&BB.41101&ZV999&0.01
+material_norm&BB.75101&03306&1.0
+material_norm&BB.75101&03342&0.02
+material_norm&BB.75101&07083&0.0
+material_norm&BB.75101&ZV999&0.1
+material_norm&BA.16106&04896&1.01
+material_norm&BA.16106&ZV999&3.0
+material_norm&BB.42011&26001&100.5
+material_norm&BB.42011&36001&16.0
+material_norm&BB.42011&ZV999&0.01
+material_norm&BB.42021&26005&100.5
+material_norm&BB.42021&36005&16.0
+material_norm&BB.42021&ZV999&0.01
+material_norm&BB.42031&26008&100.5
+material_norm&BB.42031&36008&16.0
+material_norm&BB.42031&ZV999&0.01
+material_norm&BB.42041&26012&100.5
+material_norm&BB.42041&36012&16.0
+material_norm&BB.42041&ZV999&0.01
+material_norm&BB.42051&26016&100.5
+material_norm&BB.42051&36016&16.0
+material_norm&BB.42051&ZV999&0.01
+material_norm&BB.42061&26020&100.5
+material_norm&BB.42061&36020&16.0
+material_norm&BB.42061&ZV999&0.01
+material_norm&BB.80111&31801&1.0
+material_norm&BB.80111&ZV999&0.01
+material_norm&BB.80121&31805&1.0
+material_norm&BB.80121&ZV999&0.01
+material_norm&BB.80131&31809&1.0
+material_norm&BB.80131&ZV999&0.01
+material_norm&BB.80141&31813&1.0
+material_norm&BB.80141&ZV999&0.01
+material_norm&BB.80151&31817&1.0
+material_norm&BB.80151&ZV999&0.01
+material_norm&BB.80161&31821&1.0
+material_norm&BB.80161&ZV999&0.01
+material_norm&BB.86103&11940&1.0
+material_norm&BB.86103&01418&8.0
+material_norm&BB.86103&01722&0.24
+material_norm&BB.86103&ZV999&0.01
+material_norm&BB.86101&11935&1.0
+material_norm&BB.86101&01418&4.0
+material_norm&BB.86101&01722&0.01
+material_norm&BB.86101&ZV999&0.01
+material_norm&BB.91101&02055&1.0
+material_norm&BB.91101&ZV999&0.01
+material_norm&BB.91501&12275&1.0
+material_norm&BB.91501&ZV999&0.01
+material_norm&BB.91201&02069&1.0
+material_norm&BB.91201&ZV999&0.01
+material_norm&BB.91301&02062&1.0
+material_norm&BB.91301&ZV999&0.01
+material_norm&BB.91901&06761&1.0
+material_norm&BB.91901&ZV999&0.1
+material_norm&BB.91601&11521&1.0
+material_norm&BB.91601&ZV999&0.01
+material_norm&BB.92105&00252&1.0
+material_norm&BB.92105&ZV999&0.01
+material_norm&BB.41108&09093&101.0
+material_norm&BB.41108&03342&0.39
+material_norm&BB.41108&07945&0.13
+material_norm&BB.41108&ZV999&0.01
+material_norm&BB.41106&09129&101.0
+material_norm&BB.41106&03342&0.29
+material_norm&BB.41106&07945&0.09
+material_norm&BB.41106&ZV999&0.01
+material_norm&BB.41105&09127&101.0
+material_norm&BB.41105&03342&0.23
+material_norm&BB.41105&07945&0.06
+material_norm&BB.41105&ZV999&0.01
+material_norm&BB.75106&03290&1.0
+material_norm&BB.75106&03342&0.05
+material_norm&BB.75106&07083&0.02
+material_norm&BB.75106&ZV999&0.1
+material_norm&BB.75107&03293&1.0
+material_norm&BB.75107&03342&0.06
+material_norm&BB.75107&07083&0.02
+material_norm&BB.75107&ZV999&0.1
+material_norm&BB.75104&03314&1.0
+material_norm&BB.75104&03342&0.04
+material_norm&BB.75104&07083&0.01
+material_norm&BB.75104&ZV999&0.1
+material_norm&BB.75103&03311&1.0
+material_norm&BB.75103&03342&0.03
+material_norm&BB.75103&07083&0.01
+material_norm&BB.75103&ZV999&0.1
+material_norm&AE.21213&25970&539.0
+material_norm&AE.21213&01892&0.34
+material_norm&AE.21213&07969&81.6
+material_norm&AE.21213&12592&101.4
+material_norm&AF.12212&12592&321.85
+material_norm&AF.12212&01897&0.53
+material_norm&AF.12212&04513&0.87
+material_norm&AF.12212&07969&187.57
+material_norm&AF.12212&ZV999&5.0
+material_norm&AE.22113&25970&643.0
+material_norm&AE.22113&01892&0.26
+material_norm&AE.22113&07969&62.56
+material_norm&AE.22113&12592&77.74
+material_norm&AE.22113&ZV999&5.0
+material_norm&AE.23113&25970&539.0
+material_norm&AE.23113&01892&0.34
+material_norm&AE.23113&07969&81.6
+material_norm&AE.23113&12592&101.4
+material_norm&AE.23113&ZV999&5.0
+material_norm&AK.21123&01890&0.02
+material_norm&AK.21123&07969&4.67
+material_norm&AK.21123&12592&6.54
+material_norm&AK.21123&ZV999&0.5
+material_norm&AK.31110&06203&1.01
+material_norm&AK.31110&01890&0.01
+material_norm&AK.31110&07969&3.58
+material_norm&AK.31110&12592&5.0
+material_norm&AK.31110&12579&0.65
+material_norm&AK.31110&12596&0.17
+material_norm&AK.31110&ZV999&1.0
+material_norm&AK.83520&10480&0.11
+material_norm&AK.83520&23570&0.21
+material_norm&AK.83520&ZV999&1.0
+material_norm&BA.13601&05619&1.0
+material_norm&BA.13601&ZV999&3.0
+material_norm&AB.13411&01886&1.22
+material_norm&AB.13411&ZV999&2.0
+material_norm&AF.11312&12592&321.85
+material_norm&AF.11312&01897&0.53
+material_norm&AF.11312&04513&0.87
+material_norm&AF.11312&07969&187.57
+material_norm&AF.11312&ZV999&1.0
+material_norm&AK.55110&06262&1.01
+material_norm&AK.55110&01890&0.03
+material_norm&AK.55110&07969&6.88
+material_norm&AK.55110&12592&9.62
+material_norm&AK.55110&12579&0.08
+material_norm&AF.11211&12592&272.65
+material_norm&AF.11211&01897&0.54
+material_norm&AF.11211&04513&0.89
+material_norm&AF.11211&07969&187.57
+material_norm&AF.11211&ZV999&1.0
+material_norm&AK.41113&01890&0.03
+material_norm&AK.41113&07969&6.88
+material_norm&AK.41113&12592&9.62
+material_norm&BB.11211&08A31&1.0
+material_norm&BB.11211&ZV999&0.05
+material_norm&AC.12111&026621&105.0
+material_norm&AF.61311&11428&1005.0
+material_norm&AF.61311&05429&16.07
+material_norm&AF.61321&11430&1020.0
+material_norm&AF.61321&05429&9.28
+material_norm&AF.61321&10166&4.64
+material_norm&AF.61721&11434&1020.0
+material_norm&AF.61721&05429&9.28
+material_norm&AF.61721&10166&4.62
+material_norm&AK.41214&01892&0.03
+material_norm&AK.41214&07969&6.75
+material_norm&AK.41214&12592&10.75
+material_norm&AK.41214&12579&0.3
+material_norm&BB.45121&13693A7&100.01
+material_norm&BB.45121&ZV999&0.1
+material_norm&BB.78111&43220&1.0
+material_norm&BB.78111&ZV999&0.01
+material_norm&BB.83501&04628&1.0
+material_norm&BB.83501&01423&4.0
+material_norm&BB.83501&ZV999&0.01
+material_norm&BB.85102&05731&1.0
+material_norm&BB.85102&01722&0.02
+material_norm&BB.85102&01422&8.0
+material_norm&BB.85102&ZV999&0.01
+material_norm&AI.11131&11330&1005.0
+material_norm&AI.11131&11400&22.0
+material_norm&AI.11131&08117&1.59
+material_norm&AI.11131&06287&3.18
+material_norm&AI.11131&10166&5.04
+material_norm&AI.11131&ZV999&0.5
+material_norm&AI.61111&01349&12.0
+material_norm&AI.61111&05686&20.0
+material_norm&AI.61111&10166&5.04
+material_norm&AI.61111&05429&0.24
+material_norm&AI.61111&11330&1.0
+material_norm&AI.61111&06589&0.03
+material_norm&AI.61111&ZV999&1.0
+material_norm&AI.11121&11330&802.0
+material_norm&AI.11121&11400&230.0
+material_norm&AI.11121&08117&2.82
+material_norm&AI.11121&06287&5.64
+material_norm&AI.11121&10166&15.54
+material_norm&AI.11121&ZV999&0.5
+material_norm&AI.61121&01349&15.0
+material_norm&AI.61121&05686&10.0
+material_norm&AI.61121&10166&5.88
+material_norm&AI.61121&05429&0.5
+material_norm&AI.61121&11330&1.0
+material_norm&AI.61121&06589&0.04
+material_norm&AI.61121&ZV999&1.0
+material_norm&BA.25101&02657&1.0
+material_norm&AB.13412&01886&1.22
+material_norm&AB.13412&ZV999&2.0
+material_norm&BA.33001&01825&101.5
+material_norm&BA.21203&27363&1.0
+material_norm&BA.23301&02086&1.0
+material_norm&BA.21204&27361&1.0
+material_norm&BA.35101&00155&1.0
+material_norm&BA.35201&03803&1.0
+material_norm&BA.35201&10166&0.1
+material_norm&BA.36201&05087&101.5
+material_norm&BA.32001&27600&1.0
+material_norm&SA.32211&04535&0.05
+material_norm&SA.32211&04587&0.02
+material_norm&SA.32211&ZV999&2.0
+material_norm&AF.17212&12592&321.85
+material_norm&AF.17212&01897&0.53
+material_norm&AF.17212&04513&0.87
+material_norm&AF.17212&07969&187.57
+material_norm&AF.17212&ZV999&1.0
+material_norm&AF.64110&11428&1005.0
+material_norm&AF.64110&05429&16.07
+material_norm&AE.26213&25970&550.0
+material_norm&AE.26213&01892&0.38
+material_norm&AE.26213&07969&89.76
+material_norm&AE.26213&12592&111.54
+material_norm&AE.26213&ZV999&5.5
+material_norm&BA.18305&00077&1.0
+material_norm&BA.18305&ZV999&1.0
+material_norm&BA.17404&01934&1.0
+material_norm&BA.17404&ZV999&1.0
+norm&AG.11113&Bê tông cọc, cột, bê tông M250, đá 1x2, PCB40 - Đổ bê tông đúc sẵn bằng thủ công (vữa bê tông sản xuất bằng máy trộn)&m3
+norm&AG.31121&Gia công, lắp dựng, tháo dỡ ván khuôn gỗ, cọc, cột&100m2
+norm&AG.13111&Gia công, lắp đặt cốt thép cọc, ĐK ≤10mm&tấn
+norm&AG.13121&Gia công, lắp đặt cốt thép cọc,, ĐK ≤18mm&tấn
+norm&AG.13131&Gia công, lắp đặt cốt thép cọc,, ĐK >18mm&tấn
+norm&AI.13111&Sản xuất thép bản đầu cọc + thép hình đầu cọc&tấn
+norm&AC.25213&Ép trước cọc BTCT, dài >4m, KT 25x25cm - Cấp đất I&100m
+norm&AC.29321&Nối cọc vuông bê tông cốt thép, KT 25x25cm&1 mối nối
+norm&AA.22211&Phá dỡ kết cấu bê tông có cốt thép bằng máy khoan bê tông 1,5kw&m3
+norm&AB.25111&Đào móng bằng máy đào 0,8m3, chiều rộng móng ≤6m - Cấp đất I&100m3
+norm&AB.11321&Đào móng băng bằng thủ công, rộng ≤3m, sâu ≤2m - Cấp đất I&1m3
+norm&AF.11111&Bê tông lót móng SX bằng máy trộn, đổ bằng thủ công, rộng ≤150cm, M150, đá 4x6, PCB30&m3
+norm&AF.81111&Ván khuôn lót móng băng, móng bè, bệ máy&100m2
+norm&AF.31113&Bê tông móng, rộng ≤250cm, máy bơm BT tự hành, M250, đá 1x2, PCB40&m3
+norm&AF.81122&Ván khuôn móng đài cọc&100m2
+norm&AF.81141&Ván khuôn gỗ dầm móng&100m2
+norm&AF.12233&Bê tông cột SX bằng máy trộn, đổ bằng thủ công, TD >0,1m2, chiều cao ≤6m, M250, đá 1x2, PCB40&m3
+norm&AF.81132&Ván khuôn cột - Cột vuông, chữ nhật&100m2
+norm&AF.12312&Bê tông giằng móng nhà SX bằng máy trộn, đổ bằng thủ công, bê tông M200, đá 1x2, PCB30&m3
+norm&AF.61110&Lắp dựng cốt thép móng, ĐK ≤10mm&tấn
+norm&AF.61120&Lắp dựng cốt thép móng, ĐK ≤18mm&tấn
+norm&AF.61130&Lắp dựng cốt thép móng, ĐK >18mm&tấn
+norm&AF.61511&Lắp dựng cốt thép giằng móng, ĐK ≤10mm, chiều cao ≤6m&tấn
+norm&AF.61521&Lắp dựng cốt thép giằng móng, ĐK ≤18mm, chiều cao ≤6m&tấn
+norm&AF.61531&Lắp dựng cốt thép xà dầm, giằng, ĐK >18mm, chiều cao ≤6m&tấn
+norm&AE.21113&Xây móng bằng gạch XM cốt liệu 6,5x10,5x22cm - Chiều dày ≤33cm, vữa XM M75, PCB30&m3
+norm&AB.65120&Đắp đất bằng đầm đất cầm tay 70kg, độ chặt Y/C K = 0,90&100m3
+norm&AB.41431&Vận chuyển đất bằng ô tô tự đổ 10T, phạm vi ≤1000m - Cấp đất I&100m3
+norm&AB.66142&Đắp cát công trình bằng máy đầm đất cầm tay 70kg, độ chặt Y/C K = 0,90&100m3
+norm&AF.11212&Bê tông đáy bể phốt SX bằng máy trộn, đổ bằng thủ công, rộng ≤250cm, M200, đá 1x2, PCB30&m3
+norm&AG.11412&Bê tông tấm đan bể phốt, bê tông M200, đá 1x2, PCB30 - Đổ bê tông đúc sẵn bằng thủ công (vữa bê tông sản xuất bằng máy trộn)&m3
+norm&AG.31311&Gia công, lắp dựng, tháo dỡ ván khuôn tấm đan bể phốt&100m2
+norm&AG.13231&Gia công, lắp đặt cốt thép tấm đan&tấn
+norm&AG.41610&Lắp đặt cấu kiện bê tông đúc sẵn trọng lượng > 50kg bằng cần cẩu&1cấu kiện
+norm&AK.21233&Trát tường bể phốt dày 2cm, vữa XM M75, PCB30&m2
+norm&AK.41213&Láng bể phốt có đánh màu, dày 2cm, vữa XM M75, PCB30&m2
+norm&AF.32313&Bê tông xà dầm, giằng, sàn mái, máy bơm BT tự hành, M250, đá 1x2, PCB40&m3
+norm&AF.12213&Bê tông cột SX bằng máy trộn, đổ bằng thủ công, TD ≤0,1m2, chiều cao ≤6m, M250, đá 1x2, PCB40&m3
+norm&AF.12222&Bê tông cột SX bằng máy trộn, đổ bằng thủ công, TD ≤0,1m2, chiều cao ≤28m, M200, đá 1x2, PCB30&m3
+norm&AF.12512&Bê tông lanh tô, lanh tô liền mái hắt, máng nước, tấm đan, ô văng, bê tông M200, đá 1x2, PCB30&m3
+norm&AF.12123&Bê tông thành sênô SX bằng máy trộn, đổ bằng thủ công - Chiều dày ≤45cm, chiều cao ≤28m, M250, đá 1x2, PCB40&m3
+norm&AF.12612&Bê tông cầu thang thường SX bằng máy trộn, đổ bằng thủ công, bê tông M200, đá 1x2, PCB30&m3
+norm&AF.81152&Ván khuôn gỗ lanh tô, lanh tô liền mái hắt, máng nước, tấm đan&100m2
+norm&AF.81151&Ván khuôn gỗ sàn mái&100m2
+norm&AF.81311&Ván khuôn gỗ tường sênô mái&100m2
+norm&AF.81161&Ván khuôn gỗ cầu thang thường&100m2
+norm&AK.23113&Trát xà dầm, vữa XM M75, PCB30&m2
+norm&AK.22123&Trát cầu thang, dày 1,5cm, vữa XM M75, PCB30&m2
+norm&AK.21223&Trát lanh tô dày 1,5cm, vữa XM M75, PCB30&m2
+norm&AK.23213&Trát trần, vữa XM M75, PCB30&m2
+norm&AK.21133&Trát tường sênô dày 2cm, vữa XM M75, PCB30&m2
+norm&AK.41114&Láng mái dày 2cm, vữa XM M100, PCB30&m2
+norm&AK.92111&Quét dung dịch chống vệ sinh&m2
+norm&AK.24313&Trát gờ chỉ, vữa XM M75, PCB30&m
+norm&AK.24113&Đắp phào đơn, vữa XM M75, PCB30&m
+norm&AK.24213&Đắp phào kép, vữa XM M75, PCB30&m
+norm&AF.61411&Lắp dựng cốt thép cột, trụ, ĐK ≤10mm, chiều cao ≤6m&tấn
+norm&AF.61421&Lắp dựng cốt thép cột, trụ, ĐK ≤18mm, chiều cao ≤6m&tấn
+norm&AF.61431&Lắp dựng cốt thép cột, trụ, ĐK >18mm, chiều cao ≤6m&tấn
+norm&AF.61412&Lắp dựng cốt thép cột, trụ, ĐK ≤10mm, chiều cao ≤28m&tấn
+norm&AF.61422&Lắp dựng cốt thép cột, trụ, ĐK ≤18mm, chiều cao ≤28m&tấn
+norm&AF.61432&Lắp dựng cốt thép cột, trụ, ĐK >18mm, chiều cao ≤28m&tấn
+norm&AF.61512&Lắp dựng cốt thép xà dầm, giằng, ĐK ≤10mm, chiều cao ≤28m&tấn
+norm&AF.61522&Lắp dựng cốt thép xà dầm, giằng, ĐK ≤18mm, chiều cao ≤28m&tấn
+norm&AF.61532&Lắp dựng cốt thép xà dầm, giằng, ĐK >18mm, chiều cao ≤28m&tấn
+norm&AF.61611&Lắp dựng cốt thép lanh tô liền mái hắt, máng nước, ĐK ≤10mm, chiều cao ≤6m&tấn
+norm&AF.61621&Lắp dựng cốt thép lanh tô liền mái hắt, máng nước, ĐK >10mm, chiều cao ≤6m&tấn
+norm&AF.61612&Lắp dựng cốt thép lanh tô liền mái hắt, máng nước, ĐK ≤10mm, chiều cao ≤28m&tấn
+norm&AF.61622&Lắp dựng cốt thép lanh tô liền mái hắt, máng nước, ĐK >10mm, chiều cao ≤28m&tấn
+norm&AF.61811&Lắp dựng cốt thép cầu thang, ĐK ≤10mm, chiều cao ≤6m&tấn
+norm&AF.61821&Lắp dựng cốt thép cầu thang, ĐK >10mm, chiều cao ≤6m&tấn
+norm&AF.61711&Lắp dựng cốt thép sàn mái, ĐK ≤10mm, chiều cao ≤28m&tấn
+norm&AI.11221&Gia công xà gồ thép&tấn
+norm&AI.61131&Lắp dựng xà gồ thép&tấn
+norm&AK.83510&Sơn sắt thép bằng sơn các loại 1 nước lót + 1 nước phủ&1m2
+norm&AI.11421&Gia công lan can inox&tấn
+norm&AI.63211&Lắp dựng lan can inox&m2
+norm&AI.11411&Gia công thang inox lên mái&tấn
+norm&AK.26213&Trát granitô tay vịn lan can dày 2,5cm, vữa XM cát mịn M75, XM PCB30&m2
+norm&AB.11312&Đào móng tam cấp bằng thủ công, rộng ≤3m, sâu ≤1m - Cấp đất II&1m3
+norm&AE.28113&Xây bậc tam cấp bằng gạch xi măng cốt liệu 6,5x10,5x22cm, chiều cao ≤6m, vữa XM M75, PCB30&m3
+norm&AB.13111&Đắp đất nền móng công trình&m3
+norm&AK.56210&Lát đá granit bậc tam cấp, PCB30&m2
+norm&AE.22213&Xây tường thẳng bằng gạch xi măng cốt liệu 6,5x10,5x22cm - Chiều dày ≤33cm, chiều cao ≤6m, vữa XM M75, PCB30&m3
+norm&AE.22223&Xây tường thẳng bằng gạch xi măng cốt liệu 6,5x10,5x22cm - Chiều dày ≤33cm, chiều cao ≤28m, vữa XM M75, PCB30&m3
+norm&AE.22123&Xây tường thẳng bằng gạch xi măng cốt liệu 6,5x10,5x22cm - Chiều dày ≤11cm, chiều cao ≤28m, vữa XM M75, PCB30&m3
+norm&AE.23123&Xây cột, trụ bằng gạch gạch xi măng cốt liệu 6,5x10,5x22cm, chiều cao ≤28m, vữa XM M75, PCB30&m3
+norm&AK.22133&Trát trụ cột, má cửa dày 2cm, vữa XM M75, PCB30&m2
+norm&AK.56220&Lát đá granit bậc cầu thang, PCB30&m2
+norm&AF.11311&Bê tông nền SX bằng máy trộn, đổ bằng thủ công, M150, đá 1x2, PCB30&m3
+norm&AK.51280&Lát nền gạch granit KT 600x600mm, XM PCB30&m2
+norm&AK.31150&Ốp tường vệ sinh gạch KT300x600mm, XM PCB30&m2
+norm&AK.31130&Ốp chân tường bên trong gạch granit KT120x600mm, XM PCB30&m2
+norm&AK.31210&Ốp đá trang trí chân móng đá bóc tự nhiên KT100x200mm&m2
+norm&AK.32120&Ốp đá granit tự nhiên bàn chậu rửa&m2
+norm&BB.41107&Lắp đặt ống nhựa miệng bát, nối bằng p/p dán keo, dài 6m - Đường kính 90mm&100m
+norm&BB.75105&Lắp đặt cút nhựa miệng bát nối bằng p/p dán keo - Đường kính 90mm&cái
+norm&AK.66210&Thi công trần giật cấp bằng tấm thạch cao&m2
+norm&AH.31211&Lắp dựng khuôn cửa kép&1m
+norm&AH.32111&Lắp dựng cửa vào khuôn&1m2
+norm&AI.63121&Lắp dựng cửa nhôm xingfa&m2
+norm&AI.63231&Lắp dựng vách nhôm xingfa&m2
+norm&AI.11610&Sản xuất sen hoa cửa sổ bằng hộp Inox&tấn
+norm&AI.63221&Lắp dựng sen hoa cửa&m2
+norm&AK.12222&Lợp mái che tường bằng tôn múi dày 0,45ly, chiều dài bất kỳ&100m2
+norm&AK.82510&Bả bằng bột bả vào tường&m2
+norm&AK.82520&Bả bằng bột bả vào cột, dầm, trần&m2
+norm&AK.84112&Sơn dầm, trần, tường trong nhà đã bả bằng sơn các loại 1 nước lót + 2 nước phủ&m2
+norm&AK.84114&Sơn dầm, trần, tường ngoài nhà đã bả bằng sơn các loại 1 nước lót + 2 nước phủ&m2
+norm&BA.13320&Lắp đặt đèn huỳnh quang đôi 2x18w bóng LED&bộ
+norm&BA.13102&Lắp đặt đèn sát trần có chụp&bộ
+norm&BA.11110&Lắp đặt quạt trần&cái
+norm&BA.17101&Lắp đặt công tắc 1 hạt&cái
+norm&BA.17102&Lắp đặt công tắc 2 hạt&cái
+norm&BA.17103&Lắp đặt công tắc 3 hạt&cái
+norm&BA.17202&Lắp đặt ổ cắm đôi&cái
+norm&BA.16202&Lắp đặt dây dẫn 2 ruột 2x1,5 mm2&m
+norm&BA.16203&Lắp đặt dây dẫn 2 ruột 2x6 mm2&m
+norm&BA.16204&Lắp đặt cáp Cu/PVC/PVC 2x16 mm2&m
+norm&BA.16404&Lắp đặt cáp Cu/XLPE/PVC 3x25+1x16 mm2&m
+norm&BA.16104&Lắp đặt dây đơn 1x6 mm2&m
+norm&BA.14401&Lắp đặt ống nhựa chìm bảo hộ dây dẫn, ĐK = 16 mm&m
+norm&BA.14402&Lắp đặt ống nhựa chìm bảo hộ dây dẫn, ĐK = 25mm&m
+norm&BA.18202&Lắp đặt các automat 1 pha =15A&cái
+norm&BA.18203&Lắp đặt các automat 1 pha =63A&cái
+norm&BA.18204&Lắp đặt các automat 1 pha =150A&cái
+norm&BA.17403&Lắp đặt cầu dao =200 Ampe&bộ
+norm&BA.15404&Lắp đặt tủ điện KT300x250x130&hộp
+norm&BA.13605&Lắp đặt đèn led panel 300x1200 - 48w&bộ
+norm&BA.13604&Lắp đặt đèn led tròn 12w; D=138x36&bộ
+norm&AB.11512&Đào kênh mương, rãnh thoát nước, thủ công, rộng <= 3 m, sâu <= 1 m, đất C2&1m3
+norm&BA.19402&Gia công kim thu sét, dài 1 m&cái
+norm&BA.19502&Lắp đặt kim thu sét, dài 1 m&cái
+norm&BA.19303&Kéo rải dây thép chống sét theo tường, cột và mái nhà, d = 12 mm&m
+norm&BA.19203&Kéo rải dây thép chống sét dưới mương đất, d = 18 mm&m
+norm&BA.19101&Gia công và đóng cọc chống sét mạ kẽm&cọc
+norm&BA.12110&Lắp đặt máy điều hoà 2 cục - Loại máy Treo tường&máy
+norm&BA.16403&Lắp đặt dây cáp Cu/XLPE/PVC 3x10+1x6 mm2&m
+norm&BA.14403&Lắp đặt ống nhựa chìm bảo hộ dây dẫn, ĐK = 32mm&m
+norm&BA.15402&Lắp đặt hộp nối, phân dây kích thước 100x100x50&hộp
+norm&BB.51002&Lắp đặt ống đồng dẫn ga nối bằng phương pháp hàn. Đường kính 9,5mm&100m
+norm&BB.51004&Lắp đặt ống đồng dẫn ga nối bằng phương pháp hàn. Đường kính 15,9mm&100m
+norm&BA.18303&Lắp đặt các automat 3 pha 63A&cái
+norm&BB.41101&Lắp đặt ống nhựa miệng bát, nối bằng p/p dán keo, dài 6m - Đường kính 21mm&100m
+norm&BB.75101&Lắp đặt cút nhựa miệng bát nối bằng p/p dán keo - Đường kính 21mm&cái
+norm&BA.16106&Lắp đặt dây cáp mạng CommScope AMP cat.6 UTP&m
+norm&BB.42011&Lắp đặt ống nhựa PPR nối bằng p/p hàn, dài 6 m, ĐK 20 mm&100m
+norm&BB.42021&Lắp đặt ống nhựa PPR nối bằng p/p hàn, dài 6 m, ĐK 25 mm&100m
+norm&BB.42031&Lắp đặt ống nhựa PPR nối bằng p/p hàn, dài 6 m, ĐK 32 mm&100m
+norm&BB.42041&Lắp đặt ống nhựa PPR nối bằng p/p hàn, dài 6 m, ĐK 40 mm&100m
+norm&BB.42051&Lắp đặt ống nhựa PPR nối bằng p/p hàn, dài 6 m, ĐK 50 mm&100m
+norm&BB.42061&Lắp đặt ống nhựa PPR nối bằng p/p hàn, dài 6 m, ĐK 63 mm&100m
+norm&BB.80111&Lắp đặt cút nhựa PPR nối bằng p/p hàn, ĐK 20 mm&cái
+norm&BB.80121&Lắp đặt cút nhựa PPR nối bằng p/p hàn, ĐK 25 mm&cái
+norm&BB.80131&Lắp đặt cút nhựa PPR nối bằng p/p hàn, ĐK 32 mm&cái
+norm&BB.80141&Lắp đặt cút nhựa PPR nối bằng p/p hàn, ĐK 40 mm&cái
+norm&BB.80151&Lắp đặt cút nhựa PPR nối bằng p/p hàn, ĐK 50 mm&cái
+norm&BB.80161&Lắp đặt cút nhựa PPR nối bằng p/p hàn, ĐK 63 mm&cái
+norm&BB.86103&Lắp đặt van ĐK 63mm&cái
+norm&BB.86101&Lắp đặt van ĐK 40mm&cái
+norm&BB.91101&Lắp đặt lavabô âm bàn&bộ
+norm&BB.91501&Lắp đặt vòi lavabô&bộ
+norm&BB.91201&Lắp đặt xí bệt két liền  (KT: 741x655x393mm)&bộ
+norm&BB.91301&Lắp đặt chậu tiểu nam cảm ứng cao cấp&bộ
+norm&BB.91901&Gương soi dày 5ly KT 1200x2180mm&cái
+norm&BB.91601&Lắp đặt bình nóng lanh 20l&bộ
+norm&BB.92105&Lắp đặt bể nước Inox 2,5m3&bể
+norm&BB.41108&Lắp đặt ống nhựa miệng bát nối bằng p/p dán keo, dài 6 m, ĐK 110 mm&100m
+norm&BB.41106&Lắp đặt ống nhựa miệng bát nối bằng p/p dán keo, dài 6 m, ĐK 60 mm&100m
+norm&BB.41105&Lắp đặt ống nhựa miệng bát nối bằng p/p dán keo, dài 6 m, ĐK 48 mm&100m
+norm&BB.75106&Lắp đặt Tê nhựa miệng bát nối bằng p/p dán keo, ĐK 110/90 mm&cái
+norm&BB.75107&Lắp đặt cút nhựa miệng bát nối bằng p/p dán keo, ĐK 110 mm&cái
+norm&BB.75104&Lắp đặt cút nhựa miệng bát nối bằng p/p dán keo, ĐK 60 mm&cái
+norm&BB.75103&Lắp đặt cút nhựa miệng bát nối bằng p/p dán keo, ĐK 48 mm.&cái
+norm&AB.25114&Đào móng bằng máy đào 0,8m3, chiều rộng móng ≤6m - Cấp đất IV&100m3
+norm&AE.21213&Xây móng bằng gạch xi măng cốt liệu 6,5x10,5x22cm - Chiều dày >33cm, vữa XM M75, PCB30&m3
+norm&AF.12212&Bê tông cột SX bằng máy trộn, đổ bằng thủ công, TD ≤0,1m2, chiều cao ≤6m, M200, đá 1x2, PCB30&m3
+norm&AE.22113&Xây tường thẳng gạch xi măng cốt liệu 6,5x10,5x22cm - Chiều dày ≤11cm, chiều cao ≤6m, vữa XM M75, PCB30&m3
+norm&AE.23113&Xây cột, trụ gạch XM cốt liệu 6,5x10,5x22, chiều cao ≤6m, vữa XM M75, PCB30&m3
+norm&AK.21123&Trát tường ngoài dày 1,5cm, vữa XM M75, PCB30&m2
+norm&AK.31110&Ốp gạch trang trí gạch Inax vào tường, trụ cột gạch 60x95 mm, XM PCB30&m2
+norm&AK.83520&Sơn sắt thép bằng sơn các loại 1 nước lót + 2 nước phủ&1m2
+norm&BA.13601&Lắp đặt đèn trang trí trụ tường rào bóng LED 16W&bộ
+norm&AA.22212&Phá dỡ kết cấu bê tông không cốt thép bằng máy khoan bê tông 1,5kw&m3
+norm&AB.11322&Đào móng băng bằng thủ công, rộng ≤3m, sâu ≤2m - Cấp đất II&1m3
+norm&SA.11213&Tháo dỡ nền gạch lát, đá lát¸ vỉa hè&m2
+norm&SA.11221&Phá dỡ lớp vữa lát gạch&m3
+norm&AB.13411&Đắp cát tôn nền tạo phằng nền hè&m3
+norm&AF.11312&Bê tông nền hè SX bằng máy trộn, đổ bằng thủ công, M200, đá 1x2, PCB30&m3
+norm&AK.55110&Lát vỉa hè đá tấm băm mặt trừ viền KT 400x400x35mm, XM PCB30&m2
+norm&AG.42112&Lắp các loại CKBT đúc sẵn bằng thủ công, trọng lượng ≤50kg&m3
+norm&AB.25112&Đào móng bằng máy đào 0,8m3, chiều rộng móng ≤6m - Cấp đất II&100m3
+norm&AF.11211&Bê tông lót móng SX bằng máy trộn, đổ bằng thủ công, rộng ≤250cm, M150, đá 1x2, PCB30&m3
+norm&AB.65130&Đắp đất bằng đầm đất cầm tay 70kg, độ chặt Y/C K = 0,95&100m3
+norm&AK.41113&Láng rãnh nước, hố ga, dày 2cm, vữa XM M75, PCB30&m2
+norm&BB.11211&Lắp đặt ống bê tông bằng cần trục, đoạn ống dài 1m - Đường kính 400mm&1 đoạn ống
+norm&AB.31124&Đào nền sân bằng máy đào 0,8m3 - Cấp đất IV&100m3
+norm&AB.41434&Vận chuyển đất bằng ô tô tự đổ 10T, phạm vi ≤1000m - Cấp đất IV&100m3
+norm&AA.22221&Phá dỡ kết cấu gạch đá, máy khoan&m3
+norm&AB.11371&Đào móng băng bằng thủ công, rộng >3m, sâu ≤3m - Cấp đất I&1m3
+norm&AC.12111&Đóng cọc tre bằng máy đào 0,5m3, chiều dài cọc ≤2,5m  - Cấp đất I&100m
+norm&AF.32113&Bê tông thành bể nước đổ bằng máy bơm BT tự hành, M250, đá 1x2, PCB40&m3
+norm&AF.61311&Lắp dựng cốt thép thành bể ĐK ≤10mm&tấn
+norm&AF.61321&Lắp dựng cốt thép thành bể ĐK ≤18mm&tấn
+norm&AF.61721&Lắp dựng cốt thép nắp bể nước ĐK >10mm, chiều cao ≤28m&tấn
+norm&AK.41214&Láng nền, sàn có đánh màu, dày 2cm, vữa XM M100, PCB30&m2
+norm&BB.45121&Lắp đặt ống nhựa HDPE nối bằng măng sông - Đoạn ống dài 200m; đường kính ống 32mm&100 m
+norm&BB.78111&Lắp đặt cút nhựa HDPE đường kính 32mm&cái
+norm&BB.83501&Lắp đai khởi thuỷ - Đường kính 60mm&cái
+norm&BB.85102&Lắp đặt đồng hồ đo lưu lượng, quy cách ≤100mm&cái
+norm&AB.25214&Đào móng bằng máy đào 0,8m3, chiều rộng móng ≤10m - Cấp đất IV&100m3
+norm&AB.11411&Đào móng cột, trụ, hố kiểm tra bằng thủ công, rộng ≤1m, sâu ≤1m - Cấp đất I&1m3
+norm&AI.11131&Sản xuất cột bằng thép hộp&tấn
+norm&AI.61111&Lắp dựng cột thép&tấn
+norm&AI.11121&Sản xuất vì kèo thép hộp&tấn
+norm&AI.61121&Lắp vì kèo thép&tấn
+norm&AB.11442&Đào móng cột đèn bằng thủ công, rộng >1m, sâu >1m - Cấp đất II&1m3
+norm&BA.25101&Làm tiếp địa cho cột điện&1 bộ
+norm&AB.11502&Đào móng rãnh cáp bằng thủ công, rộng ≤1m, sâu ≤1m - Cấp đất III (10% khối lượng)&1m3
+norm&AB.25102&Đào móng rãnh cáp bằng máy đào 0,4m3 - Cấp đất III (90% khối lượng)&100m3
+norm&AB.13412&Đắp cát đường ống bằng thủ công&m3
+norm&BA.33001&Rải cáp đồng ngầm CXV/DSTA 4x10mm2&100m
+norm&BA.21203&Lắp dựng cột đèn trang trí sân vườn bằng máy&1 cột
+norm&BA.23301&Lắp bộ đèn cầu sân vườn 5 bóng&bộ
+norm&BA.21204&Lắp dựng cột đèn Cột thép Bát giác, Tròn côn liền cần đơn,D150/58mm, H=8m tôn dày 3mm&1 cột
+norm&BA.34001&Luồn cáp ngầm cửa cột&1 đầu cáp
+norm&BA.35101&Lắp bảng điện cửa cột&bảng
+norm&BA.35201&Lắp của cột&cửa
+norm&BA.36201&Luồn dây từ cáp ngầm lên đèn&100m
+norm&BA.32001&Làm đầu cáp khô&1 đầu cáp
+norm&SA.32211&Cắt nền bê tông bằng máy - Chiều dày ≤10cm&m
+norm&AB.11412&Đào móng cột, trụ, hố kiểm tra bằng thủ công, rộng ≤1m, sâu ≤1m - Cấp đất II&1m3
+norm&AF.17212&Bê tông hố ga SX bằng máy trộn, đổ bằng thủ công, M200, PC30, đá 1x2&m3
+norm&AF.64110&Lắp dựng cốt thép hố ga, ĐK ≤10mm&tấn
+norm&AE.26213&Xây hố van, hố ga bằng gạch xi măng cốt liệu 6,5x10,5x22cm, vữa XM M75, PCB30&m3
+norm&BA.18305&Lắp đặt các automat 3 pha 200A&cái
+norm&BA.17404&Lắp đặt cầu dao 3 pha = 300 Ampe&bộ
+hang_muc&Xây mới nhà làm việc 3 tầng thanh tra huyện&HM0
+work&Đổ thủ công bê tông cọc thí nghiệm, bê tông M250, đá 1x2, PCB40 - Đổ bê tông đúc sẵn bằng thủ công (vữa bê tông sản xuất bằng máy trộn)&m3&1.89&HM0&W0
+work&Gia công, lắp dựng, tháo dỡ ván khuôn gỗ, cọc thí nghiệm&100m2&0.23&HM0&W1
+work&Gia công, lắp đặt cốt thép cọc thí nghiệm&tấn&0.07&HM0&W2
+work&Gia công, lắp đặt cốt thép cọc,, ĐK ≤18mm&tấn&0.25&HM0&W3
+work&Gia công, lắp đặt cốt thép cọc,, ĐK >18mm&tấn&0.0&HM0&W4
+worker_work&W0&N5307&2.58
+worker_work&W1&N2357&6.66
+worker_work&W2&N2357&0.97
+worker_work&W3&N2357&1.8
+worker_work&W4&N2357&0.03
+machine_work&W0&M1419&0.19
+machine_work&W0&M0667&0.34
+machine_work&W2&M0596&0.03
+machine_work&W3&M0596&0.08
+machine_work&W3&M0934&0.28
+machine_work&W4&M0596&0.0
+machine_work&W4&M0934&0.0
+material_work&W0&12595&576.23
+material_work&W0&01897&1.0
+material_work&W0&04513&1.64
+material_work&W0&07969&350.35
+material_work&W0&ZV999&0.94
+material_work&W1&ZV999&0.23
+material_work&W1&06684&0.02
+material_work&W1&06607&0.0
+material_work&W1&05648&2.32
+material_work&W2&11428&71.72
+material_work&W2&05429&1.15
+material_work&W3&05429&2.32
+material_work&W3&11430&255.0
+material_work&W3&10166&1.18
+material_work&W4&05429&0.03
+material_work&W4&10166&0.02
+material_work&W4&11436&4.17
+work_time&W0&1640970000.0&1641056400.0
+work_time&W1&&
+work_time&W2&&
+work_time&W3&&
+work_time&W4&&
