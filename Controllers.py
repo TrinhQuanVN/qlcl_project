@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import re
 import pandas as pd
 import itertools
@@ -52,11 +52,19 @@ class base_controller:
     
     def draw_work_time(self,start=None,end=None):
         if not start and not end:
-            self._draw_work_time()
+            self._draw_work_time_all()
             return
         self._draw_work_time(start,end)
 
-    def _draw_work_time(self,start:datetime=None,end:datetime=None):
+    def _draw_work_time_all(self):
+        wts = self.Repository.get_work_time_not_null()
+        if wts:
+            start = min([item.start for item in wts])
+            end = min([item.end for item in wts])
+            if start and end:
+                self._draw_work_time(start,end)
+
+    def _draw_work_time(self,start:datetime,end:datetime):
         class coordinate:
             def __init__(self,x,y) -> None:
                 self.x = x
@@ -85,16 +93,16 @@ class base_controller:
         def draw_text(graph,text,location:coordinate,color='white',font=('Any',9),angle=0,text_location=sg.TEXT_LOCATION_RIGHT):
             graph.draw_text(text=text,location=location.coordinate,color=color,font=font,angle=angle,text_location=text_location)
                         
-
-        wts = self.Repository.get_work_time_by_start_end(start,end) if start and end else self.Repository.work_time
-        wts_time_not_null = Enumerable(wts).where(lambda x: x.start and x.end).to_list()
+        wts = self.Repository.get_work_time_by_start_end(start,end) # công việc trong khoảng start end
         work_count = len(wts)
-        if wts and wts_time_not_null:
-            day_count = (end - start).days + 1 if start and end else (max([wt.end for wt in wts_time_not_null]) - min([wt.start for wt in wts_time_not_null])).days + 1
-        else:
-            day_count = 1
-        min_cao_between = 10
-        min_rong_between = 15
+
+        day_count = (end - start).days + 1 # số ngày
+        
+        dates = [start + timedelta(i) for i in range(day_count)] # danh sách ngày làm việc trong khoảng start end
+
+
+        min_y_between = 10 # khoảng cách nhỏ nhất giữa 2 công việc trục y đồ thị 2 
+        min_x_between = 15 # khoảng cách nhỏ nhất giữa 2 ngày trục x đồ thị 2 
         
         max_x,max_y = GRAPH_SIZE
         DISTANCE_KHUNG_DEN_TRUC = 10
@@ -134,14 +142,25 @@ class base_controller:
         draw_line(graph,goc_toa_do_2,point_to1)
         draw_line(graph,goc_toa_do_2,point_to2)
         
+        # vẽ đồ thị thứ 2
+        x_between = min([min_x_between, RONG_KHUNG_2/day_count]) if dates else min_x_between # khoảng cách giữa các ngày
+        y_between = min([min_y_between, CAO_KHUNG_2/work_count]) if wts else min_y_between # khoảng cách giữa các id công việc
+        
+        coordinate_x = [(goc_toa_do_2 + coordinate(x_between*(i+1),0)) for i in range(day_count)] # danh sách tọa độ trục x -> ngày bắt đầu từ start kết thúc end
+        coordinate_y = [(goc_toa_do_2 +coordinate(0,y_between*(i+1))) for i in range(work_count)] # danh sách tọa độ trục y -> công việc thực hiện trong khoảng start và end       
         if wts:
-            cao_between = min_cao_between if min_cao_between > CAO_KHUNG_2/work_count else CAO_KHUNG_2/work_count
-            rong_between = min_rong_between if min_rong_between > RONG_KHUNG_2/day_count else RONG_KHUNG_2/day_count
-            
-            for num, wt in enumerate(wts):
-                text = wt.work_id
-                location=(goc_toa_do_2+coordinate(0,(num+1)*cao_between))
+            dict_coordinate_work = dict(zip(coordinate_y,wts))
+            for key, value in dict_coordinate_work.items():
+                text = value.work_id
+                location= key
                 draw_text(graph,text,location)
+        
+        if dates:
+            dict_coordinate_date = dict(zip(coordinate_x,dates))
+            for key, value in dict_coordinate_date.items():
+                text = value.strftime(r'%d-%m-%y')
+                location= key
+                draw_text(graph,text,location,angle=90)
                 
     def create_work_time(self,model:Models.work_time):
         self.Repository.insert_work_time(model)

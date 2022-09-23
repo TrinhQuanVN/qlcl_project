@@ -27,8 +27,10 @@ class base_repository:
         return list[0] if list else None
 
     def get_work_time_by_start_end(self,start:datetime,end:datetime):
-        return self._linq_work_time.where(lambda x: x.start == start and x.end == end).to_list()
+        return Enumerable(self.get_work_time_not_null()).where(lambda x: x.start >= start and x.end <= end).to_list()
 
+    def get_work_time_not_null(self):
+        return self._linq_work_time.where(lambda x: x.start and x.end).to_list()
     
     def insert_work_time(self,model):
         self.context.work_time.append(model)     
