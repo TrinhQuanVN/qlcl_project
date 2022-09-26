@@ -129,6 +129,8 @@ class work_time_update_view(base_view):
                 break
             elif event in ['-UPDATE-'] and values['-ID IN-']:
                 self.foward('work time do update',work_id=values['-ID IN-'],start=values['-START IN-'],end=values['-END IN-'])
+
+                self.foward('worker work time do create by work time',work_id=values['-ID IN-'],start=values['-START IN-'],end=values['-END IN-'])
                 self.foward('work time list')
                 break
             elif event == '-CLEAR-':
@@ -266,6 +268,7 @@ class work_create_with_norm_id_view(base_view):
                             unit=values['-UNIT IN-'],
                             amount=values['-AMOUNT IN-'],
                             hm_id=values['-COMBO HM-'].id)
+
                 
                 for i in range(10):
                     if values[f'-COMBO WORKER{i}-'] and values[f'-INPUT WORKER{i}-']:
@@ -287,6 +290,8 @@ class work_create_with_norm_id_view(base_view):
                                     amount=values[f'-INPUT MATERIAL{i}-'])                       
 
                 self.foward('work list')
+
+                self.foward('work time do create', work_id= id) # create work time
                 break
 
             if event == clear_btn.key:

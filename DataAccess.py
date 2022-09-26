@@ -17,6 +17,7 @@ class data_access:
        
     work = []
     work_time = []
+    worker_work_time = []
     hang_muc = []
     
     def __init__(self,path) -> None:

@@ -13,6 +13,8 @@ def main():
     # print(datetime.datetime.date(time+datetime.timedelta(days=1)))
     # print(time.strftime(r'%d-%m-%y'))
     # print(display_date_time(time))
-    print(min([1,2,3,4]))
+    str = r'01/02/22'
+    d = datetime.datetime.strptime(str,r'%d/%m/%y')
+    print(5/2)
 if __name__ == "__main__":
     main() 

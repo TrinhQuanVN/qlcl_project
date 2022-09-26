@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 import re
+from turtle import color
 import pandas as pd
 import itertools
 import Views
@@ -40,6 +41,41 @@ class base_controller:
         
     def Update(self,**kwargs):
         self.window[kwargs['key']].update(kwargs['values'])
+############################################ worker work time
+    def create_worker_work_time_by_work_time(self,model:Models.work_time):
+        work_id = model.work_id
+        worker_works = self.Repository.get_worker_work_by_work_id(work_id)
+        # delete worker work time cu
+        if worker_works:
+            for item in worker_works:
+                self.Repository.delete_worker_work_time_by_work_id(work_id)
+                old_worker_work_times = self.Repository.get_worker_work_time_by_work_id_and_worker_id(work_id,item.id)
+        worker_works = self.Repository.get_worker_work_by_work_id(work_id)
+        self.Repository.insert_worker_work_time(model)
+
+    def create_worker_work_time(self,model:Models.worker_work_time):
+        self.Repository.insert_worker_work_time(model)
+
+    def inital_worker_work_time(self):
+        if not self.Repository.get_work_time_not_null():
+            return
+        for wt in self.Repository.get_work_time_not_null():
+            worker_works = self.Repository.get_worker_work_by_work_id(wt.work_id)
+            if not worker_works:
+                continue
+            for ww in worker_works:
+                amount_per_day = ww.amount / wt.days
+                for i in range(1,wt.days):
+                    worker_work_time = Models.worker_work_time(ww.work_id,ww.id,amount_per_day,wt.start+i-1) 
+                    if worker_work_time in self.Repository.worker_work_time:
+                        continue
+                    else:
+                        self.create_worker_work_time(worker_work_time)
+
+        if not self.Repository.work_count == self.Repository.work_time_count:
+            work_id_not_in_work_time_yet = self.Repository._linq_work.where(lambda x: x.id not in [x.work_id for x in self.Repository.work_time]).to_list()
+            for id in [x.id for x in work_id_not_in_work_time_yet]:
+                self.create_work_time(Models.work_time(id,None,None))
 
 ############################################ work time
     def edit_wrok_time(self,work_id,model:Models.work_time=None):
@@ -60,7 +96,7 @@ class base_controller:
         wts = self.Repository.get_work_time_not_null()
         if wts:
             start = min([item.start for item in wts])
-            end = min([item.end for item in wts])
+            end = max([item.end for item in wts])
             if start and end:
                 self._draw_work_time(start,end)
 
@@ -71,6 +107,9 @@ class base_controller:
                 self.y = y
             def add_x(self,x):
                 self.x += x
+
+            def __sub__(self,other):
+                return self.__class__(*[self.x-other.x,self.y-other.y])
                 
             def add_y(self,y):
                 self.y += y
@@ -81,8 +120,8 @@ class base_controller:
             def __add__(self, other):
                 return self.__class__(*[self.x+other.x,self.y+other.y])
             
-            def __repr__(self) -> set:
-                return (self.x,self.y)
+            def __repr__(self) -> str:
+                return 'coordinate ({},{})'.format(self.x,self.y)
             
         def draw_line(graph,point_from:coordinate,point_to:coordinate,color='white',width=1):
             graph.draw_line(point_from=point_from.coordinate,point_to=point_to.coordinate,color=color,width=width)
@@ -149,11 +188,25 @@ class base_controller:
         coordinate_x = [(goc_toa_do_2 + coordinate(x_between*(i+1),0)) for i in range(day_count)] # danh sách tọa độ trục x -> ngày bắt đầu từ start kết thúc end
         coordinate_y = [(goc_toa_do_2 +coordinate(0,y_between*(i+1))) for i in range(work_count)] # danh sách tọa độ trục y -> công việc thực hiện trong khoảng start và end       
         if wts:
-            dict_coordinate_work = dict(zip(coordinate_y,wts))
+            dict_coordinate_work = dict(zip(wts,coordinate_y))
             for key, value in dict_coordinate_work.items():
-                text = value.work_id
-                location= key
+                text = key.work_id
+                location= value
                 draw_text(graph,text,location)
+            for item in wts:
+                # draw line so ngay lam viec
+                point_from = dict_coordinate_work[item] + coordinate(((item.start-start).days)*x_between,0)
+                point_to = dict_coordinate_work[item] + coordinate(((item.end-start).days+1)*x_between,0)
+                print(point_from,point_to)
+                draw_line(graph,point_from=point_from,point_to=point_to,color='green',width=2)
+                # hien thi nhan cong tren dong
+                text = self.Repository.get_worker_work_by_work_id(item.work_id)
+                if not text or item.days == 0:
+                    text = 0
+                else:
+                    text = round(text[0].amount / item.days,1)
+                location = point_from + coordinate((point_to-point_from).x/2,0)
+                draw_text(graph,text=text,location=location,color='yellow',text_location=sg.TEXT_LOCATION_BOTTOM)
         
         if dates:
             dict_coordinate_date = dict(zip(coordinate_x,dates))
@@ -161,6 +214,12 @@ class base_controller:
                 text = value.strftime(r'%d-%m-%y')
                 location= key
                 draw_text(graph,text,location,angle=90)
+
+        # vẽ đồ thị thứ 1: truc x la ngay, truc y la khoang nhan cong
+        # van dung kc giua cac ngay o do thi 2: x_between + coordinate_x
+        # nhan cong theo thoi gian
+
+
                 
     def create_work_time(self,model:Models.work_time):
         self.Repository.insert_work_time(model)

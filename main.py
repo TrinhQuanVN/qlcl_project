@@ -89,9 +89,16 @@ def to_hang_muc(parameter:Parameter):
 
 def to_work_time(parameter:Parameter) -> Models.work_time:
     work_id = parameter['work_id']
-    start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%Y')
-    end = datetime.datetime.strptime(parameter['end'],r'%d/%m/%Y')
+    start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%y') if 'start' in parameter else None
+    end = datetime.datetime.strptime(parameter['end'],r'%d/%m/%y') if 'end' in parameter else None
     return Models.work_time(work_id,start,end)    
+
+def to_worker_work_time(parameter:Parameter) -> Models.worker_work_time:
+    work_id = parameter['work_id']
+    id = parameter['id']
+    amount = parameter['amount']
+    date = datetime.datetime.strptime(parameter['date'],r'%d/%m/%y')
+    return Models.worker_work_time(work_id,id,amount,date)
 
 def event_tree_click_set_meta_data(window,**kwargs):
     window[kwargs['key']].metadata = kwargs['value']
@@ -256,8 +263,7 @@ def main():
                 Route.Foward('work time initial')
                 Route.Foward('work time list')
                 Route.Foward('work time draw')
-                # sg.Graph().draw_line(point_from=,point_to=,color=,width=)
-                # sg.Graph().draw_text(text=,location=,color=,font=,angle=,text_location='TEXT_LOCATION_CENTER')
+
         if event == '-GRAPH-_Configure':
             graph = window['-GRAPH-']
             e = graph.user_bind_event

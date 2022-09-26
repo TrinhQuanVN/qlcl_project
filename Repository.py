@@ -7,6 +7,37 @@ class base_repository:
         self.context = context
         # self.context.Load()
 
+############################################ worker work time
+    @property
+    def worker_work_time(self):
+        return self.context.worker_work_time
+
+    @property
+    def _linq_worker_work_time(self):
+        return Enumerable(self.context.worker_work_time)
+
+    def delete_worker_work_time_by_work_id(self,work_id):
+        # not done
+        pass     
+    def insert_worker_work_time(self,model):
+        self.context.worker_work_time.append(model)        
+
+    def get_worker_work_by_date(self,date):
+        return self._linq_worker_work.where(lambda x: x.date == date).to_list()
+    
+    def get_worker_work_time(self,work_id,id,date) -> Models.worker_work:
+        return self._linq_worker_work.where(lambda x: x.work_id.lower() == work_id.lower() and x.id.lower() == id.lower() and x.date == date).to_list()[0]
+
+    def update_worker_work_time(self,work_id,id,date,model):
+        old = self.get_worker_work(work_id,id,date)
+        if old:
+            old.id = model.id
+            old.date = model.date
+            old.amount = model.amount
+            return True
+        return False
+
+
 ############################################ work time
     @property
     def work_time(self):
@@ -89,6 +120,7 @@ class base_repository:
         old = self.get_work_by_id(id=id)
         old.name = model.name
         old.unit = model.unit
+        old.amount = model.amount
         return True
 ############################################ worker work 
     @property

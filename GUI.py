@@ -97,7 +97,7 @@ def GUI():
                 layout=main_layout(),
                 right_click_menu=right_click_menu_def,grab_anywhere=True,
                 resizable=True,finalize=True,  
-                location=(300,300),
+                # location=(300,300),
                 margins=(0, 0)
     )
     

@@ -119,12 +119,26 @@ class work_time:
         self.work_id = work_id 
         self.start = start if not isinstance(start,str) else (datetime.datetime.fromtimestamp(float(start)) if start else None)
         self.end = end if not isinstance(end,str) else (datetime.datetime.fromtimestamp(eval(end)) if end else None)
-        
-    def npd(self):
-        return (self.end - self.start).days + 1
+    
+    @property
+    def days(self):
+        return (self.end - self.start).days + 1 if self.end and self.start else 0
     
     def to_list(self):
         return [self.work_id,self.start,self.end]
 
     def to_save_list(self):
         return [self.__class__.__name__,self.work_id,self.start.timestamp() if self.start else None,self.end.timestamp() if self.end else None]
+
+class worker_work_time:
+    def __init__(self,work_id,id,amount,date:datetime.datetime) -> None:
+        self.work_id = work_id
+        self.id = id
+        self.amount = amount if not isinstance(amount,str) else float(amount)
+        self.date = date
+
+    def to_list(self):
+        return [self.work_id,self.id,self.amount,self.date]
+
+    def to_save_list(self):
+        return [self.__class__.__name__,self.work_id,self.id,self.amount,self.date.timestamp()]
