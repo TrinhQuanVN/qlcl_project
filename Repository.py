@@ -16,9 +16,29 @@ class base_repository:
     def _linq_worker_work_time(self):
         return Enumerable(self.context.worker_work_time)
 
+    def get_worker_work_time_by_work_id(self,work_id):
+        return self._linq_worker_work_time.where(lambda x: x.work_id == work_id).to_list()
+
+    def delete_worker_work_time(self,model:worker_work_time):
+        self.context.worker_work_time.remove(model)
+        return True
+
     def delete_worker_work_time_by_work_id(self,work_id):
-        # not done
-        pass     
+        worker_works = self.get_worker_work_by_work_id(work_id)
+        if not worker_works:
+            return
+        for ww in worker_works:
+            worker_work_times = self.get_worker_work_time_by_work_id_and_worker_work_id(work_id,ww.id)
+            if not worker_work_times:
+                continue
+            for wwt in worker_work_times:
+                self.delete_worker_work_time(wwt)
+                print(f'worker work time {wwt.work_id} {wwt.id} {wwt.date} is deleted')
+        return True
+                
+    def get_worker_work_time_by_work_id_and_worker_work_id(self,work_id,id):
+        return self._linq_worker_work_time.where(lambda x: x.work_id == work_id and x.id == id).to_list()
+
     def insert_worker_work_time(self,model):
         self.context.worker_work_time.append(model)        
 
@@ -50,6 +70,9 @@ class base_repository:
     @property
     def _linq_work_time(self):
         return Enumerable(self.context.work_time)
+
+    def delete_work_time(self,model:Models.work_time):
+        self.context.work_time.remove(model)
 
     def get_work_time_by_work_id(self,work_id:str) -> Models.work_time:
         if not self.work_time:

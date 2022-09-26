@@ -42,42 +42,36 @@ class base_controller:
     def Update(self,**kwargs):
         self.window[kwargs['key']].update(kwargs['values'])
 ############################################ worker work time
+    def delete_worker_work_time_by_work_id(self,work_id):
+        wwts = self.Repository.get_worker_work_time_by_work_id(work_id)
+        if not wwts:
+            return
+        for wwt in wwts:
+            self.Repository.delete_worker_work_time(wwt)
+            
     def create_worker_work_time_by_work_time(self,model:Models.work_time):
         work_id = model.work_id
-        worker_works = self.Repository.get_worker_work_by_work_id(work_id)
         # delete worker work time cu
-        if worker_works:
-            for item in worker_works:
-                self.Repository.delete_worker_work_time_by_work_id(work_id)
-                old_worker_work_times = self.Repository.get_worker_work_time_by_work_id_and_worker_id(work_id,item.id)
+        self.Repository.delete_worker_work_time_by_work_id(work_id)
+        # get worker works                
         worker_works = self.Repository.get_worker_work_by_work_id(work_id)
-        self.Repository.insert_worker_work_time(model)
+        if worker_works:
+            for ww in worker_works:
+                amount = ww.amount / model.days if model.days > 0 else 0
+                for i in range(model.days):
+                    self.Repository.insert_worker_work_time(Models.worker_work_time(work_id,ww.id,amount,model.start + timedelta(days=i)))  
+        
 
     def create_worker_work_time(self,model:Models.worker_work_time):
         self.Repository.insert_worker_work_time(model)
 
-    def inital_worker_work_time(self):
-        if not self.Repository.get_work_time_not_null():
-            return
-        for wt in self.Repository.get_work_time_not_null():
-            worker_works = self.Repository.get_worker_work_by_work_id(wt.work_id)
-            if not worker_works:
-                continue
-            for ww in worker_works:
-                amount_per_day = ww.amount / wt.days
-                for i in range(1,wt.days):
-                    worker_work_time = Models.worker_work_time(ww.work_id,ww.id,amount_per_day,wt.start+i-1) 
-                    if worker_work_time in self.Repository.worker_work_time:
-                        continue
-                    else:
-                        self.create_worker_work_time(worker_work_time)
-
-        if not self.Repository.work_count == self.Repository.work_time_count:
-            work_id_not_in_work_time_yet = self.Repository._linq_work.where(lambda x: x.id not in [x.work_id for x in self.Repository.work_time]).to_list()
-            for id in [x.id for x in work_id_not_in_work_time_yet]:
-                self.create_work_time(Models.work_time(id,None,None))
-
 ############################################ work time
+    def delete_work_time(self,work_id):
+        model = self.Repository.get_work_time_by_work_id(work_id)
+        if not model:
+            return
+        self.Repository.delete_work_time(model)
+
     def edit_wrok_time(self,work_id,model:Models.work_time=None):
         if not model:
             work_time = self.Repository.get_work_time_by_work_id(work_id)
@@ -137,7 +131,7 @@ class base_controller:
 
         day_count = (end - start).days + 1 # số ngày
         
-        dates = [start + timedelta(i) for i in range(day_count)] # danh sách ngày làm việc trong khoảng start end
+        dates = [start + timedelta(days=i) for i in range(day_count)] # danh sách ngày làm việc trong khoảng start end
 
 
         min_y_between = 10 # khoảng cách nhỏ nhất giữa 2 công việc trục y đồ thị 2 
@@ -224,12 +218,6 @@ class base_controller:
     def create_work_time(self,model:Models.work_time):
         self.Repository.insert_work_time(model)
         
-    def inital_work_time(self):
-        if not self.Repository.work_count == self.Repository.work_time_count:
-            work_id_not_in_work_time_yet = self.Repository._linq_work.where(lambda x: x.id not in [x.work_id for x in self.Repository.work_time]).to_list()
-            for id in [x.id for x in work_id_not_in_work_time_yet]:
-                self.create_work_time(Models.work_time(id,None,None))
-                
     def list_work_time(self,start:datetime=None,end:datetime=None):
         if not start and not end:
             self._list_work_time(self.Repository.work_time)

@@ -107,14 +107,17 @@ def get_metadata(window,key):
     return window[key].metadata
 
 def register():
+#################################################### worker work time
+    Route.Register('worker work time do create by work time',lambda p: controller.create_worker_work_time_by_work_time(to_work_time(p)))
+    Route.Register('worker work time do delete by work id',lambda p: controller.delete_worker_work_by_work_id(p['work_id']))
+    
 #################################################### work time
+    Route.Register('work time do delete by work id',lambda p: controller.delete_work_time(p['work_id']))
     Route.Register('work time do create',lambda p: controller.create_work_time(to_work_time(p)))
-    Route.Register('work time initial',controller.inital_work_time)
     Route.Register('work time list',controller.list_work_time)
     Route.Register('work time draw',controller.draw_work_time)
     Route.Register('work time update',lambda p: controller.edit_wrok_time(work_id=p['work_id']))
     Route.Register('work time do update',lambda p: controller.edit_wrok_time(work_id=p['work_id'],model=to_work_time(p)))
-    
     
 #################################################### HANG MUC
     Route.Register('file cons save', controller.save_file)
@@ -260,7 +263,6 @@ def main():
 #################################################### work time
         if event == '-TAB GROUP-':
             if values['-TAB GROUP-'] == '-TIME TAB-':
-                Route.Foward('work time initial')
                 Route.Foward('work time list')
                 Route.Foward('work time draw')
 
@@ -430,7 +432,10 @@ def main():
                 Route.Foward(f'worker work do delete by work id ? work_id={work_id}')
                 Route.Foward(f'machine work do delete by work id ? work_id={work_id}')
                 Route.Foward(f'material work do delete by work id ? work_id={work_id}')
-                   
+            
+            Route.Foward(f'work time do delete by work id ? work_id ={work_id}')
+            Route.Foward(f'worker work time do delete by work id ? work_id ={work_id}')
+            
             Route.Foward('work list')                
                 
 

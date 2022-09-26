@@ -15,6 +15,7 @@ def main():
     # print(display_date_time(time))
     str = r'01/02/22'
     d = datetime.datetime.strptime(str,r'%d/%m/%y')
-    print(5/2)
+    for i in range(0,1):
+        print(5/2)
 if __name__ == "__main__":
     main() 
