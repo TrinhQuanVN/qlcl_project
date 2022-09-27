@@ -70,7 +70,8 @@ class base_controller:
         model = self.Repository.get_work_time_by_work_id(work_id)
         if not model:
             return
-        self.Repository.delete_work_time(model)
+        if self.Repository.delete_work_time(model):
+            print(f'work time {work_id} is deleted')
 
     def edit_wrok_time(self,work_id,model:Models.work_time=None):
         if not model:
@@ -132,53 +133,56 @@ class base_controller:
         day_count = (end - start).days + 1 # số ngày
         
         dates = [start + timedelta(days=i) for i in range(day_count)] # danh sách ngày làm việc trong khoảng start end
-
+        X,Y = GRAPH_SIZE # chieu cao, chieu rong cua canavas
+        HEIGHT_KHUNG_1 = 120
+        HEIGHT_KHUNG_2 = Y - HEIGHT_KHUNG_1 - DISTANCE_KHUNG_DEN_TRUC * 2 - DISTANCE_GIUA_2_KHUNG
+        WIDTH_KHUNG = X - DISTANCE_VIEN_KHUNG * 2
 
         min_y_between = 10 # khoảng cách nhỏ nhất giữa 2 công việc trục y đồ thị 2 
         min_x_between = 15 # khoảng cách nhỏ nhất giữa 2 ngày trục x đồ thị 2 
-        
-        max_x,max_y = GRAPH_SIZE
+
+
         DISTANCE_KHUNG_DEN_TRUC = 10
         DISTANCE_VIEN_KHUNG = 5
         DISTANCE_GIUA_2_KHUNG = 10
         
-        WIDTH_CHU_VIET = 20
+        WIDTH_CHU_VIET = 10
         HEIGHT_CHU_VIET = 20
-        RONG_KHUNG_1 = max_x - DISTANCE_VIEN_KHUNG*2
-        RONG_KHUNG_2 = max_x - DISTANCE_VIEN_KHUNG*2
-        CAO_KHUNG_1 = 120
-        CAO_KHUNG_2 = max_y - DISTANCE_VIEN_KHUNG*2 - DISTANCE_GIUA_2_KHUNG
-        
+
+        max_x = WIDTH_KHUNG - DISTANCE_KHUNG_DEN_TRUC - WIDTH_CHU_VIET
+        max_y_1 = HEIGHT_KHUNG_1 - DISTANCE_KHUNG_DEN_TRUC - HEIGHT_CHU_VIET
+        max_y_2 = HEIGHT_KHUNG_2 - DISTANCE_KHUNG_DEN_TRUC - HEIGHT_CHU_VIET
+
         goc_toa_do_1 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET)
-        goc_toa_do_2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1+DISTANCE_GIUA_2_KHUNG+HEIGHT_CHU_VIET)
+        goc_toa_do_2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+max_y_1+DISTANCE_GIUA_2_KHUNG+HEIGHT_CHU_VIET)
         graph = self.window['-GRAPH-']
         # xóa
         graph.erase()
         # vẽ khung đồ thị 1
-        top_left=coordinate(DISTANCE_VIEN_KHUNG,CAO_KHUNG_1+DISTANCE_VIEN_KHUNG)
+        top_left=coordinate(DISTANCE_VIEN_KHUNG,max_y_1+DISTANCE_VIEN_KHUNG)
         bottom_right=coordinate(max_x-DISTANCE_VIEN_KHUNG,DISTANCE_VIEN_KHUNG)
         draw_rectangle(graph,top_left,bottom_right)
         # vẽ khung đồ thị 2
-        top_left=coordinate(DISTANCE_VIEN_KHUNG,max_y-DISTANCE_VIEN_KHUNG)
-        bottom_right=coordinate(max_x-DISTANCE_VIEN_KHUNG,CAO_KHUNG_1+DISTANCE_GIUA_2_KHUNG+DISTANCE_VIEN_KHUNG)
+        top_left=coordinate(DISTANCE_VIEN_KHUNG,max_y_2-DISTANCE_VIEN_KHUNG)
+        bottom_right=coordinate(max_x-DISTANCE_VIEN_KHUNG,max_y_1+DISTANCE_GIUA_2_KHUNG+DISTANCE_VIEN_KHUNG)
         draw_rectangle(graph,top_left,bottom_right)
         
         # vẽ trục tọa độ đồ thị 1
         point_to1 = coordinate(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET)
-        point_to2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1-5)
+        point_to2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+max_y_1-5)
         draw_line(graph,goc_toa_do_1,point_to1)
         draw_line(graph,goc_toa_do_1,point_to2)
         
         # vẽ trục tọa độ đồ thị 2
-        point_to1 = coordinate(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+CAO_KHUNG_1+HEIGHT_CHU_VIET+DISTANCE_GIUA_2_KHUNG)
+        point_to1 = coordinate(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+max_y_1+HEIGHT_CHU_VIET+DISTANCE_GIUA_2_KHUNG)
         point_to2 = coordinate(DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET,max_y-DISTANCE_VIEN_KHUNG-5)
         draw_line(graph,goc_toa_do_2,point_to1)
         draw_line(graph,goc_toa_do_2,point_to2)
         
         # vẽ đồ thị thứ 2
-        x_between = min([min_x_between, RONG_KHUNG_2/day_count]) if dates else min_x_between # khoảng cách giữa các ngày
-        y_between = min([min_y_between, CAO_KHUNG_2/work_count]) if wts else min_y_between # khoảng cách giữa các id công việc
-        
+        x_between = min([min_x_between, max_x/day_count]) if dates else min_x_between # khoảng cách giữa các ngày
+        y_between = min([min_y_between, max_y_2/work_count]) if wts else min_y_between # khoảng cách giữa các id công việc
+        print(x_between,max_y_2/work_count)
         coordinate_x = [(goc_toa_do_2 + coordinate(x_between*(i+1),0)) for i in range(day_count)] # danh sách tọa độ trục x -> ngày bắt đầu từ start kết thúc end
         coordinate_y = [(goc_toa_do_2 +coordinate(0,y_between*(i+1))) for i in range(work_count)] # danh sách tọa độ trục y -> công việc thực hiện trong khoảng start và end       
         if wts:
