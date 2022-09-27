@@ -134,6 +134,11 @@ class base_controller:
         
         dates = [start + timedelta(days=i) for i in range(day_count)] # danh sách ngày làm việc trong khoảng start end
         X,Y = GRAPH_SIZE # chieu cao, chieu rong cua canavas
+        
+        DISTANCE_KHUNG_DEN_TRUC = 10
+        DISTANCE_VIEN_KHUNG = 5
+        DISTANCE_GIUA_2_KHUNG = 10
+                
         HEIGHT_KHUNG_1 = 120
         HEIGHT_KHUNG_2 = Y - HEIGHT_KHUNG_1 - DISTANCE_KHUNG_DEN_TRUC * 2 - DISTANCE_GIUA_2_KHUNG
         WIDTH_KHUNG = X - DISTANCE_VIEN_KHUNG * 2
@@ -141,11 +146,6 @@ class base_controller:
         min_y_between = 10 # khoảng cách nhỏ nhất giữa 2 công việc trục y đồ thị 2 
         min_x_between = 15 # khoảng cách nhỏ nhất giữa 2 ngày trục x đồ thị 2 
 
-
-        DISTANCE_KHUNG_DEN_TRUC = 10
-        DISTANCE_VIEN_KHUNG = 5
-        DISTANCE_GIUA_2_KHUNG = 10
-        
         WIDTH_CHU_VIET = 10
         HEIGHT_CHU_VIET = 20
 
@@ -154,39 +154,38 @@ class base_controller:
         max_y_2 = HEIGHT_KHUNG_2 - DISTANCE_KHUNG_DEN_TRUC - HEIGHT_CHU_VIET
 
         goc_toa_do_1 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET)
-        goc_toa_do_2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+max_y_1+DISTANCE_GIUA_2_KHUNG+HEIGHT_CHU_VIET)
+        goc_toa_do_2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG + HEIGHT_KHUNG_1+DISTANCE_GIUA_2_KHUNG+HEIGHT_CHU_VIET)
         graph = self.window['-GRAPH-']
         # xóa
         graph.erase()
         # vẽ khung đồ thị 1
-        top_left=coordinate(DISTANCE_VIEN_KHUNG,max_y_1+DISTANCE_VIEN_KHUNG)
-        bottom_right=coordinate(max_x-DISTANCE_VIEN_KHUNG,DISTANCE_VIEN_KHUNG)
+        top_left=coordinate(DISTANCE_VIEN_KHUNG,HEIGHT_KHUNG_1+DISTANCE_VIEN_KHUNG)
+        bottom_right=coordinate(WIDTH_KHUNG+DISTANCE_VIEN_KHUNG,DISTANCE_VIEN_KHUNG)
         draw_rectangle(graph,top_left,bottom_right)
         # vẽ khung đồ thị 2
-        top_left=coordinate(DISTANCE_VIEN_KHUNG,max_y_2-DISTANCE_VIEN_KHUNG)
-        bottom_right=coordinate(max_x-DISTANCE_VIEN_KHUNG,max_y_1+DISTANCE_GIUA_2_KHUNG+DISTANCE_VIEN_KHUNG)
+        top_left=coordinate(DISTANCE_VIEN_KHUNG,Y-DISTANCE_VIEN_KHUNG)
+        bottom_right=coordinate(WIDTH_KHUNG+DISTANCE_VIEN_KHUNG,Y-DISTANCE_VIEN_KHUNG-HEIGHT_KHUNG_2)
         draw_rectangle(graph,top_left,bottom_right)
         
         # vẽ trục tọa độ đồ thị 1
-        point_to1 = coordinate(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET)
-        point_to2 = coordinate(DISTANCE_VIEN_KHUNG+WIDTH_CHU_VIET,DISTANCE_VIEN_KHUNG+max_y_1-5)
-        draw_line(graph,goc_toa_do_1,point_to1)
-        draw_line(graph,goc_toa_do_1,point_to2)
+        draw_line(graph,goc_toa_do_1,goc_toa_do_1 + coordinate(max_x,0))
+        draw_line(graph,goc_toa_do_1,goc_toa_do_1 + coordinate(0,max_y_1))
         
         # vẽ trục tọa độ đồ thị 2
-        point_to1 = coordinate(max_x-DISTANCE_VIEN_KHUNG-5,DISTANCE_VIEN_KHUNG+max_y_1+HEIGHT_CHU_VIET+DISTANCE_GIUA_2_KHUNG)
-        point_to2 = coordinate(DISTANCE_VIEN_KHUNG+HEIGHT_CHU_VIET,max_y-DISTANCE_VIEN_KHUNG-5)
-        draw_line(graph,goc_toa_do_2,point_to1)
-        draw_line(graph,goc_toa_do_2,point_to2)
+        draw_line(graph,goc_toa_do_2,goc_toa_do_2 + coordinate(max_x,0))
+        draw_line(graph,goc_toa_do_2,goc_toa_do_2 + coordinate(0,max_y_2))
         
         # vẽ đồ thị thứ 2
         x_between = min([min_x_between, max_x/day_count]) if dates else min_x_between # khoảng cách giữa các ngày
         y_between = min([min_y_between, max_y_2/work_count]) if wts else min_y_between # khoảng cách giữa các id công việc
-        print(x_between,max_y_2/work_count)
-        coordinate_x = [(goc_toa_do_2 + coordinate(x_between*(i+1),0)) for i in range(day_count)] # danh sách tọa độ trục x -> ngày bắt đầu từ start kết thúc end
-        coordinate_y = [(goc_toa_do_2 +coordinate(0,y_between*(i+1))) for i in range(work_count)] # danh sách tọa độ trục y -> công việc thực hiện trong khoảng start và end       
+        print(x_between,max_x/day_count)
+        coordinate_x_2 = [(goc_toa_do_2 + coordinate(x_between*(i+1),0)) for i in range(day_count)] # danh sách tọa độ trục x do thi 2 -> ngày bắt đầu từ start kết thúc end
+        coordinate_y_2 = [(goc_toa_do_2 +coordinate(0,y_between*(i+1))) for i in range(work_count)] # danh sách tọa độ trục y do thi 2-> công việc thực hiện trong khoảng start và end       
+        
+        coordinate_x_1 = [(goc_toa_do_1 + coordinate(x_between*(i+1),0)) for i in range(day_count)] # danh sách tọa độ trục x do thi 1 -> ngày bắt đầu từ start kết thúc end
+        
         if wts:
-            dict_coordinate_work = dict(zip(wts,coordinate_y))
+            dict_coordinate_work = dict(zip(wts,coordinate_y_2))
             for key, value in dict_coordinate_work.items():
                 text = key.work_id
                 location= value
@@ -207,16 +206,30 @@ class base_controller:
                 draw_text(graph,text=text,location=location,color='yellow',text_location=sg.TEXT_LOCATION_BOTTOM)
         
         if dates:
-            dict_coordinate_date = dict(zip(coordinate_x,dates))
-            for key, value in dict_coordinate_date.items():
-                text = value.strftime(r'%d-%m-%y')
+            dict_coordinate_date_2 = dict(zip(coordinate_x_2,dates))
+            dict_coordinate_date_1 = dict(zip(coordinate_x_1,dates))
+            
+            for key, value in dict_coordinate_date_2.items():
+                text = value.strftime(r'%d-%m')
                 location= key
                 draw_text(graph,text,location,angle=90)
 
-        # vẽ đồ thị thứ 1: truc x la ngay, truc y la khoang nhan cong
-        # van dung kc giua cac ngay o do thi 2: x_between + coordinate_x
-        # nhan cong theo thoi gian
+            for key, value in dict_coordinate_date_1.items():
+                text = value.strftime(r'%d-%m')
+                location= key
+                draw_text(graph,text,location,angle=90)
+                                
+        # vẽ đồ thị thứ 1
+        def draw_reg_worker(coordinate_date:coordinate,height):
+            pass
 
+        worker_per_day = []
+        for date in dates:
+            worker_work_times = self.Repository.get_worker_work_time_by_date(date)
+            if not worker_work_times:
+                worker_per_day.append(0)
+                continue
+            worker_per_day.append(sum([item.amount for item in worker_work_times]))
 
                 
     def create_work_time(self,model:Models.work_time):
