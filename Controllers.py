@@ -234,11 +234,9 @@ class base_controller:
         max_worker = max(worker_per_day)
         scale = max_worker // max_y_1 * 5 if max_worker // max_y_1 >=1 else 1
 
-        nc_bieu_dien_truc_y = []
-        x = 5
-        while x*scale<max_y_1:
-            nc_bieu_dien_truc_y.append(x)
-            x +=5
+        a = [x for x in range(1,max_y_1 // 5)] # danh sách các điểm trục y của đồ thị 1
+        coordinate_y_1 = [(goc_toa_do_1 +coordinate(0,i)) for i in a] # danh sách tọa độ trục y do thi 1-> bieu dien khoang nhan cong      
+
                 
     def create_work_time(self,model:Models.work_time):
         self.Repository.insert_work_time(model)
