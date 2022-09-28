@@ -178,7 +178,7 @@ class base_controller:
         # vẽ đồ thị thứ 2
         x_between = min([min_x_between, max_x/day_count]) if dates else min_x_between # khoảng cách giữa các ngày
         y_between = min([min_y_between, max_y_2/work_count]) if wts else min_y_between # khoảng cách giữa các id công việc
-        print(x_between,max_x/day_count)
+
         coordinate_x_2 = [(goc_toa_do_2 + coordinate(x_between*(i+1),0)) for i in range(day_count)] # danh sách tọa độ trục x do thi 2 -> ngày bắt đầu từ start kết thúc end
         coordinate_y_2 = [(goc_toa_do_2 +coordinate(0,y_between*(i+1))) for i in range(work_count)] # danh sách tọa độ trục y do thi 2-> công việc thực hiện trong khoảng start và end       
         
@@ -231,6 +231,14 @@ class base_controller:
                 continue
             worker_per_day.append(sum([item.amount for item in worker_work_times]))
 
+        max_worker = max(worker_per_day)
+        scale = max_worker // max_y_1 * 5 if max_worker // max_y_1 >=1 else 1
+
+        nc_bieu_dien_truc_y = []
+        x = 5
+        while x*scale<max_y_1:
+            nc_bieu_dien_truc_y.append(x)
+            x +=5
                 
     def create_work_time(self,model:Models.work_time):
         self.Repository.insert_work_time(model)

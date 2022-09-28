@@ -16,6 +16,9 @@ class base_repository:
     def _linq_worker_work_time(self):
         return Enumerable(self.context.worker_work_time)
 
+    def get_worker_work_time_by_date(self,date):
+        return self._linq_worker_work_time.where(lambda x: x.date == date).to_list()
+
     def get_worker_work_time_by_work_id(self,work_id):
         return self._linq_worker_work_time.where(lambda x: x.work_id == work_id).to_list()
 
