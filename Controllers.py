@@ -149,6 +149,8 @@ class base_controller:
         WIDTH_CHU_VIET = 10
         HEIGHT_CHU_VIET = 20
 
+        MIN_NHAN_CONG_BIEU_DIEN = 10 # gia tri be nhat tren truc y cua do thi 1
+
         max_x = WIDTH_KHUNG - DISTANCE_KHUNG_DEN_TRUC - WIDTH_CHU_VIET
         max_y_1 = HEIGHT_KHUNG_1 - DISTANCE_KHUNG_DEN_TRUC - HEIGHT_CHU_VIET
         max_y_2 = HEIGHT_KHUNG_2 - DISTANCE_KHUNG_DEN_TRUC - HEIGHT_CHU_VIET
@@ -235,8 +237,14 @@ class base_controller:
         scale = max_worker // max_y_1 * 5 if max_worker // max_y_1 >=1 else 1
 
         a = [x for x in range(1,max_y_1 // 5)] # danh sách các điểm trục y của đồ thị 1
-        coordinate_y_1 = [(goc_toa_do_1 +coordinate(0,i)) for i in a] # danh sách tọa độ trục y do thi 1-> bieu dien khoang nhan cong      
-
+        coordinate_y_1 = [(goc_toa_do_1 +coordinate(0,i*5)) for i in a] # danh sách tọa độ trục y do thi 1-> bieu dien khoang nhan cong      
+        nc_bieu_dien = [5*scale*i for i in range(len(a))] # nhan cong bieu dien
+        dict_nhan_cong_bieu_dien = dict(zip(nc_bieu_dien,coordinate_y_1))
+        if worker_per_day:
+            for key, value in dict_nhan_cong_bieu_dien.items():
+                text = key
+                location= value
+                draw_text(graph,text,location)            
                 
     def create_work_time(self,model:Models.work_time):
         self.Repository.insert_work_time(model)
