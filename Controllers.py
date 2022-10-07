@@ -232,13 +232,13 @@ class base_controller:
                 worker_per_day.append(0)
                 continue
             worker_per_day.append(sum([item.amount for item in worker_work_times]))
-
+        print(worker_per_day)
         max_worker = max(worker_per_day)
-        scale = max_worker // max_y_1 * 5 if max_worker // max_y_1 >=1 else 1
+        scale = max_worker // max_y_1 if max_worker // max_y_1 >=1 else 1
 
-        a = [x for x in range(1,max_y_1 // 5)] # danh sách các điểm trục y của đồ thị 1
-        coordinate_y_1 = [(goc_toa_do_1 +coordinate(0,i*5)) for i in a] # danh sách tọa độ trục y do thi 1-> bieu dien khoang nhan cong      
-        nc_bieu_dien = [5*scale*i for i in range(len(a))] # nhan cong bieu dien
+        a = [x for x in range(1,max_y_1 // MIN_NHAN_CONG_BIEU_DIEN)] # danh sách các điểm trục y của đồ thị 1
+        coordinate_y_1 = [(goc_toa_do_1 +coordinate(0,i*MIN_NHAN_CONG_BIEU_DIEN)) for i in a] # danh sách tọa độ trục y do thi 1-> bieu dien khoang nhan cong      
+        nc_bieu_dien = [MIN_NHAN_CONG_BIEU_DIEN*scale*i for i in range(len(a))] # nhan cong bieu dien
         dict_nhan_cong_bieu_dien = dict(zip(nc_bieu_dien,coordinate_y_1))
         if worker_per_day:
             for key, value in dict_nhan_cong_bieu_dien.items():
