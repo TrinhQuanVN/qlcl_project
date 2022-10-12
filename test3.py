@@ -1,6 +1,6 @@
 import Extension
 import datetime
-
+import numpy as np
 from py_linq import Enumerable
 
 def main():
@@ -15,7 +15,11 @@ def main():
     # print(display_date_time(time))
     str = r'01/02/22'
     d = datetime.datetime.strptime(str,r'%d/%m/%y')
-    for i in range(0,1):
-        print(5/2)
+    np.random.seed(0)
+    a = np.random.randint(1,10,10)
+    b = np.random.random()
+    print(a,b)
+        
+        
 if __name__ == "__main__":
     main() 
