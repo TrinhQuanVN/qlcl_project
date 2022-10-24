@@ -53,10 +53,11 @@ class GUI():
                 [self.Tree('TREE'), self.Multiline('MULTILINE')]]
 
     def Window(self, layout):
+        sg.theme('Topanga')
         self.window = sg.Window('Docstring for Python Files', layout=layout,
             margins=(0, 0), use_default_focus=False, finalize=True)
-        self.tree = self.window.FindElement('TREE')
-        self.multiline = self.window.FindElement('MULTILINE')
+        self.tree = self.window['TREE']
+        self.multiline = self.window['MULTILINE']
         self.tree.Widget.configure(show='tree')    # Invisiable Header
         # self.tree.bind('<Button-1>', 'Down')       # add Button-1 event to Tree
 
@@ -68,7 +69,7 @@ class GUI():
         return sg.Tree(data=self.treedata, headings=['Notes',], pad=(0, 0),
         show_expanded=False, col0_width=30, auto_size_columns=False,
         visible_column_map=[False,], select_mode=sg.TABLE_SELECT_MODE_BROWSE,
-        enable_events=True, text_color='black', background_color='white',
+        enable_events=True, #  text_color='black', background_color='white'
         font=self.font2, num_rows=28, row_height=20, key=key)
 
     def Input(self, key):
@@ -78,8 +79,8 @@ class GUI():
     def Multiline(self, key):
         return sg.Multiline(default_text='', enable_events=False, pad=((0, 5), 5),
             size=(self.line_width, 31), do_not_clear=True, disabled=True,
-            key=key, border_width=0, focus=False, font=self.font1,
-            text_color='white', background_color='blue')
+            key=key, border_width=0, focus=False, font=self.font1,)
+            #text_color='white', background_color='blue')
 
     def Browse_File(self, key):
         return sg.FileBrowse(button_text=key, target=key, font=self.font1,
