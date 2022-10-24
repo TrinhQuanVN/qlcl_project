@@ -45,8 +45,8 @@ class GUI():
         self.treedata = sg.TreeData()
 
     def Layout(self):
-        return [[self.Input('Load File'), self.Browse_File('Load File'),
-                 self.Input('Load Path'), self.Browse_Path('Load Path'),
+        return [[self.Input('Load File Input'), self.Browse_File('Load File'),
+                 self.Input('Load Path Input'), self.Browse_Path('Load Path'),
                  self.Button('Sort'),           self.Button('Rename'),
                  self.Button('Delete'),         self.Button('Move Up'),
                  self.Button('Move Down'),      self.Button('Quit')],
@@ -354,6 +354,9 @@ func = {'Load File':G.Load_File, 'Load Path':G.Load_Path, 'Sort'   :G.Sort,
 while True:
 
     event, values = G.window.Read()
+    if event:
+        print(f'event {event} & values {values[event]}')
+        print(values['Load File Input'])
 
     if event in [None, 'Quit']:
         break
