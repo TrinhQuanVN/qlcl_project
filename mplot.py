@@ -153,8 +153,6 @@ def e():
     
     
 def f():
-
-
     # Load a numpy record array from yahoo csv data with fields date, open, high,
     # low, close, volume, adj_close from the mpl-data/sample_data directory. The
     # record array stores the date as an np.datetime64 with a day unit ('D') in
