@@ -1,6 +1,7 @@
 import datetime
 import re
 import pandas as pd
+import numpy as np
 
 def is_work(letter:str):
     return True if re.match(r'(W)([\d])',letter) else False
@@ -43,5 +44,31 @@ def read_excel(path) -> list:
     return dutoanDF.values
 
 def display_date_time(date_time:datetime.datetime):
-    format = '%d/%m/%y'
+    format = r'%d/%m/%y'
     return date_time.strftime(format)
+
+def to_date(text):
+    date_pattern = {r"^[0-9]{1,2}/[0-9]{1,2}/[0-9]{2}$":r'%d/%m/%y', r"^[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}$":r'%d/%m/%Y',
+                     r"^[0-9]{1,2}-[0-9]{1,2}-[0-9]{2}$":r'%d-%m-%y', r"^[0-9]{1,2}-[0-9]{1,2}-[0-9]{4}$":r'%d-%m-%Y',
+                    r"^[0-9]{1,2}.[0-9]{1,2}.[0-9]{2}$":r'%d.%m.%y', r"^[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}$":r'%d.%m.%Y'}
+    
+    for p, format in date_pattern.items():
+        if re.findall(re.compile(p),text):
+            return datetime.datetime.strptime(text,format)
+
+    return None
+
+def main():
+    text = '22/10/99'
+    print(to_date(text))
+    a = np.datetime64('1992-10-20','D')
+    b= a + np.timedelta64(30,'m')
+    print(b.data)
+
+if __name__ == "__main__":
+    main()
+
+
+    
+        
+    

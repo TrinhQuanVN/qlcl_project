@@ -61,12 +61,19 @@ class material_norm(worker_norm):
           
 class work:
     id_iter = count()
-    def __init__(self,name,unit,amount,hm_id,id=None) -> None:
+    def __init__(self,name,unit,amount,hm_id,start:datetime.datetime=None,end:datetime.datetime=None,id=None) -> None:
         self.id = f'W{next(self.id_iter)}' if not id else id
         self.name = name
         self.unit = unit
         self.amount = float(amount)
         self.hm_id = hm_id
+        self.start = start
+        self.end = end
+        
+    def work_days(self):
+        if not self.start or self.end:
+            return
+        return (self.end - self.start + datetime.timedelta(1)).days
 
     def to_save_list(self):
         return [self.__class__.__name__,self.name,self.unit,self.amount,self.hm_id,self.id]

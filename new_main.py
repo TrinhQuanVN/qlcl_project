@@ -12,24 +12,35 @@ class GUI():
         self.treedata = sg.TreeData()
         
     def Main_Layout(self):
+        
+        # Menu bar
         menu_def = [['Công trình', ['Save','Open','Exit']],
             ['Định mức', ['Show nhân công','Show máy','Show vật liệu','Mở định mức','Thêm từ dự toán',]]]
         
+        # Right click 
         right_click_menu_def = [[], ['Quan', 'Yeu', 'Hang','More Nothing','Exit']]
         
+        # Right click 
         right_click_menu_tab_norm = [['a'], ['Copy', 'Paste', 'Delete','Create a copy','More']]
         
         layout_tab_norm = [
         [sg.Text('Find',(5,1)),sg.Input(s=(20,1),k='-NORM SEARCH INPUT-'),sg.Text(s=(5,1),k='-NORM COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-NORM FIND BUTTON-')],
         [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE NORM-',col0_heading='NORM',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True)],
         [sg.Push(),sg.Button('Add work',s=(10,1),k='-ADD WORK WITH NORM ID-'),sg.Button('Add',s=(10,1),k='-ADD NORM-'),sg.Button('Edit',s=(10,1),k='-EDIT NORM-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY NORM-'),sg.Button('Delete',s=(10,1),k='-DELETE NORM-')]
-    ]
+                        ]
+
+        layout_tab_work = [
+        [sg.Text('Find',(5,1)),sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-')],
+        [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE WORK-',col0_heading='WORK',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True)],
+        [sg.Push(),sg.Button('Add HM',s=(10,1),k='-ADD HM-'),sg.Button('Add',s=(10,1),k='-ADD WORK-'),sg.Button('Edit',s=(10,1),k='-EDIT WORK-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY WORK-'),sg.Button('Delete',s=(10,1),k='-DELETE WORK-')]
+                            ]
         
         return [
                 [sg.MenubarCustom(menu_def, font=self.font1)], #Menubar
                 
                 [sg.TabGroup(layout=[
-                    [sg.Tab('Norm',layout_tab_norm,k='-NORM TAB-',right_click_menu=right_click_menu_tab_norm)]
+                    [sg.Tab('Norm',layout_tab_norm,k='-NORM TAB-',right_click_menu=right_click_menu_tab_norm)],
+                    [sg.Tab('Work',layout_tab_work,k='-WORK TAB-',right_click_menu=right_click_menu_def)]
                                     ]
                             ,k='-TAB GROUP-',enable_events=True)],
                 # [self.Input('Load File'), self.Browse_File('Load File'),
@@ -84,9 +95,10 @@ def main():
     G = GUI()
     G.Window(G.Main_Layout(),theme='DarkAmber')
     # G.Load_Book()
-    func = {'Thêm từ dự toán':G.load_norm_from_excel, 'Load Path':G.Load_Path, 'Sort'   :G.Sort,
-            'Rename'   :G.Rename,    'Delete'   :G.Delete,    'Move Up':G.Move_Up,
-            'Move Down':G.Move_Down}
+    func = {'Thêm từ dự toán':G.load_norm_from_excel,}
+            # 'Load Path':G.Load_Path, 'Sort'   :G.Sort,
+            # 'Rename'   :G.Rename,    'Delete'   :G.Delete,    'Move Up':G.Move_Up,
+            # 'Move Down':G.Move_Down}
     while True:
 
         event, values = G.window.Read()

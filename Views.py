@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import Framework
 import Extension as ex
 import Models
@@ -52,9 +52,8 @@ class base_view:
         for key in kwargs:
             request.append('{} = {} &'.format(key,kwargs[key]))
         result = route + '?' + ''.join(request)
-        print(request)
+        print(result.strip()[:-1])
         Framework.Route.Foward(result.strip()[:-1])
-        print(result)
 
 class save_file_menu_bar_view(base_view):
     def Render(self):
@@ -139,18 +138,83 @@ class work_time_update_view(base_view):
         window.close()
 
 ############################################################ WORK
+
+def get_amount(id,item_work):
+    return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
+
+def work_create_layout(norm = None, hang_muc = None,
+                       workers = None, machines = None, materials = None,
+                       worker = None, machine = None, material = None,
+                       worker_norm = None, machine_norm = None, material_norm = None):
+    
+    id_text = sg.Text('ID',s=(7,1))
+    name_text = sg.Text('Name',s=(7,1))
+    unit_text = sg.Text('Unit',s=(7,1))
+    amount_text = sg.Text('Amount',s=(7,1))
+    start_text = sg.Text('Start',s=(7,1))
+    end_text = sg.Text('End',s=(7,1))
+    hm_text = sg.Text('Hang muc',s=(7,1))
+    
+    # id_in = sg.Input(s=(15,1),k='-ID IN-',expand_x=True,default_text=work_id,readonly=True,text_color='black')
+    name_in = sg.Input(s=(15,1),expand_x=True,default_text=norm.name,k='-NAME IN-')
+    unit_in = sg.Input(s=(15,1),expand_x=True,default_text=norm.unit,k='-UNIT IN-')
+    amount_in = sg.Input(s=(15,1),expand_x=True,k='-AMOUNT IN-',enable_events=True)
+    start_in = sg.Input(s=(15,1),expand_x=True,k='-START IN-',enable_events=True)
+    end_in = sg.Input(s=(15,1),expand_x=True,k='-END IN-',enable_events=True)
+    hm_combo = Combo(hang_muc,k=f'-COMBO HM-',default_value=hang_muc[-1])
+    
+    create_btn = sg.Button('Create',s=(10,1),k='-CREATE-')
+    clear_btn =  sg.Button('Clear',s=(10,1),k='-CLEAR-')   
+    cancel_btn = sg.Button('Cancel',s=(10,1),k='-CANCEL-')    
+    
+    layout =[
+        [hm_text,hm_combo],
+        [name_text,name_in],
+        [unit_text,unit_in],
+        [amount_text,amount_in],
+        [start_text,start_in],
+        [end_text,end_in],
+        
+        [Elements.Text('Worker',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
+            Elements.Text('Machine',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
+            Elements.Text('Material',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI],
+    ]
+
+    for i in range(10):
+        layout.append([
+            Combo(values=workers,s=(20,1),k=f'-COMBO WORKER{i}-',default_value=worker[i] if i <len(worker) else None),
+            
+            I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c',default_text=worker[i].unit if i <len(worker) and worker else None),
+            
+            I(s=(10,1),k=f'-INPUT WORKER{i}-',default_text=get_amount(worker[i].id,worker_norm) if i <len(worker) and worker else None),
+            
+            Combo(values=machines,s=(20,1),k=f'-COMBO MACHINE{i}-',default_value=machine[i] if i <len(machine) and machine else None),
+            
+            I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c',default_text=machine[i].unit if i <len(machine) and machine else None),
+            
+            I(s=(10,1),k=f'-INPUT MACHINE{i}-',default_text=get_amount(machine[i].id,machine_norm) if i <len(machine) and machine else None),
+            
+            Combo(values=materials,s=(20,1),k=f'-COMBO MATERIAL{i}-',default_value=material[i] if i <len(material) and material else None),
+            
+            I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c',default_text=material[i].unit if i <len(material) and material else None),
+            
+            I(s=(10,1),k=f'-INPUT MATERIAL{i}-',default_text=get_amount(material[i].id,material_norm) if i <len(material) and material else None),
+            
+            ])
+        
+    layout.append(
+        [create_btn,clear_btn,cancel_btn]
+    )
+    
+    return layout
+
+def work_create_windown(title:str,layout):
+    pass
+
+
 class work_create_with_norm_id_view(base_view):
     def Render(self):
-        def get_worker_amount(id,item_work):
-            return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
         
-        def get_machine_amount(id,item_work):
-            print(id)
-            print(item_work)
-            return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
-
-        def get_material_amount(id,item_work):
-            return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
         
         hang_muc = self.kwargs['hang_muc']
         
@@ -167,264 +231,245 @@ class work_create_with_norm_id_view(base_view):
         machine = self.kwargs['machine']
         material = self.kwargs['material']
         
-        id_text = Elements.Text('ID',(5,1))
-        name_text = Elements.Text('Name',(5,1))
-        unit_text = Elements.Text('Unit',(5,1))
-        amount_text = Elements.Text('Amount',(5,1))
-        hm_text = Elements.Text('Hang muc',(7,1))
+        layout = work_create_layout(norm, hang_muc, workers, machines, materials, worker, machine, material, worker_norm, machine_norm, material_norm)
         
-        # id_in = sg.Input(s=(15,1),k='-ID IN-',expand_x=True,default_text=work_id,readonly=True,text_color='black')
-        name_in = sg.Input(s=(15,1),expand_x=True,default_text=norm.name,k='-NAME IN-')
-        unit_in = sg.Input(s=(15,1),expand_x=True,default_text=norm.unit,k='-UNIT IN-')
-        amount_in = sg.Input(s=(15,1),expand_x=True,k='-AMOUNT IN-',enable_events=True)
-        hm_combo = Combo(hang_muc,k=f'-COMBO HM-',default_value=hang_muc[-1])
         
-        Create_btn = Elements.Button('Create',(10,1))
-        clear_btn =  Elements.Button('Clear',(10,1))   
-        cancel_btn = Elements.Button('Cancel',(10,1))    
-        
-        layout =[
-            [hm_text.GUI,hm_combo],
-            [name_text.GUI,name_in],
-            [unit_text.GUI,unit_in],
-            [amount_text.GUI,amount_in],
-            
-            [Elements.Text('Worker',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-             Elements.Text('Machine',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-             Elements.Text('Material',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI],
-        ]
-        for i in range(10):
-            layout.append([
-                Combo(values=workers,s=(20,1),k=f'-COMBO WORKER{i}-',default_value=worker[i] if i <len(worker) else None),
-                
-                I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c',default_text=worker[i].unit if i <len(worker) else None),
-                
-                I(s=(10,1),k=f'-INPUT WORKER{i}-',default_text=get_worker_amount(worker[i].id,worker_norm) if i <len(worker) else None),
-                
-                Combo(values=machines,s=(20,1),k=f'-COMBO MACHINE{i}-',default_value=machine[i] if i <len(machine) else None),
-                
-                I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c',default_text=machine[i].unit if i <len(machine) else None),
-                
-                I(s=(10,1),k=f'-INPUT MACHINE{i}-',default_text=get_machine_amount(machine[i].id,machine_norm) if i <len(machine) else None),
-                
-                Combo(values=materials,s=(20,1),k=f'-COMBO MATERIAL{i}-',default_value=material[i] if i <len(material) else None),
-              
-                I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c',default_text=material[i].unit if i <len(material) else None),
-                
-                I(s=(10,1),k=f'-INPUT MATERIAL{i}-',default_text=get_material_amount(material[i].id,material_norm) if i <len(material) else None),
-                
-                ])
-            
-        layout.append(
-            [Create_btn.GUI,clear_btn.GUI,cancel_btn.GUI]
-        )
         window = sg.Window('Create work',layout,font=('Any',13),keep_on_top=True,finalize=True)
         window['-NAME IN-'].bind("<Return>", "_Enter")
         window['-AMOUNT IN-'].bind("<Return>", "_Enter")
         window.bind('<Escape>','-ESCAPE-')
-        while True:
-            event,values = window.read()
-            print(event)
-            if event in [sg.WIN_CLOSED,cancel_btn.key,'-ESCAPE-']:
-                break
-            
-            if event == '-NAME IN-'+'_Enter' and  ex.is_norm(values['-NAME IN-'].lower().strip()):
-                id = values['-NAME IN-'].lower().strip()
-                self.foward('work create with norm id', id=id)
-                break
-            
-            if event == '-AMOUNT IN-'+'_Enter' and  values['-AMOUNT IN-']:
-                window['-AMOUNT IN-'].update(round(eval(values['-AMOUNT IN-']),2))
-                for i in range(10):
-                    if values[f'-INPUT WORKER{i}-']:
-                        window[f'-INPUT WORKER{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_worker_amount(values[f'-COMBO WORKER{i}-'].id,worker_norm))),2))
-                        
-                    if values[f'-INPUT MACHINE{i}-']:
-                        window[f'-INPUT MACHINE{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_machine_amount(values[f'-COMBO MACHINE{i}-'].id,machine_norm))),2))
-                        
-                    if values[f'-INPUT MATERIAL{i}-']:
-                        window[f'-INPUT MATERIAL{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_material_amount(values[f'-COMBO MATERIAL{i}-'].id,material_norm))),2))  
-                                                                     
-            if event in [f'-COMBO WORKER{i}-' for i in range(10)]:
-                for i in range(10):
-                    if values[f'-COMBO WORKER{i}-']:
-                        window[f'-UNIT WORKER{i}-'].update(values[f'-COMBO WORKER{i}-'].unit)
-                        
-            if event in [f'-COMBO MACHINE{i}-' for i in range(10)]:
-                for i in range(10):                        
-                    if values[f'-COMBO MACHINE{i}-']:
-                        window[f'-UNIT MACHINE{i}-'].update(values[f'-COMBO MACHINE{i}-'].unit)
-                        
-            if event in [f'-COMBO MATERIAL{i}-' for i in range(10)]:
-                for i in range(10):                        
-                    if values[f'-COMBO MATERIAL{i}-']:
-                        window[f'-UNIT MATERIAL{i}-'].update(values[f'-COMBO MATERIAL{i}-'].unit) 
-                              
-            if event in [Create_btn.key]:
-                id= 'W{}'.format(next(Models.work.id_iter))
-                self.foward('work do create',
-                            id= id,
-                            name=values['-NAME IN-'],
-                            unit=values['-UNIT IN-'],
-                            amount=values['-AMOUNT IN-'],
-                            hm_id=values['-COMBO HM-'].id)
-
+        BREAK = False
+        
+        def multi_amount(values=None):
+            if not values['-AMOUNT IN-']:
+                return
+            window['-AMOUNT IN-'].update(round(eval(values['-AMOUNT IN-']),2))
+            for i in range(10):
+                if values[f'-INPUT WORKER{i}-']:
+                    window[f'-INPUT WORKER{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO WORKER{i}-'].id,worker_norm))),2))
+                    
+                if values[f'-INPUT MACHINE{i}-']:
+                    window[f'-INPUT MACHINE{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO MACHINE{i}-'].id,machine_norm))),2))
+                    
+                if values[f'-INPUT MATERIAL{i}-']:
+                    window[f'-INPUT MATERIAL{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO MATERIAL{i}-'].id,material_norm))),2))            
+        
+        def update_unit(values=None):
+            for i in range(10):
+                if values[f'-COMBO WORKER{i}-']:
+                    window[f'-UNIT WORKER{i}-'].update(values[f'-COMBO WORKER{i}-'].unit)
+                    
+            for i in range(10):                        
+                if values[f'-COMBO MACHINE{i}-']:
+                    window[f'-UNIT MACHINE{i}-'].update(values[f'-COMBO MACHINE{i}-'].unit)
+                    
+            for i in range(10):                        
+                if values[f'-COMBO MATERIAL{i}-']:
+                    window[f'-UNIT MATERIAL{i}-'].update(values[f'-COMBO MATERIAL{i}-'].unit)
+        
+        def create(values=None):
+            self.foward('work do create',
+                            id ='W{}'.format(next(Models.work.id_iter)),
+                            name = values['-NAME IN-'],
+                            unit = values['-UNIT IN-'],
+                            amount = values['-AMOUNT IN-'],
+                            hm_id = values['-COMBO HM-'].id,
+                            start = values['-START IN-'],
+                            end = values['-END IN-'])
                 
-                for i in range(10):
-                    if values[f'-COMBO WORKER{i}-'] and values[f'-INPUT WORKER{i}-']:
-                        self.foward('worker work do create',
-                                    work_id=id,
-                                    id=values[f'-COMBO WORKER{i}-'].id,
-                                    amount=values[f'-INPUT WORKER{i}-'])
-                        
-                    if values[f'-COMBO MACHINE{i}-'] and values[f'-INPUT MACHINE{i}-']:
-                        self.foward('machine work do create',
-                                    work_id=id,
-                                    id=values[f'-COMBO MACHINE{i}-'].id,
-                                    amount=values[f'-INPUT MACHINE{i}-']) 
-                        
-                    if values[f'-COMBO MATERIAL{i}-'] and values[f'-INPUT MATERIAL{i}-']:
-                        self.foward('material work do create',
-                                    work_id=id,
-                                    id=values[f'-COMBO MATERIAL{i}-'].id,
-                                    amount=values[f'-INPUT MATERIAL{i}-'])                       
+            for i in range(10):
+                if values[f'-COMBO WORKER{i}-'] and values[f'-INPUT WORKER{i}-']:
+                    self.foward('worker work do create',
+                                work_id=id,
+                                id=values[f'-COMBO WORKER{i}-'].id,
+                                amount=values[f'-INPUT WORKER{i}-'])
+                    
+                if values[f'-COMBO MACHINE{i}-'] and values[f'-INPUT MACHINE{i}-']:
+                    self.foward('machine work do create',
+                                work_id=id,
+                                id=values[f'-COMBO MACHINE{i}-'].id,
+                                amount=values[f'-INPUT MACHINE{i}-']) 
+                    
+                if values[f'-COMBO MATERIAL{i}-'] and values[f'-INPUT MATERIAL{i}-']:
+                    self.foward('material work do create',
+                                work_id=id,
+                                id=values[f'-COMBO MATERIAL{i}-'].id,
+                                amount=values[f'-INPUT MATERIAL{i}-'])                       
 
-                self.foward('work list')
+            self.foward('work list')
+            
+            BREAK = True
 
-                self.foward('work time do create', work_id= id) # create work time
+        def clear(values=None):
+            for key in ['-NAME IN-','-UNIT IN-','-AMOUNT IN-']:
+                window[key].update('')
+        
+        func = {'-AMOUNT IN-'+'_Enter':multi_amount, 
+                '-CREATE-':create, '-CLEAR-':clear}
+        
+        for i in range(10):
+            func.update({f'-COMBO WORKER{i}-':update_unit})
+            func.update({f'-COMBO MACHINE{i}-':update_unit})
+            func.update({f'-COMBO MATERIAL{i}-':update_unit})
+            
+        while not BREAK:
+            event, values = window.read()
+            print(event)
+            if event in [sg.WIN_CLOSED,'-ESCAPE-','-CANCEL-']:
                 break
-
-            if event == clear_btn.key:
-                for key in ['-NAME IN-','-UNIT IN-','-AMOUNT IN-']:
-                    window[key].update('')
+            
+            if event in func:
+                func[event](values)
+            
+    
         window.close()
 
 class work_create_view(base_view):
     def Render(self):
-        def get_worker_amount(id,item_work):
-            return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
-        
-        def get_machine_amount(id,item_work):
-            return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
 
-        def get_material_amount(id,item_work):
-            return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
         hang_muc = self.kwargs['hang_muc']
         
-        worker = self.kwargs['worker']
-        material = self.kwargs['material']
-        machine = self.kwargs['machine']
+        workers = self.kwargs['worker']
+        materials = self.kwargs['material']
+        machines = self.kwargs['machine']
         
-        # id_text = Elements.Text('ID',(7,1))
-        name_text = Elements.Text('Name',(7,1))
-        unit_text = Elements.Text('Unit',(7,1))
-        amount_text = Elements.Text('Amount',(7,1))
-        hm_text = Elements.Text('Hang muc',(7,1))
+        layout = work_create_layout(hang_muc = hang_muc, workers = workers, materials = materials, machines = machines)
+        # # id_text = Elements.Text('ID',(7,1))
+        # name_text = Elements.Text('Name',(7,1))
+        # unit_text = Elements.Text('Unit',(7,1))
+        # amount_text = Elements.Text('Amount',(7,1))
+        # hm_text = Elements.Text('Hang muc',(7,1))
         
         
-        # id_in = sg.Input(s=(15,1),k='-ID IN-',expand_x=True,default_text=work_id,readonly=True,text_color='black')
-        name_in = sg.Input(s=(15,1),expand_x=True,k='-NAME IN-')
-        unit_in = sg.Input(s=(15,1),expand_x=True,k='-UNIT IN-')
-        amount_in = sg.Input(s=(15,1),expand_x=True,k='-AMOUNT IN-')
-        hm_combo = Combo(hang_muc,k=f'-COMBO HM-',default_value=hang_muc[-1])
+        # # id_in = sg.Input(s=(15,1),k='-ID IN-',expand_x=True,default_text=work_id,readonly=True,text_color='black')
+        # name_in = sg.Input(s=(15,1),expand_x=True,k='-NAME IN-')
+        # unit_in = sg.Input(s=(15,1),expand_x=True,k='-UNIT IN-')
+        # amount_in = sg.Input(s=(15,1),expand_x=True,k='-AMOUNT IN-')
+        # hm_combo = Combo(hang_muc,k=f'-COMBO HM-',default_value=hang_muc[-1])
         
-        Create_btn = Elements.Button('Create',(10,1))
-        clear_btn =  Elements.Button('Clear',(10,1))   
-        cancel_btn = Elements.Button('Cancel',(10,1))    
+        # Create_btn = Elements.Button('Create',(10,1))
+        # clear_btn =  Elements.Button('Clear',(10,1))   
+        # cancel_btn = Elements.Button('Cancel',(10,1))    
         
-        layout =[
-            [hm_text.GUI,hm_combo],
-            [name_text.GUI,name_in],
-            [unit_text.GUI,unit_in],
-            [amount_text.GUI,amount_in],
-            [Elements.Text('Worker',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-             Elements.Text('Machine',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-             Elements.Text('Material',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI],
-        ]
-        for i in range(10):
-            layout.append([
-                Combo(worker,k=f'-COMBO WORKER{i}-'), I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT WORKER{i}-',justification='r'),
-                Combo(machine,k=f'-COMBO MACHINE{i}-'), I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT MACHINE{i}-',justification='r'),
-                Combo(material,k=f'-COMBO MATERIAL{i}-'), I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT MATERIAL{i}-',justification='r'),
-                ])
+        # layout =[
+        #     [hm_text.GUI,hm_combo],
+        #     [name_text.GUI,name_in],
+        #     [unit_text.GUI,unit_in],
+        #     [amount_text.GUI,amount_in],
+        #     [Elements.Text('Worker',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
+        #      Elements.Text('Machine',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
+        #      Elements.Text('Material',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI],
+        # ]
+        # for i in range(10):
+        #     layout.append([
+        #         Combo(worker,k=f'-COMBO WORKER{i}-'), I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT WORKER{i}-',justification='r'),
+        #         Combo(machine,k=f'-COMBO MACHINE{i}-'), I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT MACHINE{i}-',justification='r'),
+        #         Combo(material,k=f'-COMBO MATERIAL{i}-'), I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT MATERIAL{i}-',justification='r'),
+        #         ])
             
-        layout.append(
-            [Create_btn.GUI,clear_btn.GUI,cancel_btn.GUI]
-        )
+        # layout.append(
+        #     [Create_btn.GUI,clear_btn.GUI,cancel_btn.GUI]
+        # )
         window = sg.Window('Create work',layout,font=('Any',13),keep_on_top=True,finalize=True)
         window['-NAME IN-'].bind("<Return>", "_Enter")
         window['-AMOUNT IN-'].bind("<Return>", "_Enter")
         window.bind('<Escape>','-ESCAPE-')
+
+        BREAK = False
         
-        while True:
+        def multi_amount(values=None):
+            if not values['-AMOUNT IN-']:
+                return
+            window['-AMOUNT IN-'].update(round(eval(values['-AMOUNT IN-']),2))
+            
+            for i in range(10):
+                if values[f'-INPUT WORKER{i}-']:
+                    window[f'-INPUT WORKER{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO WORKER{i}-'].id,worker_norm))),2))
+                    
+                if values[f'-INPUT MACHINE{i}-']:
+                    window[f'-INPUT MACHINE{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO MACHINE{i}-'].id,machine_norm))),2))
+                    
+                if values[f'-INPUT MATERIAL{i}-']:
+                    window[f'-INPUT MATERIAL{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO MATERIAL{i}-'].id,material_norm))),2))            
+        
+        
+        def update_unit(values=None):
+            for i in range(10):
+                if values[f'-COMBO WORKER{i}-']:
+                    window[f'-UNIT WORKER{i}-'].update(values[f'-COMBO WORKER{i}-'].unit)
+                    
+            for i in range(10):                        
+                if values[f'-COMBO MACHINE{i}-']:
+                    window[f'-UNIT MACHINE{i}-'].update(values[f'-COMBO MACHINE{i}-'].unit)
+                    
+            for i in range(10):                        
+                if values[f'-COMBO MATERIAL{i}-']:
+                    window[f'-UNIT MATERIAL{i}-'].update(values[f'-COMBO MATERIAL{i}-'].unit)
+        
+        def create(values=None):
+            self.foward('work do create',
+                            id ='W{}'.format(next(Models.work.id_iter)),
+                            name = values['-NAME IN-'],
+                            unit = values['-UNIT IN-'],
+                            amount = values['-AMOUNT IN-'],
+                            hm_id = values['-COMBO HM-'].id,
+                            start = values['-START IN-'],
+                            end = values['-END IN-'])
+                
+            for i in range(10):
+                if values[f'-COMBO WORKER{i}-'] and values[f'-INPUT WORKER{i}-']:
+                    self.foward('worker work do create',
+                                work_id=id,
+                                id=values[f'-COMBO WORKER{i}-'].id,
+                                amount=values[f'-INPUT WORKER{i}-'])
+                    
+                if values[f'-COMBO MACHINE{i}-'] and values[f'-INPUT MACHINE{i}-']:
+                    self.foward('machine work do create',
+                                work_id=id,
+                                id=values[f'-COMBO MACHINE{i}-'].id,
+                                amount=values[f'-INPUT MACHINE{i}-']) 
+                    
+                if values[f'-COMBO MATERIAL{i}-'] and values[f'-INPUT MATERIAL{i}-']:
+                    self.foward('material work do create',
+                                work_id=id,
+                                id=values[f'-COMBO MATERIAL{i}-'].id,
+                                amount=values[f'-INPUT MATERIAL{i}-'])                       
+
+            self.foward('work list')
+            BREAK = True
+
+        def clear(values=None):
+            for key in ['-NAME IN-','-UNIT IN-','-AMOUNT IN-']:
+                window[key].update('')
+        
+        func = {'-AMOUNT IN-'+'_Enter':multi_amount, 
+                
+                '-CREATE-':create, '-CLEAR-':clear}
+        
+        for i in range(10):
+            func.update({f'-COMBO WORKER{i}-':update_unit})
+            func.update({f'-COMBO MACHINE{i}-':update_unit})
+            func.update({f'-COMBO MATERIAL{i}-':update_unit})        
+        
+        while not BREAK:
             event,values = window.read()
-            print(event)
-            if event in [sg.WIN_CLOSED,cancel_btn.key,'-ESCAPE-']:
+            if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
                 break
             
-            if event == '-AMOUNT IN-'+'_Enter' and  values['-AMOUNT IN-']:
-                window['-AMOUNT IN-'].update(round(eval(values['-AMOUNT IN-']),2))
-            
-            if event in [f'-COMBO WORKER{i}-' for i in range(10)]:
-                for i in range(10):
-                    if values[f'-COMBO WORKER{i}-']:
-                        window[f'-UNIT WORKER{i}-'].update(values[f'-COMBO WORKER{i}-'].unit)
-                        
-            if event in [f'-COMBO MACHINE{i}-' for i in range(10)]:
-                for i in range(10):                        
-                    if values[f'-COMBO MACHINE{i}-']:
-                        window[f'-UNIT MACHINE{i}-'].update(values[f'-COMBO MACHINE{i}-'].unit)
-                        
-            if event in [f'-COMBO MATERIAL{i}-' for i in range(10)]:
-                for i in range(10):                        
-                    if values[f'-COMBO MATERIAL{i}-']:
-                        window[f'-UNIT MATERIAL{i}-'].update(values[f'-COMBO MATERIAL{i}-'].unit) 
-                              
-            if event in [Create_btn.key]:
-                id= 'W{}'.format(next(Models.work.id_iter))
-                self.foward('work do create',
-                            id= id,
-                            name=values['-NAME IN-'],
-                            unit=values['-UNIT IN-'],
-                            amount=values['-AMOUNT IN-'],
-                            hm_id=values['-COMBO HM-'].id)
-                
-                for i in range(10):
-                    if values[f'-COMBO WORKER{i}-'] and values[f'-INPUT WORKER{i}-']:
-                        self.foward('worker work do create',
-                                    work_id=id,
-                                    id=values[f'-COMBO WORKER{i}-'].id,
-                                    amount=values[f'-INPUT WORKER{i}-'])
-                        
-                    if values[f'-COMBO MACHINE{i}-'] and values[f'-INPUT MACHINE{i}-']:
-                        self.foward('machine work do create',
-                                    work_id=id,
-                                    id=values[f'-COMBO MACHINE{i}-'].id,
-                                    amount=values[f'-INPUT MACHINE{i}-']) 
-                        
-                    if values[f'-COMBO MATERIAL{i}-'] and values[f'-INPUT MATERIAL{i}-']:
-                        self.foward('material work do create',
-                                    work_id=id,
-                                    id=values[f'-COMBO MATERIAL{i}-'].id,
-                                    amount=values[f'-INPUT MATERIAL{i}-'])                      
-
-                self.foward('work list')
-                break                                              
-
-            if event == clear_btn.key:
-                for key in [name_in.key,unit_in.key]:
-                    window[key].update('')
+            if event in func:
+                func[event](values)
+ 
         window.close()
 
 class work_edit_view(base_view):
     def Render(self):
-        def get_worker_amount(id,item_work):
+        def get_amount(id,item_work):
             return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
         
-        def get_machine_amount(id,item_work):
+        def get_amount(id,item_work):
             return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
 
-        def get_material_amount(id,item_work):
+        def get_amount(id,item_work):
             return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
         
         work = self.kwargs['work']
@@ -476,19 +521,19 @@ class work_edit_view(base_view):
                 
                 I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c',default_text=worker[i].unit if i <len(worker) else None),
                 
-                I(s=(10,1),k=f'-INPUT WORKER{i}-',default_text=get_worker_amount(worker[i].id,worker_work) if i <len(worker) else None),
+                I(s=(10,1),k=f'-INPUT WORKER{i}-',default_text=get_amount(worker[i].id,worker_work) if i <len(worker) else None),
                 
                 Combo(values=machines,s=(20,1),k=f'-COMBO MACHINE{i}-',default_value=machine[i] if i <len(machine) else None),
                 
                 I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c',default_text=machine[i].unit if i <len(machine) else None),
                 
-                sg.I(s=(10,1),k=f'-INPUT MACHINE{i}-',default_text=get_machine_amount(machine[i].id,machine_work) if i <len(machine) else None),
+                sg.I(s=(10,1),k=f'-INPUT MACHINE{i}-',default_text=get_amount(machine[i].id,machine_work) if i <len(machine) else None),
                 
                 Combo(values=materials,s=(20,1),k=f'-COMBO MATERIAL{i}-',default_value=material[i] if i <len(material) else None),
               
                 I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c',default_text=material[i].unit if i <len(material) else None),
                 
-                I(s=(10,1),k=f'-INPUT MATERIAL{i}-',default_text=get_material_amount(material[i].id,material_work) if i <len(material) else None),
+                I(s=(10,1),k=f'-INPUT MATERIAL{i}-',default_text=get_amount(material[i].id,material_work) if i <len(material) else None),
                 
                 ])
             
@@ -751,13 +796,13 @@ class norm_create_view(base_view):
 
 class norm_edit_view(base_view):
     def Render(self):
-        def get_worker_amount(id,item_norm):
+        def get_amount(id,item_norm):
             return Enumerable(item_norm).where(lambda x: x.id == id).to_list()[0].amount
         
-        def get_machine_amount(id,item_norm):
+        def get_amount(id,item_norm):
             return Enumerable(item_norm).where(lambda x: x.id == id).to_list()[0].amount
 
-        def get_material_amount(id,item_norm):
+        def get_amount(id,item_norm):
             return Enumerable(item_norm).where(lambda x: x.id == id).to_list()[0].amount 
          
         norm = self.kwargs['norm']
@@ -799,19 +844,19 @@ class norm_edit_view(base_view):
                 
                 I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c',default_text=worker[i].unit if i <len(worker) else None),
                 
-                I(s=(10,1),k=f'-INPUT WORKER{i}-',default_text=get_worker_amount(worker[i].id,worker_norm) if i <len(worker) else None),
+                I(s=(10,1),k=f'-INPUT WORKER{i}-',default_text=get_amount(worker[i].id,worker_norm) if i <len(worker) else None),
                 
                 Combo(values=machines,s=(20,1),k=f'-COMBO MACHINE{i}-',default_value=machine[i] if i <len(machine) else None),
                 
                 I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c',default_text=machine[i].unit if i <len(machine) else None),
                 
-                sg.I(s=(10,1),k=f'-INPUT MACHINE{i}-',default_text=get_machine_amount(machine[i].id,machine_norm) if i <len(machine) else None),
+                sg.I(s=(10,1),k=f'-INPUT MACHINE{i}-',default_text=get_amount(machine[i].id,machine_norm) if i <len(machine) else None),
                 
                 Combo(values=materials,s=(20,1),k=f'-COMBO MATERIAL{i}-',default_value=material[i] if i <len(material) else None),
               
                 I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c',default_text=material[i].unit if i <len(material) else None),
                 
-                I(s=(10,1),k=f'-INPUT MATERIAL{i}-',default_text=get_material_amount(material[i].id,material_norm) if i <len(material) else None),
+                I(s=(10,1),k=f'-INPUT MATERIAL{i}-',default_text=get_amount(material[i].id,material_norm) if i <len(material) else None),
                 
                 ])
             
@@ -974,7 +1019,7 @@ class create_norm_from_excel_view(base_view):
         # self.window.finalize()
         path = sg.popup_get_file('Please select du toan excel file',title='EXCEL PATH')
         if path:
-            requset = f'norm do create from excel ? path = {path}'
+            requset = f'norm do create from excel ? path={path}'
             Framework.Route.Foward(requset)
             
 ############################################################ HANG MUC

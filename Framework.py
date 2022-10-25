@@ -64,14 +64,16 @@ class Parameter(Mapping):
         if not '=' in parameter:
             raise Exception(f'Parameter {parameter} is not correct form')
         
-        pairs = parameter.split('&') if '&' in parameter else None
-        if not pairs:
-            key,value = [item.strip() for item in parameter.split('=')]
-            self.update({key:value})
-        else:
-            for pair in pairs:
-                key,value = [item.strip() for item in pair.split('=')]
-                self.update({key:value})
+        if not '&' in parameter:
+            index = parameter.index('=')
+            self.update({parameter[:index].strip() : parameter[index+1:].strip()})
+            return
+        
+        pairs = parameter.split('&')
+        for p in pairs:
+            index = p.index('=')
+            self.update({p[:index].strip() : p[index+1:].strip()})
+
     
 class Route(SingletonClass):
     routeTable = {}
@@ -161,5 +163,15 @@ class Extension:
     def ToInt(cls,astr:str):
         return int(astr) if astr.isdigit() else None
             
-      
+def main():
+    text = 'id=1'
+    index = text.index('=')
+    a = [text[:index],text[index+1:]]
+    print(a)
+    para = Parameter(r'id=1&name=a')
+    print(para.items())
+
+if __name__ == "__main__":
+    main()           
+   
     

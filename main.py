@@ -9,6 +9,7 @@ import Repository
 from Framework import Extension, Parameter,Route
 from GUI import GUI
 import PySimpleGUI as sg
+################################################### GUI #######################################
 window = GUI()
 context = DataAccess.data_access(path='')
 repo = Repository.base_repository(context)
@@ -62,7 +63,10 @@ def to_work(parameter:Parameter):
     unit = parameter['unit']
     amount = float(parameter['amount']) if parameter['amount'] else 0
     hm_id = parameter['hm_id']
-    return Models.work(name,unit,amount,hm_id,id)
+    start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%y') if parameter['start'] in parameter else None
+    end = datetime.datetime.strptime(parameter['end'],r'%d/%m/%y') if parameter['end'] in parameter else None
+    
+    return Models.work(name,unit,amount,hm_id,start,end,id)
 
 def to_worker_work(parameter:Parameter):
     id1 = parameter['work_id']
@@ -235,7 +239,55 @@ def refesh():
     
     Route.Foward('work count')
     Route.Foward('work list')
+
+def add_worker():
+    Route.Foward('worker create')
+    Route.Foward('worker list') 
+    Route.Foward('worker count')
     
+def add_machine():
+    Route.Foward('machine create')
+    Route.Foward('machine list')
+    Route.Foward('machine count')
+    
+def add_material():
+    Route.Foward('material create')
+    Route.Foward('material list')   
+    Route.Foward('material count')    
+    
+def add_hang_muc():
+    Route.Foward('hang muc create')
+    Route.Foward('work list')   
+
+def add_norm_from_excel():
+    Route.Foward('norm create from excel')   
+    refesh()
+
+def add_norm():
+    Route.Foward('norm create')
+    Route.Foward('norm list')  
+    Route.Foward('norm count')   
+
+def add_work():
+    if repo.hang_muc:
+        Route.Foward('work create')
+        Route.Foward('work list')  
+        Route.Foward('work count')        
+
+def save():
+    Route.Foward('file cons save')
+    
+def open():
+    Route.Foward('file cons load')
+
+
+         
+func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
+        '-ADD HM-': add_hang_muc, '-ADD NORM-': add_norm, '-ADD WORK-': add_work,
+        
+        'Save': save, 'Open': open,
+        'Thêm từ dự toán':add_norm_from_excel}
+
 def main():
     register()
     refesh()
@@ -243,28 +295,12 @@ def main():
     while True:
         event, values = window.read()
         print(event)
-        if event in [None]:
+        if event in [None,'Exit']:
             break
         
-        if event == '-ADD WORKER-':
-            Route.Foward('worker create')
-            Route.Foward('worker list') 
-            Route.Foward('worker count')        
-        
-        if event == '-ADD MACHINE-':
-            Route.Foward('machine create')
-            Route.Foward('machine list')
-            Route.Foward('machine count')
-            
-        if event == '-ADD MATERIAL-':
-            Route.Foward('material create')
-            Route.Foward('material list')   
-            Route.Foward('material count')
-#################################################### work time
-        if event == '-TAB GROUP-':
-            if values['-TAB GROUP-'] == '-TIME TAB-':
-                Route.Foward('work time list')
-                Route.Foward('work time draw')
+        if event in func:
+            func[event]()
+
 
         if event == '-GRAPH-_Configure':
             graph = window['-GRAPH-']
@@ -289,10 +325,7 @@ def main():
             if work_id:
                 Route.Foward('work time update ? work_id = {}'.format(work_id))
             
-#################################################### HANG MUC
-        if event == '-ADD HM-':
-            Route.Foward('hang muc create')
-            Route.Foward('work list')
+
 
 #################################################### norm
         if event == 'Copy' and get_metadata(window,'-DELETE NORM-'):
@@ -310,10 +343,7 @@ def main():
             for id in norm_id_to_copy:
                 Route.Foward(f'norm create copy ? id={id}')
     
-        if event == '-ADD NORM-':  
-            Route.Foward('norm create')
-            Route.Foward('norm list')  
-            Route.Foward('norm count')
+
         
         if event == '-TREE NORM-':
             id = values['-TREE NORM-'] if values['-TREE NORM-'] else None
@@ -358,10 +388,7 @@ def main():
             Route.Foward('norm list')
               
 #################################################### work    
-        if event in ['-ADD WORK-'] and repo.hang_muc:  
-            Route.Foward('work create')
-            Route.Foward('work list')  
-            Route.Foward('work count')
+
             
         if event in ['-ADD WORK WITH NORM ID-'] and repo.hang_muc and get_metadata(window,'-EDIT NORM-'):
             norm_id =  get_metadata(window,'-EDIT NORM-')[0]
@@ -441,11 +468,7 @@ def main():
 
                 
                 
-        if event == 'Save':
-            Route.Foward('file cons save')
 
-        if event == 'Open':
-            Route.Foward('file cons load')
             
                 
         # if event == "-GRAPH-":
@@ -473,9 +496,7 @@ def main():
                 Route.Foward('norm list')
                 Route.Foward('norm count')
             
-        if event == 'Thêm từ dự toán':
-            Route.Foward('norm create from excel')   
-            refesh()
+
     window.close()
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import Extension
 import datetime
 import numpy as np
 from py_linq import Enumerable
+import re
 
 def main():
     def display_date_time(date_time:datetime.datetime):
@@ -18,8 +19,11 @@ def main():
     np.random.seed(0)
     a = np.random.randint(1,10,10)
     b = np.random.random()
-    print(a,b)
-        
+    date_pattern = r"^[0-9]{1,2}/[0-9]{1,2}/[0-9]{2}"
+    a = re.search(date_pattern, '2/12/22') 
+    print(a)
+    if a:
+        print('haha')    
         
 if __name__ == "__main__":
     main() 
