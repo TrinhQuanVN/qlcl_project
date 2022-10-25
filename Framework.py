@@ -89,10 +89,10 @@ class Route(SingletonClass):
         if route in cls.routeTable:
             raise Exception(f'Route {route} is registered!!')
         else:
-            cls.routeTable.update({route:action})
+            cls.routeTable.update({route : action})
             
     @classmethod
-    def Foward(cls,request:str):
+    def Foward(cls, request:str):
         req = cls.Request(request)
         if not req.route in cls.routeTable:
             print('ROUTE NOT FOUND')
@@ -104,7 +104,7 @@ class Route(SingletonClass):
                 cls.routeTable.get(req.route)(req.parameter)
             
     class Request:
-        def __init__(self,request:str) -> None:
+        def __init__(self, request:str) -> None:
             self.route = ''
             self.parameter = None
             self.Analyze(request)
