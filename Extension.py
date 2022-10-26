@@ -2,7 +2,7 @@ import datetime
 import re
 import pandas as pd
 import numpy as np
-
+import PySimpleGUI as sg
 def is_work(letter:str):
     return True if re.match(r'(W)([\d])',letter) else False
 
@@ -55,9 +55,17 @@ def to_date(text):
     for p, format in date_pattern.items():
         if re.findall(re.compile(p),text):
             return datetime.datetime.strptime(text,format)
-
     return None
 
+def try_parse_string_to_float(text:str,message:str=fr"Value error: can not convert to float",element_focus:sg.Element=None):
+    try:
+        return float(text)
+    except ValueError:
+        sg.popup_ok('input amount is not float!!!', keep_on_top=True)
+        if element_focus:
+            element_focus.set_focus()
+        return text
+        
 def main():
     text = '22/10/99'
     print(to_date(text))

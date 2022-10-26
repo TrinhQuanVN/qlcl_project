@@ -67,10 +67,10 @@ def to_work(parameter:Parameter):
     amount = float(parameter['amount']) if parameter['amount'] else 0
     hm_id = parameter['hm_id']
     pv_id = parameter['pv_id'] if parameter['pv_id'] else 0
-    start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%y') if parameter['start'] else None
-    end = datetime.datetime.strptime(parameter['end'],r'%d/%m/%y') if parameter['end'] else None
+    start = ex.to_date(parameter['start']) if parameter['start'] else None
+    end = ex.to_date(parameter['end']) if parameter['end'] else None
     
-    return Models.work(name,unit,amount,hm_id,start,end,id)
+    return Models.work(name,unit,amount,hm_id,pv_id,start,end,id)
 
 def to_worker_work(parameter:Parameter):
     id1 = parameter['work_id']
@@ -214,26 +214,26 @@ def register():
 #################################################### workER    
     Route.Register('worker create', controller.create_worker)
     Route.Register('worker do create',lambda p: controller.create_worker(to_worker(p)))
-    Route.Register('worker list',controller.list_worker)
-    Route.Register('worker do list',lambda p: controller.list_worker(p['key']))   
-    Route.Register('worker count',controller.count_worker)
-    Route.Register('worker do count',lambda p: controller.count_worker(p['count'])) 
+    # Route.Register('worker list',controller.list_worker)
+    # Route.Register('worker do list',lambda p: controller.list_worker(p['key']))   
+    # Route.Register('worker count',controller.count_worker)
+    # Route.Register('worker do count',lambda p: controller.count_worker(p['count'])) 
       
 #################################################### machine   
     Route.Register('machine create', controller.create_machine)
     Route.Register('machine do create',lambda p: controller.create_machine(to_machine(p)))
-    Route.Register('machine list',controller.list_machine)
-    Route.Register('machine do list',lambda p: controller.list_machine(p['key']))   
-    Route.Register('machine count',controller.count_machine)
-    Route.Register('machine do count',lambda p: controller.count_machine(p['count'])) 
+    # Route.Register('machine list',controller.list_machine)
+    # Route.Register('machine do list',lambda p: controller.list_machine(p['key']))   
+    # Route.Register('machine count',controller.count_machine)
+    # Route.Register('machine do count',lambda p: controller.count_machine(p['count'])) 
        
 #################################################### material    
     Route.Register('material create', controller.create_material)
     Route.Register('material do create',lambda p: controller.create_material(to_material(p)))
-    Route.Register('material list',controller.list_material)
-    Route.Register('material do list',lambda p: controller.list_material(p['key']))   
-    Route.Register('material count',controller.count_material)
-    Route.Register('material do count',lambda p: controller.count_material(p['count']))  
+    # Route.Register('material list',controller.list_material)
+    # Route.Register('material do list',lambda p: controller.list_material(p['key']))   
+    # Route.Register('material count',controller.count_material)
+    # Route.Register('material do count',lambda p: controller.count_material(p['count']))  
 
 def refesh():
     Route.Foward('material list')
@@ -242,9 +242,9 @@ def refesh():
     Route.Foward('norm list')
     
     Route.Foward('norm count')
-    Route.Foward('worker count')
-    Route.Foward('machine count')
-    Route.Foward('material count')
+    # Route.Foward('worker count')
+    # Route.Foward('machine count')
+    # Route.Foward('material count')
     
     Route.Foward('work count')
     Route.Foward('work list')
@@ -423,10 +423,19 @@ func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':a
          '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,         
          
         'Save': save, 'Open': open,
-        'Thêm từ dự toán':add_norm_from_excel}
+        'Thêm từ dự toán' : add_norm_from_excel}
 
+
+def load_test():
+    path = r'D:\Python\QuanProject\qlcl project git\qlcl_project\PLHĐ nha thanh tra Kim Bang 2022.xls'
+    Route.Foward(f'norm do create from excel?path={path}')
+    
+    id = next(Models.hang_muc.id_iter)
+    name = 'Nhà 3 tầng thanh tra huyện kim bảng'
+    Route.Foward(f'hang muc do create?id={id}&name={name}')
 def main():
     register()
+    load_test()
     refesh()
     
     while True:

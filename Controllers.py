@@ -362,6 +362,7 @@ class base_controller:
         if not key:
             self._list_work(self.Repository.work)
             print('work list showed!')
+            self.count_work()
             return
         self._list_work(self.Repository.get_work_by_key(key))
         print(f'work list with key {key} is showed !')

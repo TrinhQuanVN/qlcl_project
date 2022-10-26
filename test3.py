@@ -4,7 +4,7 @@ import numpy as np
 from py_linq import Enumerable
 import re
 from itertools import count
-
+import Extension as ex
 
 def main():
     def display_date_time(date_time:datetime.datetime):
@@ -28,15 +28,8 @@ def main():
     b = next(a)
     # print(type(b))
     
-    
-    def a(x,y,z,k):
-        return x+y+z+k
-    
-    b = a(x=1,
-          y=2,
-          z=3,
-          k=4)
-    print(b)
+    a = ex.try_parse_string_to_float('a')
+    print(a)
         
 if __name__ == "__main__":
     main() 

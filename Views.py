@@ -285,13 +285,25 @@ class work_create_with_norm_id_view(base_view):
             window['-AMOUNT IN-'].update(round(eval(values['-AMOUNT IN-']),2))
             for i in range(10):
                 if values[f'-INPUT WORKER{i}-']:
-                    window[f'-INPUT WORKER{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO WORKER{i}-'].id,worker_norm))),2))
+                    window[f'-INPUT WORKER{i}-'].update(
+                        round(eval('{}*{}'.format(
+                                                values['-AMOUNT IN-'],
+                                                get_amount(values[f'-COMBO WORKER{i}-'].id,
+                                                          self.kwargs['worker_norm']))),2))
                     
                 if values[f'-INPUT MACHINE{i}-']:
-                    window[f'-INPUT MACHINE{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO MACHINE{i}-'].id,machine_norm))),2))
+                    window[f'-INPUT MACHINE{i}-'].update(
+                        round(eval('{}*{}'.format(
+                                                values['-AMOUNT IN-'],
+                                                get_amount(values[f'-COMBO MACHINE{i}-'].id,
+                                                        self.kwargs['machine_norm']))),2))
                     
                 if values[f'-INPUT MATERIAL{i}-']:
-                    window[f'-INPUT MATERIAL{i}-'].update(round(eval('{}*{}'.format(values['-AMOUNT IN-'],get_amount(values[f'-COMBO MATERIAL{i}-'].id,material_norm))),2))            
+                    window[f'-INPUT MATERIAL{i}-'].update(
+                        round(eval('{}*{}'.format(
+                                                values['-AMOUNT IN-'],
+                                                get_amount(values[f'-COMBO MATERIAL{i}-'].id,
+                                                        self.kwargs['material_norm']))),2))            
         
         def update_unit(values=None):
             for i in range(10):
@@ -307,32 +319,38 @@ class work_create_with_norm_id_view(base_view):
                     window[f'-UNIT MATERIAL{i}-'].update(values[f'-COMBO MATERIAL{i}-'].unit)
         
         def create(values=None):
+            # try:
+            #     amount = float(values['-AMOUNT IN-'])
+            # except ValueError:
+            #     window['-AMOUNT IN-'].set_focus()
+            #     return
+            work_id = next(Models.work.id_iter)
             self.foward('work do create',
-                            id ='W{}'.format(next(Models.work.id_iter)),
+                            id =work_id,
                             name = values['-NAME IN-'],
                             unit = values['-UNIT IN-'],
                             amount = values['-AMOUNT IN-'],
                             hm_id = values['-COMBO HM-'].id,
-                            pv_id = values['-COMBO PV-'].id if values['-COMBO PV-'] else '',
+                            pv_id = values['-COMBO PV-'].id,
                             start = values['-START IN-'],
                             end = values['-END IN-'])
                 
             for i in range(10):
                 if values[f'-COMBO WORKER{i}-'] and values[f'-INPUT WORKER{i}-']:
                     self.foward('worker work do create',
-                                work_id=id,
+                                work_id=work_id,
                                 id=values[f'-COMBO WORKER{i}-'].id,
                                 amount=values[f'-INPUT WORKER{i}-'])
                     
                 if values[f'-COMBO MACHINE{i}-'] and values[f'-INPUT MACHINE{i}-']:
                     self.foward('machine work do create',
-                                work_id=id,
+                                work_id=work_id,
                                 id=values[f'-COMBO MACHINE{i}-'].id,
                                 amount=values[f'-INPUT MACHINE{i}-']) 
                     
                 if values[f'-COMBO MATERIAL{i}-'] and values[f'-INPUT MATERIAL{i}-']:
                     self.foward('material work do create',
-                                work_id=id,
+                                work_id=work_id,
                                 id=values[f'-COMBO MATERIAL{i}-'].id,
                                 amount=values[f'-INPUT MATERIAL{i}-'])                       
 

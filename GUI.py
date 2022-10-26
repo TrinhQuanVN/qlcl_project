@@ -135,9 +135,9 @@ def main_layout():
         menu_layout(),
         
         [sg.TabGroup([
-            [sg.Tab('Worker',tab_worker_layout(),k='-WORKER TAB-')],
-            [sg.Tab('Machine',tab_machine_layout(),k='-MACHINE TAB-')],
-            [sg.Tab('Material',tab_material_layout(),k='-MATERIAL TAB-')],
+            # [sg.Tab('Worker',tab_worker_layout(),k='-WORKER TAB-')],
+            # [sg.Tab('Machine',tab_machine_layout(),k='-MACHINE TAB-')],
+            # [sg.Tab('Material',tab_material_layout(),k='-MATERIAL TAB-')],
             [sg.Tab('Norm',tab_norm_layout(),k='-NORM TAB-',right_click_menu=right_click_menu_tab_norm)],
             [sg.Tab('Work',tab_work_layout(),k='-WORK TAB-')],
             [sg.Tab('NKTC',tab_nktc_layout(),k='-NKTC TAB-')],
@@ -163,9 +163,9 @@ def GUI():
                 margins=(0, 0)
     )
     
-    window['-TABLE MACHINE-'].expand(True,True)
-    window['-TABLE MATERIAL-'].expand(True,True)
-    window['-TABLE WORKER-'].expand(True,True)
+    # window['-TABLE MACHINE-'].expand(True,True)
+    # window['-TABLE MATERIAL-'].expand(True,True)
+    # window['-TABLE WORKER-'].expand(True,True)
     window['-TREE NORM-'].expand(True,True)
     window['-TREE WORK-'].expand(True,True)
     window['-TREE NKTC-'].expand(True,True)
