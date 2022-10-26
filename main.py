@@ -15,7 +15,7 @@ context = DataAccess.data_access(path='')
 repo = Repository.base_repository(context)
 controller = Controllers.base_controller(repo,window)
 
-selected_norm_tree = []
+
 
 def to_machine(parameter:Parameter):
     id = parameter['id']
@@ -282,25 +282,66 @@ def save(values=None):
 def open(values=None):
     Route.Foward('file cons load')
 
-def norm_tree_select(values:None):
-    if not selected_norm_tree:
-        if ex.is_norm(values['-TREE NORM-']):
-            selected_norm_tree.append(values['-TREE NORM-'])
-            window['-SELECT NORM INPUT-'].update(selected_norm_tree[0])
-            return
-    if ex.is_norm(values['-TREE NORM-']):
-        selected_norm_tree.clear()
-        selected_norm_tree.append(values['-TREE NORM-'])
-        window['-SELECT NORM INPUT-'].update(selected_norm_tree[0])
+def norm_tree_select(values=None):
+    if not values['-TREE NORM-']:
+        return
+    value = values['-TREE NORM-'][0]
+    if not value:
+        return
+    if ex.is_norm(value):
+        window['-SELECTED NORM INPUT-'].update(value)
+    
+def delete_norm(values=None):
+    norm_id = values['-SELECTED NORM INPUT-']
+    select_id = values['-TREE NORM-'][0]
+    print(f'line 295 {norm_id} {select_id}')
+    if not norm_id:
+        return
+    if select_id == norm_id:
+        Route.Foward(f'norm do delete ? id = {norm_id}')
+        Route.Foward(f'worker norm do delete by norm id ? norm_id={norm_id}')
+        Route.Foward(f'machine norm do delete by norm id ? norm_id={norm_id}')
+        Route.Foward(f'material norm do delete by norm id ? norm_id={norm_id}')
+            
+    if ex.is_worker(select_id):
+        Route.Foward('worker norm do delete ? norm_id ={} & id = {}'.format(norm_id,select_id))
+    elif ex.is_machine(select_id) or ex.is_dif_machine(select_id):
+        Route.Foward('machine norm do delete ? norm_id ={} & id = {}'.format(norm_id,select_id))
     else:
-        selected_norm_tree.append(values['-TREE NORM-'])
-        window['-SELECT NORM INPUT-'].update('&'.join(selected_norm_tree))
+        Route.Foward('material norm do delete ? norm_id ={} & id = {}'.format(norm_id,select_id))    
     
+    Route.Foward('norm list')
+
+def search_norm(values=None):
+    id = values['-NORM SEARCH INPUT-']
+    if id:
+        Route.Foward('norm do list ? key = {}'.format(values['-NORM SEARCH INPUT-']))
+        return
+    Route.Foward('norm list')
+    Route.Foward('norm count')
+
+def edit_norm(values=None):
+    norm_id = values['-SELECTED NORM INPUT-']
+    if not norm_id:
+        return
+    Route.Foward('norm edit ? id = {}'.format(norm_id))
+    Route.Foward('norm list')
     
+def create_copy_norm(values=None):
+    norm_id = values['-SELECTED NORM INPUT-']
+    if not norm_id:
+        return    
+    Route.Foward(f'norm create copy ? id={norm_id}')    
+
+
          
 func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
         '-ADD HM-': add_hang_muc, '-ADD NORM-': add_norm, '-ADD WORK-': add_work,
-        # '-TREE NORM-':norm_tree_select,
+        
+        '-TREE NORM-' : norm_tree_select, '-DELETE NORM-': delete_norm, '-NORM FIND BUTTON-' : search_norm,
+        '-NORM SEARCH INPUT-'+'_Enter' : search_norm, '-EDIT NORM-' : edit_norm,
+         '-CREATE COPY NORM-' : create_copy_norm,
+         
         'Save': save, 'Open': open,
         'Thêm từ dự toán':add_norm_from_excel}
 
@@ -308,7 +349,7 @@ def main():
     register()
     refesh()
     COPY = None
-
+    
     while True:
         event, values = window.read()
         print(event)
@@ -317,32 +358,6 @@ def main():
         
         if event in func:
             func[event](values)
-
-
-        if event == '-GRAPH-_Configure':
-            graph = window['-GRAPH-']
-            e = graph.user_bind_event
-            w0, h0 = graph.CanvasSize
-            # Update the canvas size for coordinate conversion
-            w1, h1 = graph.CanvasSize = e.width, e.height
-            w_scale, h_scale = w1/w0, h1/h0
-            graph.widget.scale("all", 0, 0, w_scale, h_scale) 
-
-        if event == '-TREE TIME-':
-            id = values['-TREE TIME-'] if values['-TREE TIME-'] else None
-            event_tree_click_set_meta_data(window,key='-SHOW WORK-', value=id)                
-
-        if event == '-SHOW WORK-' and values['-TREE TIME-']:
-            work_id= get_metadata(window,'-SHOW WORK-')[0]
-            if work_id:
-                Route.Foward('work edit ? id = {}'.format(work_id))
-
-        if event == '-EDIT TIME-' and values['-TREE TIME-']:
-            work_id= get_metadata(window,'-SHOW WORK-')[0]
-            if work_id:
-                Route.Foward('work time update ? work_id = {}'.format(work_id))
-            
-
 
 #################################################### norm
         if event == 'Copy' and get_metadata(window,'-DELETE NORM-'):
@@ -355,61 +370,14 @@ def main():
             for item in COPY:
                 pass
 
-        if event == '-CREATE COPY NORM-' and get_metadata(window,'-DELETE NORM-'):
-            norm_id_to_copy = Enumerable(get_metadata(window,'-DELETE NORM-')).where(lambda x: ex.is_norm(x)).to_list()
-            for id in norm_id_to_copy:
-                Route.Foward(f'norm create copy ? id={id}')
-    
-
+        # if event == '-CREATE COPY NORM-' and get_metadata(window,'-DELETE NORM-'):
+        #     norm_id_to_copy = Enumerable(get_metadata(window,'-DELETE NORM-')).where(lambda x: ex.is_norm(x)).to_list()
+        #     for id in norm_id_to_copy:
+        #         Route.Foward(f'norm create copy ? id={id}')
         
-        if event == '-TREE NORM-':
-            id = values['-TREE NORM-'] if values['-TREE NORM-'] else None
-            event_tree_click_set_meta_data(window,key='-DELETE NORM-', value=id)
-            print(get_metadata(window,'-DELETE NORM-'))
-            if id:
-                if ex.is_norm(id[0]):
-                    event_tree_click_set_meta_data(window,key='-EDIT NORM-',value=[id[0],None])
-                else:
-                    event_tree_click_set_meta_data(window,key='-EDIT NORM-',value=[get_metadata(window,'-EDIT NORM-')[0],id])
-                print(get_metadata(window,'-EDIT NORM-'))
                     
-        if event == '-EDIT NORM-' and values['-TREE NORM-']:
-            norm_id, other_id = get_metadata(window,'-EDIT NORM-')
-            if not other_id:
-                Route.Foward('norm edit ? id = {}'.format(norm_id))
-            elif len(other_id)==1:
-                other_id = other_id[0]
-                if ex.is_worker(other_id):
-                    Route.Foward('worker norm update ? norm_id = {} & id ={}'.format(norm_id, other_id))
-                if ex.is_machine(other_id) or ex.is_dif_machine(other_id):
-                    Route.Foward('machine norm update ? norm_id = {} & id ={}'.format(norm_id, other_id))
-                if ex.is_material(other_id) or ex.is_dif_material(other_id):
-                    Route.Foward('material norm update ? norm_id = {} & id ={}'.format(norm_id, other_id))
-                                                        
-        if event == '-DELETE NORM-':
-            print(values['-TREE NORM-'])
-            print(type(values['-TREE NORM-']))
-            
-            # norm_id, other_id = get_metadata(window,'-EDIT NORM-')
-            # if norm_id and other_id:
-            #     other_id = other_id[0]
-            #     if ex.is_worker(other_id):
-            #         Route.Foward('worker norm do delete ? norm_id ={} & id = {}'.format(norm_id,other_id))
-            #     elif ex.is_machine(other_id) or ex.is_dif_machine(other_id):
-            #         Route.Foward('machine norm do delete ? norm_id ={} & id = {}'.format(norm_id,other_id))
-            #     else: #ex.is_machine(other_id) or ex.is_dif_machine(other_id):
-            #         Route.Foward('material norm do delete ? norm_id ={} & id = {}'.format(norm_id,other_id))
-            # elif norm_id and not other_id:
-            #     Route.Foward(f'norm do delete ? id = {norm_id}')
-            #     Route.Foward(f'worker norm do delete by norm id ? norm_id={norm_id}')
-            #     Route.Foward(f'machine norm do delete by norm id ? norm_id={norm_id}')
-            #     Route.Foward(f'material norm do delete by norm id ? norm_id={norm_id}')
-                   
-            # Route.Foward('norm list')
-              
+                                    
 #################################################### work    
-
-            
         if event in ['-ADD WORK WITH NORM ID-'] and repo.hang_muc and get_metadata(window,'-EDIT NORM-'):
             norm_id =  get_metadata(window,'-EDIT NORM-')[0]
             print(norm_id)
@@ -509,12 +477,7 @@ def main():
                 Route.Foward('material list')
                 Route.Foward('material count')
 
-        if event in ['-NORM FIND BUTTON-', '-NORM SEARCH INPUT-'+'_Enter']:  #and values['-WORKER SEARCH INPUT-']/
-            if values['-NORM SEARCH INPUT-']:
-                Route.Foward('norm do list ? key = {}'.format(values['-NORM SEARCH INPUT-']))
-            else:
-                Route.Foward('norm list')
-                Route.Foward('norm count')
+
             
 
     window.close()
