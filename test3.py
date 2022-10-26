@@ -3,6 +3,8 @@ import datetime
 import numpy as np
 from py_linq import Enumerable
 import re
+from itertools import count
+
 
 def main():
     def display_date_time(date_time:datetime.datetime):
@@ -21,9 +23,20 @@ def main():
     b = np.random.random()
     date_pattern = r"^[0-9]{1,2}/[0-9]{1,2}/[0-9]{2}"
     a = re.search(date_pattern, '2/12/22') 
-    print(a)
-    if a:
-        print('haha')    
+    
+    a = count()
+    b = next(a)
+    # print(type(b))
+    
+    
+    def a(x,y,z,k):
+        return x+y+z+k
+    
+    b = a(x=1,
+          y=2,
+          z=3,
+          k=4)
+    print(b)
         
 if __name__ == "__main__":
     main() 

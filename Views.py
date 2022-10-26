@@ -1,4 +1,5 @@
 import datetime
+from telnetlib import SGA
 import Framework
 import Extension as ex
 import Models
@@ -142,26 +143,36 @@ class work_time_update_view(base_view):
 def get_amount(id,item_work):
     return Enumerable(item_work).where(lambda x: x.id == id).to_list()[0].amount
 
-def work_create_layout(norm = None, hang_muc = None,
+def work_create_layout(norm = None, hang_muc = None, phan_viec =None,
                        workers = None, machines = None, materials = None,
                        worker = None, machine = None, material = None,
                        worker_norm = None, machine_norm = None, material_norm = None):
     
-    id_text = sg.Text('ID',s=(7,1))
-    name_text = sg.Text('Name',s=(7,1))
-    unit_text = sg.Text('Unit',s=(7,1))
-    amount_text = sg.Text('Amount',s=(7,1))
-    start_text = sg.Text('Start',s=(7,1))
-    end_text = sg.Text('End',s=(7,1))
-    hm_text = sg.Text('Hang muc',s=(7,1))
+    id_text = sg.Text('ID', s=(10,1))
+    name_text = sg.Text('Name', s=(10,1))
+    unit_text = sg.Text('Unit', s=(10,1))
+    amount_text = sg.Text('Amount', s=(10,1))
+    start_text = sg.Text('Start', s=(10,1))
+    end_text = sg.Text('End', s=(10,1))
+    hm_text = sg.Text('Hang mục', s=(10,1))
+    pv_text = sg.Text('Phần việc', s=(10,1))
+    
     
     # id_in = sg.Input(s=(15,1),k='-ID IN-',expand_x=True,default_text=work_id,readonly=True,text_color='black')
-    name_in = sg.Input(s=(15,1),expand_x=True,default_text=norm.name,k='-NAME IN-')
-    unit_in = sg.Input(s=(15,1),expand_x=True,default_text=norm.unit,k='-UNIT IN-')
+    name_in = sg.Input(s=(15,1),
+                       expand_x=True,
+                       default_text = norm.name if norm else '',
+                       k='-NAME IN-')
+    
+    unit_in = sg.Input(s=(15,1),
+                       expand_x=True,
+                       default_text=norm.unit if norm else '',
+                       k='-UNIT IN-')
     amount_in = sg.Input(s=(15,1),expand_x=True,k='-AMOUNT IN-',enable_events=True)
     start_in = sg.Input(s=(15,1),expand_x=True,k='-START IN-',enable_events=True)
     end_in = sg.Input(s=(15,1),expand_x=True,k='-END IN-',enable_events=True)
-    hm_combo = Combo(hang_muc,k=f'-COMBO HM-',default_value=hang_muc[-1])
+    hm_combo = sg.Combo(hang_muc,k=f'-COMBO HM-',default_value=hang_muc[-1],enable_events=True,font=('Any',11),expand_x=True)
+    pv_combo = sg.Combo(phan_viec, k=f'-COMBO PV-',enable_events=True,font=('Any',11),expand_x=True, default_value=phan_viec[-1])
     
     create_btn = sg.Button('Create',s=(10,1),k='-CREATE-')
     clear_btn =  sg.Button('Clear',s=(10,1),k='-CLEAR-')   
@@ -169,37 +180,72 @@ def work_create_layout(norm = None, hang_muc = None,
     
     layout =[
         [hm_text,hm_combo],
+        [pv_text,pv_combo],
         [name_text,name_in],
         [unit_text,unit_in],
         [amount_text,amount_in],
         [start_text,start_in],
         [end_text,end_in],
         
-        [Elements.Text('Worker',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-            Elements.Text('Machine',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-            Elements.Text('Material',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI],
-    ]
+        [sg.Text('Worker',s=(20,1),justification='c'),
+         sg.Text('Unit',s=(7,1),justification='c'),
+         sg.Text('Amount',s=(7,1),justification='c'),
+         sg.Text('Machine',s=(20,1),justification='c'),
+         sg.Text('Unit',s=(7,1),justification='c'),
+         sg.Text('Amount',s=(7,1),justification='c'),
+         sg.Text('Material',s=(20,1),justification='c'),
+         sg.Text('Unit',s=(7,1),justification='c'),
+         sg.Text('Amount',s=(7,1),justification='c')],
+            ]
 
     for i in range(10):
         layout.append([
-            Combo(values=workers,s=(20,1),k=f'-COMBO WORKER{i}-',default_value=worker[i] if i <len(worker) else None),
+            Combo(values=workers,
+                  s=(20,1),
+                  k=f'-COMBO WORKER{i}-',
+                  default_value=worker[i] if i <len(worker) else None),
             
-            I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c',default_text=worker[i].unit if i <len(worker) and worker else None),
+            I(s=(7,1),
+              k=f'-UNIT WORKER{i}-',
+              readonly=True,
+              text_color='black',
+              justification='c',
+              default_text=worker[i].unit if i <len(worker) and worker else None),
             
-            I(s=(10,1),k=f'-INPUT WORKER{i}-',default_text=get_amount(worker[i].id,worker_norm) if i <len(worker) and worker else None),
+            I(s=(10,1),
+              k=f'-INPUT WORKER{i}-',
+              default_text=get_amount(worker[i].id,worker_norm) if i <len(worker) and worker else None),
             
-            Combo(values=machines,s=(20,1),k=f'-COMBO MACHINE{i}-',default_value=machine[i] if i <len(machine) and machine else None),
+            Combo(values=machines,
+                  s=(20,1),
+                  k=f'-COMBO MACHINE{i}-',
+                  default_value=machine[i] if i <len(machine) and machine else None),
             
-            I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c',default_text=machine[i].unit if i <len(machine) and machine else None),
+            I(s=(7,1),
+              k=f'-UNIT MACHINE{i}-',
+              readonly=True,
+              text_color='black',
+              justification='c',
+              default_text=machine[i].unit if i <len(machine) and machine else None),
             
-            I(s=(10,1),k=f'-INPUT MACHINE{i}-',default_text=get_amount(machine[i].id,machine_norm) if i <len(machine) and machine else None),
+            I(s=(10,1),
+              k=f'-INPUT MACHINE{i}-',
+              default_text=get_amount(machine[i].id,machine_norm) if i <len(machine) and machine else None),
             
-            Combo(values=materials,s=(20,1),k=f'-COMBO MATERIAL{i}-',default_value=material[i] if i <len(material) and material else None),
+            Combo(values=materials,
+                  s=(20,1),k=f'-COMBO MATERIAL{i}-',
+                  default_value=material[i] if i <len(material) and material else None),
             
-            I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c',default_text=material[i].unit if i <len(material) and material else None),
+            I(s=(7,1),
+              k=f'-UNIT MATERIAL{i}-',
+              readonly=True,
+              text_color='black',
+              justification='c',
+              default_text=material[i].unit if i <len(material) and material else None),
             
-            I(s=(10,1),k=f'-INPUT MATERIAL{i}-',default_text=get_amount(material[i].id,material_norm) if i <len(material) and material else None),
-            
+            I(s=(10,1),
+              k=f'-INPUT MATERIAL{i}-',
+              default_text=get_amount(material[i].id,material_norm) if i <len(material) and material else None),
             ])
         
     layout.append(
@@ -214,31 +260,24 @@ def work_create_windown(title:str,layout):
 
 class work_create_with_norm_id_view(base_view):
     def Render(self):
-        
-        
-        hang_muc = self.kwargs['hang_muc']
-        
-        workers = self.kwargs['workers']
-        machines = self.kwargs['machines']
-        materials = self.kwargs['materials']
-        
-        norm = self.kwargs['norm']
-        worker_norm = self.kwargs['worker_norm']
-        machine_norm = self.kwargs['machine_norm']
-        material_norm = self.kwargs['material_norm']
-        
-        worker = self.kwargs['worker']
-        machine = self.kwargs['machine']
-        material = self.kwargs['material']
-        
-        layout = work_create_layout(norm, hang_muc, workers, machines, materials, worker, machine, material, worker_norm, machine_norm, material_norm)
-        
+        layout = work_create_layout(norm = self.kwargs['norm'],
+                                    hang_muc = self.kwargs['hang_muc'],
+                                    phan_viec = self.kwargs['phan_viec'],
+                                    workers = self.kwargs['workers'],
+                                    machines = self.kwargs['machines'],
+                                    materials = self.kwargs['materials'],
+                                    worker = self.kwargs['worker'],
+                                    machine = self.kwargs['machine'],
+                                    material = self.kwargs['material'],
+                                    worker_norm = self.kwargs['worker_norm'],
+                                    machine_norm = self.kwargs['machine_norm'],
+                                    material_norm = self.kwargs['material_norm'])
         
         window = sg.Window('Create work',layout,font=('Any',13),keep_on_top=True,finalize=True)
+        
         window['-NAME IN-'].bind("<Return>", "_Enter")
         window['-AMOUNT IN-'].bind("<Return>", "_Enter")
         window.bind('<Escape>','-ESCAPE-')
-        BREAK = False
         
         def multi_amount(values=None):
             if not values['-AMOUNT IN-']:
@@ -274,6 +313,7 @@ class work_create_with_norm_id_view(base_view):
                             unit = values['-UNIT IN-'],
                             amount = values['-AMOUNT IN-'],
                             hm_id = values['-COMBO HM-'].id,
+                            pv_id = values['-COMBO PV-'].id if values['-COMBO PV-'] else '',
                             start = values['-START IN-'],
                             end = values['-END IN-'])
                 
@@ -298,7 +338,7 @@ class work_create_with_norm_id_view(base_view):
 
             self.foward('work list')
             
-            BREAK = True
+            window.close()
 
         def clear(values=None):
             for key in ['-NAME IN-','-UNIT IN-','-AMOUNT IN-']:
@@ -308,14 +348,14 @@ class work_create_with_norm_id_view(base_view):
                 '-CREATE-':create, '-CLEAR-':clear}
         
         for i in range(10):
-            func.update({f'-COMBO WORKER{i}-':update_unit})
-            func.update({f'-COMBO MACHINE{i}-':update_unit})
-            func.update({f'-COMBO MATERIAL{i}-':update_unit})
+            func.update({f'-COMBO WORKER{i}-' : update_unit})
+            func.update({f'-COMBO MACHINE{i}-' : update_unit})
+            func.update({f'-COMBO MATERIAL{i}-' : update_unit})
             
-        while not BREAK:
+        while True:
             event, values = window.read()
             print(event)
-            if event in [sg.WIN_CLOSED,'-ESCAPE-','-CANCEL-']:
+            if event in [sg.WIN_CLOSED, '-ESCAPE-', '-CANCEL-']:
                 break
             
             if event in func:
@@ -326,57 +366,17 @@ class work_create_with_norm_id_view(base_view):
 
 class work_create_view(base_view):
     def Render(self):
-
-        hang_muc = self.kwargs['hang_muc']
-        
-        workers = self.kwargs['worker']
-        materials = self.kwargs['material']
-        machines = self.kwargs['machine']
-        
-        layout = work_create_layout(hang_muc = hang_muc, workers = workers, materials = materials, machines = machines)
-        # # id_text = Elements.Text('ID',(7,1))
-        # name_text = Elements.Text('Name',(7,1))
-        # unit_text = Elements.Text('Unit',(7,1))
-        # amount_text = Elements.Text('Amount',(7,1))
-        # hm_text = Elements.Text('Hang muc',(7,1))
-        
-        
-        # # id_in = sg.Input(s=(15,1),k='-ID IN-',expand_x=True,default_text=work_id,readonly=True,text_color='black')
-        # name_in = sg.Input(s=(15,1),expand_x=True,k='-NAME IN-')
-        # unit_in = sg.Input(s=(15,1),expand_x=True,k='-UNIT IN-')
-        # amount_in = sg.Input(s=(15,1),expand_x=True,k='-AMOUNT IN-')
-        # hm_combo = Combo(hang_muc,k=f'-COMBO HM-',default_value=hang_muc[-1])
-        
-        # Create_btn = Elements.Button('Create',(10,1))
-        # clear_btn =  Elements.Button('Clear',(10,1))   
-        # cancel_btn = Elements.Button('Cancel',(10,1))    
-        
-        # layout =[
-        #     [hm_text.GUI,hm_combo],
-        #     [name_text.GUI,name_in],
-        #     [unit_text.GUI,unit_in],
-        #     [amount_text.GUI,amount_in],
-        #     [Elements.Text('Worker',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-        #      Elements.Text('Machine',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI,
-        #      Elements.Text('Material',(20,1),justification='c').GUI, Elements.Text('Unit',(7,1),justification='c').GUI, Elements.Text('Amount',(7,1),justification='c').GUI],
-        # ]
-        # for i in range(10):
-        #     layout.append([
-        #         Combo(worker,k=f'-COMBO WORKER{i}-'), I(s=(7,1),k=f'-UNIT WORKER{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT WORKER{i}-',justification='r'),
-        #         Combo(machine,k=f'-COMBO MACHINE{i}-'), I(s=(7,1),k=f'-UNIT MACHINE{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT MACHINE{i}-',justification='r'),
-        #         Combo(material,k=f'-COMBO MATERIAL{i}-'), I(s=(7,1),k=f'-UNIT MATERIAL{i}-',readonly=True,text_color='black',justification='c'), I(s=(7,1),k=f'-INPUT MATERIAL{i}-',justification='r'),
-        #         ])
-            
-        # layout.append(
-        #     [Create_btn.GUI,clear_btn.GUI,cancel_btn.GUI]
-        # )
+        layout = work_create_layout(hang_muc = self.kwargs['hang_muc'],
+                                    phan_viec = self.kwargs['phan_viec'],
+                                    workers = self.kwargs['worker'],
+                                    materials = self.kwargs['material'],
+                                    machines = self.kwargs['machine'])
+  
         window = sg.Window('Create work',layout,font=('Any',13),keep_on_top=True,finalize=True)
         window['-NAME IN-'].bind("<Return>", "_Enter")
         window['-AMOUNT IN-'].bind("<Return>", "_Enter")
         window.bind('<Escape>','-ESCAPE-')
 
-        BREAK = False
-        
         def multi_amount(values=None):
             if not values['-AMOUNT IN-']:
                 return
@@ -413,6 +413,7 @@ class work_create_view(base_view):
                             unit = values['-UNIT IN-'],
                             amount = values['-AMOUNT IN-'],
                             hm_id = values['-COMBO HM-'].id,
+                            pv_id = values['-COMBO PV-'].id if values['-COMBO PV-'] else '',
                             start = values['-START IN-'],
                             end = values['-END IN-'])
                 
@@ -436,7 +437,7 @@ class work_create_view(base_view):
                                 amount=values[f'-INPUT MATERIAL{i}-'])                       
 
             self.foward('work list')
-            BREAK = True
+            window.close()
 
         def clear(values=None):
             for key in ['-NAME IN-','-UNIT IN-','-AMOUNT IN-']:
@@ -451,7 +452,7 @@ class work_create_view(base_view):
             func.update({f'-COMBO MACHINE{i}-':update_unit})
             func.update({f'-COMBO MATERIAL{i}-':update_unit})        
         
-        while not BREAK:
+        while True:
             event,values = window.read()
             if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
                 break
@@ -951,8 +952,8 @@ class MachineNormUpdateView:
         machine = Enumerable(machines).where(lambda x: x.id == machine_norm.id).to_list()[0]
         
         layout = [
-            [T('ID NORM','-TEXT0-',s=(10,1),justification='c'),T('MACHINE','-TEXT1-',s=(30,1),justification='c'),T('UNIT','-TEXT1-',s=(7,1),justification='c'),T('AMOUnT','-TEXT1-',s=(10,1),justification='c')],
-            [I(k='-ID NORM-',readonly=True,text_color='black',default_text=machine_norm.id_norm),Combo(machines,s=(30,1),k='-MACHINE COMBO-',default_value=machine),I(k='-UNIT-',s=(7,1),readonly=True,text_color='black',default_text=machine.unit,justification='c'),I(k='-AMOUnT-',default_text=machine_norm.amount,justification='r')],
+            [T('ID NORM','-TEXT0-',s=(10,1),justification='c'), T('MACHINE','-TEXT1-',s=(30,1),justification='c'), T('UNIT','-TEXT1-',s=(7,1),justification='c'),T('AMOUnT','-TEXT1-',s=(10,1),justification='c')],
+            [I(k='-ID NORM-',readonly=True,text_color='black',default_text=machine_norm.id_norm), Combo(machines,s=(30,1),k='-MACHINE COMBO-',default_value=machine),I(k='-UNIT-',s=(7,1),readonly=True,text_color='black',default_text=machine.unit,justification='c'),I(k='-AMOUnT-',default_text=machine_norm.amount,justification='r')],
             [sg.Push(),Btn('Update','-UPDATE-'),Btn('Clear','-CLEAR-'),Btn('Cancel','-CANCEL-')]
         ]
         window = sg.Window('Edit machine norm',layout,font=('Any',13),keep_on_top=True,finalize=True)
@@ -1000,7 +1001,7 @@ class material_norm_update_view:
             if event == '-MATERIAL COMBO-' and values['-MATERIAL COMBO-']:
                 window['-UNIT-'].update(values['-MATERIAL COMBO-'].unit)
             
-            if event == '-UPDATE-' and values['-AMOUnT-'] and values['-MATERIAL COMBO-']:
+            if event == '-UPDATE-' and values['-AMOUNT-'] and values['-MATERIAL COMBO-']:
                 request = '''material norm do update ?
                     id_norm = {} &
                     old_id = {} &
@@ -1008,6 +1009,7 @@ class material_norm_update_view:
                     amount = {}'''.format(values['-ID NORM-'],material_norm.id,values['-MATERIAL COMBO-'].id,values['-AMOUnT-'])
                 Framework.Route.Foward(request)
                 Framework.Route.Foward('norm list')
+                break
                 
             elif event == '-CLEAR-':
                 for key in ['-INPUT-']:
@@ -1023,33 +1025,61 @@ class create_norm_from_excel_view(base_view):
             Framework.Route.Foward(requset)
             
 ############################################################ HANG MUC
+def layout_to_create_hang_muc():
+    name_text = sg.Text('Name',s=(5,1))
+    name_in = sg.Input(s=(30,1),k='-NAME IN-',enable_events=True,expand_x=True)
+
+    create_btn = sg.Button('create',s=(10,1),k='-CREATE-')
+    clear_btn =  sg.Button('Clear',s=(10,1),k='-CLEAR-')   
+    cancel_btn = sg.Button('Cancel',s=(10,1),k='-CANCEL-')    
+    
+    layout =[
+        [name_text,name_in],
+        [create_btn,clear_btn,cancel_btn]
+    ]    
+    
+    return layout
+
+def window_to_create_hang_muc(layout, title):
+    window = sg.Window(title,layout,font=('Any',13),keep_on_top=True,finalize=True)
+    window['-NAME IN-'].bind("<Return>", "_Enter")
+    window.bind('<Escape>','-ESCAPE-')
+    return window    
+
 class hang_muc_create_view(base_view):
     def Render(self):
-        name_text = Elements.Text('Name',(5,1))
-        # id_in = sg.Input(s=(30,1),k='-ID IN-',default_text=id,readonly=True,text_color='black',expand_x=True)
-        name_in = sg.Input(s=(30,1),k='-NAME IN-',enable_events=True,expand_x=True)
-        
-        create_btn = Elements.Button('create',(10,1))
-        clear_btn =  Elements.Button('Clear',(10,1))   
-        cancel_btn = Elements.Button('Cancel',(10,1))    
-        
-        layout =[
-            [name_text.GUI,name_in],
-            [create_btn.GUI,clear_btn.GUI,cancel_btn.GUI]
-        ]
-        window = sg.Window('create hang muc',layout,font=('Any',13),keep_on_top=True,finalize=True)
+        window = sg.Window('Create hạng mục',layout_to_create_hang_muc(),font=('Any',13),keep_on_top=True,finalize=True)
         window['-NAME IN-'].bind("<Return>", "_Enter")
         window.bind('<Escape>','-ESCAPE-')
         while True:
             event,values = window.read()
-            if event in [sg.WIN_CLOSED,cancel_btn.key,'-ESCAPE-']:
+            if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
                 break
-            elif event in [create_btn.key,'-NAME IN-'+'_Enter']:
-                self.foward('hang muc do create',id='HM{}'.format(next(Models.hang_muc.id_iter)),name=values['-NAME IN-'])
-                self.foward('work list')
-                self.foward('hang muc create')
+            elif event in ['-CREATE-','-NAME IN-'+'_Enter']:
+                self.foward('hang muc do create', 
+                            id='{}'.format(next(Models.hang_muc.id_iter)),name=values['-NAME IN-'])
+                # self.foward('work list')
                 break
-            elif event == clear_btn.key:
+            elif event == '-CLEAR-':
+                for key in ['-ID IN-']:
+                    window[key].update('')
+        window.close()
+        
+class phan_viec_create_view(base_view):
+    def Render(self):
+        window = window_to_create_hang_muc(layout_to_create_hang_muc(),'Create phần việc')
+        window['-NAME IN-'].bind("<Return>", "_Enter")
+        window.bind('<Escape>','-ESCAPE-')
+        while True:
+            event,values = window.read()
+            if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
+                break
+            elif event in ['-CREATE-','-NAME IN-'+'_Enter']:
+                self.foward('hphan viec do create', 
+                            id='{}'.format(next(Models.hang_muc.id_iter)),name=values['-NAME IN-'])
+                # self.foward('work list')
+                break
+            elif event == '-CLEAR-':
                 for key in ['-ID IN-']:
                     window[key].update('')
         window.close()

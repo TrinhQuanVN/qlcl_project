@@ -5,7 +5,7 @@ from py_linq import Enumerable
 class base_repository:
     def __init__(self,context:DataAccess.data_access) -> None:
         self.context = context
-        # self.context.Load()
+        # self.context.load()
 
 ############################################ worker work time
     @property
@@ -534,7 +534,29 @@ class base_repository:
     def load_file(self,path):
         self.context.path = path
         self.context.load()
+
+############################################ Phan Viec
+    @property
+    def phan_viec(self):
+        return self.context.phan_viec
     
+    @property
+    def _linq_phan_viec(self):
+        return Enumerable(self.phan_viec)
+    
+    def insert_phan_viec(self,model):
+        self.context.phan_viec.append(model)
+        
+    def get_phan_viec_by_id(self,id):
+        results = self._linq_phan_viec.where(lambda x: x.id.lower() == id.lower()).to_list()
+        return results[0] if results else []
+    
+    def delete_phan_viec(self,model):
+        if not model:
+            return False
+        self.context.phan_viec.remove(model)
+        return True
+
 
     
 

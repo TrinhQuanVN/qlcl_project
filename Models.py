@@ -61,22 +61,40 @@ class material_norm(worker_norm):
           
 class work:
     id_iter = count()
-    def __init__(self,name,unit,amount,hm_id,start:datetime.datetime=None,end:datetime.datetime=None,id=None) -> None:
-        self.id = f'W{next(self.id_iter)}' if not id else id
+    def __init__(self,name,unit,amount,hm_id,pv_id=None,start:datetime.datetime=None,end:datetime.datetime=None,id=None) -> None:
+        self.id = next(self.id_iter) if not id else id
         self.name = name
         self.unit = unit
         self.amount = float(amount)
         self.hm_id = hm_id
-        self.start = start
-        self.end = end
+        self.pv_id = pv_id if pv_id else 0
+        self._start = start
+        self._end = end
         
-    def work_days(self):
-        if not self.start or self.end:
-            return
-        return (self.end - self.start + datetime.timedelta(1)).days
+    @property
+    def _start_timestamp(self):
+        return self._start.timestamp() if self._start else ''
+    
+    @property
+    def _end_timestamp(self):
+        return self._end.timestamp() if self._end else ''
+    
+    @property
+    def start(self):
+        return self._start.strftime(r'%d/%m/%y') if self._start else ''
+
+    @property
+    def end(self):
+        return self._end.strftime(r'%d/%m/%y') if self._end else ''
+
+    @property
+    def work_day(self):
+        if not self._start or not self._end:
+            return 0
+        return (self._end - self._start + datetime.timedelta(1)).days
 
     def to_save_list(self):
-        return [self.__class__.__name__,self.name,self.unit,self.amount,self.hm_id,self.id]
+        return [self.__class__.__name__,self.name,self.unit,self.amount,self.hm_id,self._start_timestamp,self._end_timestamp,self.id]
    
 class worker_work:
     def __init__(self,work_id,id,amount) -> None:
@@ -109,18 +127,24 @@ class material_work(worker_work):
 class hang_muc:
     id_iter = count()
     def __init__(self,name,id=None) -> None:
-        self.id = f'HM{next(self.id_iter)}' if not id else id
+        self.id = next(self.id_iter) if not id else id
         self.name = name
         
     def __str__(self) -> str:
-        return self.id
+        return self.name
         
     def __repr__(self) -> str:
-        return (self.x,self.y)
+        return ' '.join(self.to_save_list())
 
     def to_save_list(self):
         return [self.__class__.__name__,self.name,self.id]
-    
+
+class phan_viec(hang_muc):
+    id_iter = count()
+    def __init__(self, name, id=None) -> None:
+        super().__init__(name, id)
+        self.id = next(self.id_iter) if not id else id
+        
 class work_time:
     def __init__(self,work_id:str,start:datetime.datetime,end:datetime.datetime) -> None:
         self.work_id = work_id 

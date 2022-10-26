@@ -324,27 +324,35 @@ class base_controller:
     def create_work(self,norm_id=None,model=None):
         if not model:
             hang_muc = self.Repository.hang_muc
+            if not self.Repository.phan_viec:
+                self.create_phan_viec(Models.phan_viec('phần việc khác',0))
+            
             if not norm_id:
-                self.Render(Views.work_create_view,hang_muc=hang_muc,worker=self.Repository.worker,material=self.Repository.material,machine=self.Repository.machine)
+                self.Render(Views.work_create_view,
+                            hang_muc = hang_muc,
+                            phan_viec = self.Repository.phan_viec,
+                            worker=self.Repository.worker,
+                            material=self.Repository.material,
+                            machine=self.Repository.machine)
                 return
             else:
-                norm = self.Repository.get_norm_by_id(norm_id)
-                worker_norm = self.Repository.get_worker_norm_by_norm_id(norm_id)
-                machine_norm = self.Repository.get_machine_norm_by_norm_id(norm_id)
-                material_norm = self.Repository.get_material_norm_by_norm_id(norm_id)
-                
-                worker = self.Repository.get_worker_by_norm_id(norm_id)
-                machine = self.Repository.get_machine_by_norm_id(norm_id)
-                material = self.Repository.get_material_by_norm_id(norm_id)                
                 self.Render(Views.work_create_with_norm_id_view,
-                    hang_muc=hang_muc,
-                    id=id,
-                    worker=worker,machine=machine,material=material,
-                    norm=norm,worker_norm=worker_norm,machine_norm=machine_norm,material_norm=material_norm,
-                    workers=self.Repository.worker,materials=self.Repository.material,machines=self.Repository.machine)
-                return                
+                            hang_muc = hang_muc,
+                            phan_viec = self.Repository.phan_viec,
+                            worker = self.Repository.get_worker_by_norm_id(norm_id),
+                            machine = self.Repository.get_machine_by_norm_id(norm_id),
+                            material = self.Repository.get_material_by_norm_id(norm_id),
+                            norm = self.Repository.get_norm_by_id(norm_id),
+                            worker_norm = self.Repository.get_worker_norm_by_norm_id(norm_id),
+                            machine_norm = self.Repository.get_machine_norm_by_norm_id(norm_id),
+                            material_norm = self.Repository.get_material_norm_by_norm_id(norm_id),
+                            workers = self.Repository.worker,
+                            materials = self.Repository.material,
+                            machines = self.Repository.machine)
+                return 
         self.Repository.insert_work(model)
-        print(f'work {model.id} is created')
+        print(f'work {model.id} is created')                         
+
      
     def count_work(self,count=None):
         num = count if count else self.Repository.work_count
@@ -352,19 +360,17 @@ class base_controller:
         
     def list_work(self,key=None):
         if not key:
-            self._list_work(self.Repository.work,self.Repository.hang_muc)
+            self._list_work(self.Repository.work)
             print('work list showed!')
             return
         self._list_work(self.Repository.get_work_by_key(key))
         print(f'work list with key {key} is showed !')
             
-    def _list_work(self,works:list,hang_muc:list):
+    def _list_work(self,works:list):
         treedata = sg.TreeData()
-        for item in hang_muc:
-            treedata.Insert('',item.id,item.name,[item.id])
             
         for item in works:
-            treedata.Insert(item.hm_id,item.id,item.name,[item.id,item.unit,item.amount])
+            treedata.Insert('',item.id,item.name,[item.id,item.unit,item.amount,item.work_day,item.start,item.end])
             
             worker_works = self.Repository.get_worker_work_by_work_id(item.id)
             if worker_works:
@@ -760,4 +766,16 @@ class base_controller:
                 
     def delete_hang_muc(self,id:str):
         if self.Repository.delete_hang_muc(id):
+            print(f'Hang muc {id} is deleted ')
+            
+############################################ Phan viec 
+    def create_phan_viec(self,model=None):
+        if not model:
+            self.Render(Views.phan_viec_create_view)
+            return
+        self.Repository.insert_phan_viec(model)
+        print(f'Phần việc {model.id} is created')
+                
+    def delete_phan_viec(self,id:str):
+        if self.Repository.delete_phan_viec(id):
             print(f'Hang muc {id} is deleted ')

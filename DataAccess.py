@@ -19,6 +19,7 @@ class data_access:
     work_time = []
     worker_work_time = []
     hang_muc = []
+    phan_viec = []
     
     def __init__(self,path) -> None:
         self.path = path
@@ -63,9 +64,10 @@ class data_access:
                         
                     if Models.hang_muc.__name__ in row:
                         self.hang_muc.append(Models.hang_muc(*row[1:]))
+
+                    if Models.phan_viec.__name__ in row:
+                        self.phan_viec.append(Models.phan_viec(*row[1:]))
                         
-                    if Models.work_time.__name__ in row:
-                        self.work_time.append(Models.work_time(*row[1:]))                                                                                                       
     def save_change(self):
         if self.path:
             with open(self.path,'w',newline='',encoding='utf-8') as file:
@@ -101,6 +103,10 @@ class data_access:
                 
                 if self.hang_muc:
                     for item in self.hang_muc:
+                        write.writerows([item.to_save_list()])
+
+                if self.phan_viec:
+                    for item in self.phan_viec:
                         write.writerows([item.to_save_list()])
                         
                 if self.work:

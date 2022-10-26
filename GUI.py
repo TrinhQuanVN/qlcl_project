@@ -13,7 +13,7 @@ def T(text='',k='',s=(5,1),justification='r',font=('Any',11)):
 
 
 right_click_menu_def = [[], ['Quan', 'Yeu', 'Hang','More Nothing','Exit']]
-right_click_menu_tab_norm = [['a'], ['Copy', 'Paste', 'Delete','Create a copy','More']]
+right_click_menu_tab_norm = [['a'], ['Create a copy', 'Edit', 'Delete', 'More']]
 GRAPH_SIZE = (640,480)
 def menu_layout():
     menu_def = [['Công trình', ['Save','Open','Exit']],
@@ -48,17 +48,53 @@ def tab_worker_layout():
 
 def tab_norm_layout():
     layout = [
-        [Text('Find',(5,1)).GUI,sg.Input(s=(20,1),k='-NORM SEARCH INPUT-'),sg.Text(s=(5,1),k='-NORM COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-NORM FIND BUTTON-'),sg.Input(k='-SELECTED NORM INPUT-')],# ,visible=False
-        [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE NORM-',col0_heading='NORM',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True,select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
-        [sg.Push(),sg.Button('Add work',s=(10,1),k='-ADD WORK WITH NORM ID-'),sg.Button('Add',s=(10,1),k='-ADD NORM-'),sg.Button('Edit',s=(10,1),k='-EDIT NORM-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY NORM-'),sg.Button('Delete',s=(10,1),k='-DELETE NORM-')]
+        [sg.Text('Find',s=(5,1)), 
+        sg.Input(s=(20,1),k='-NORM SEARCH INPUT-'), 
+        sg.Text(s=(5,1),k='-NORM COUNT TEXT-'), 
+        sg.Button('Find',s=(10,1),k='-NORM FIND BUTTON-'), 
+        sg.Input(k='-SELECTED NORM INPUT-',visible=False)],
+        
+        [sg.Tree(data=sg.TreeData(), 
+                 headings=['ID','UNIT','amount'], 
+                 k='-TREE NORM-',col0_heading='NORM',
+                 col0_width=50,col_widths=[6,6,6],
+                 auto_size_columns=False,
+                 enable_events=True,
+                 select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
+        
+        [sg.Push(), 
+         sg.Button('Add work',s=(10,1),k='-ADD WORK WITH NORM ID-'),
+         sg.Button('Add',s=(10,1),k='-ADD NORM-'),
+         sg.Button('Edit',s=(10,1),k='-EDIT NORM-'),
+         sg.Button('Create a copy',s=(15,1),k='-CREATE COPY NORM-'),
+         sg.Button('Delete',s=(10,1),k='-DELETE NORM-')]
     ]
     return layout
 
 def tab_work_layout():
     layout = [
-        [Text('Find',(5,1)).GUI,sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-')],
-        [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE WORK-',col0_heading='WORK',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True)],
-        [sg.Push(),sg.Button('Đồ thị',s=(10,1),k='-SHOW GRAPH-'),sg.Button('Add HM',s=(10,1),k='-ADD HM-'),sg.Button('Add',s=(10,1),k='-ADD WORK-'),sg.Button('Edit',s=(10,1),k='-EDIT WORK-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY WORK-'),sg.Button('Delete',s=(10,1),k='-DELETE WORK-')]
+        [sg.Text('Find',s=(5,1)),
+         sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),
+         sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),
+         sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-'),
+         sg.Input(k='-SELECTED WORK INPUT-',visible=False)],
+        
+        [sg.Tree(data=sg.TreeData(),
+                 headings=['ID','Unit','Amount','Days','Start','End'],
+                 k='-TREE WORK-',
+                 col0_heading='WORK',
+                 col0_width=50,
+                 col_widths=[6,6,6],
+                 auto_size_columns=False,
+                 enable_events=True)],
+        
+        [sg.Push(),
+         sg.Button('Đồ thị',s=(10,1),k='-SHOW GRAPH-'),
+         sg.Button('Add HM',s=(10,1),k='-ADD HM-'),
+         sg.Button('Add',s=(10,1),k='-ADD WORK-'),
+         sg.Button('Edit',s=(10,1),k='-EDIT WORK-'),
+         sg.Button('Create a copy',s=(15,1),k='-CREATE COPY WORK-'),
+         sg.Button('Delete',s=(10,1),k='-DELETE WORK-')]
     ]
     return layout
 

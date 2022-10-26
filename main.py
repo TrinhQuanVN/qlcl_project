@@ -1,5 +1,6 @@
 import datetime
 from random import randint
+from tabnanny import check
 from py_linq import Enumerable
 import Extension as ex
 import Models
@@ -65,8 +66,9 @@ def to_work(parameter:Parameter):
     unit = parameter['unit']
     amount = float(parameter['amount']) if parameter['amount'] else 0
     hm_id = parameter['hm_id']
-    start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%y') if parameter['start'] in parameter else None
-    end = datetime.datetime.strptime(parameter['end'],r'%d/%m/%y') if parameter['end'] in parameter else None
+    pv_id = parameter['pv_id'] if parameter['pv_id'] else 0
+    start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%y') if parameter['start'] else None
+    end = datetime.datetime.strptime(parameter['end'],r'%d/%m/%y') if parameter['end'] else None
     
     return Models.work(name,unit,amount,hm_id,start,end,id)
 
@@ -93,6 +95,12 @@ def to_hang_muc(parameter:Parameter):
     name = parameter['name']
     return Models.hang_muc(name,id)
 
+def to_phan_viec(parameter:Parameter):
+    id = parameter['id']
+    name = parameter['name']
+    return Models.phan_viec(name,id)
+
+
 def to_work_time(parameter:Parameter) -> Models.work_time:
     work_id = parameter['work_id']
     start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%y') if 'start' in parameter else None
@@ -106,11 +114,6 @@ def to_worker_work_time(parameter:Parameter) -> Models.worker_work_time:
     date = datetime.datetime.strptime(parameter['date'],r'%d/%m/%y')
     return Models.worker_work_time(work_id,id,amount,date)
 
-def event_tree_click_set_meta_data(window,**kwargs):
-    window[kwargs['key']].metadata = kwargs['value']
-
-def get_metadata(window,key):
-    return window[key].metadata
 
 def register():
 #################################################### worker work time
@@ -135,6 +138,10 @@ def register():
 #################################################### HANG MUC
     Route.Register('hang muc create', controller.create_hang_muc)
     Route.Register('hang muc do create', lambda p: controller.create_hang_muc(to_hang_muc(p)))
+    
+#################################################### Phan viec
+    Route.Register('phan viec create', controller.create_phan_viec)
+    Route.Register('phan viec do create', lambda p: controller.create_phan_viec(to_phan_viec(p)))
 #################################################### work
     Route.Register('work create', controller.create_work)
     Route.Register('work do create',lambda p: controller.create_work(model=to_work(p)))
@@ -333,7 +340,76 @@ def create_copy_norm(values=None):
         return    
     Route.Foward(f'norm create copy ? id={norm_id}')    
 
+############################## WORK
+def work_tree_select(values=None):
+    if not values['-TREE WORK-']:
+        return
+    value = values['-TREE WORK-'][0]
+    if not value:
+        return
+    if ex.is_norm(value):
+        window['-SELECTED WORK INPUT-'].update(value)
+        
+def delete_work(values=None):
+    work_id = values['-SELECTED WORK INPUT-']
+    select_id = values['-TREE WORK-'][0]
+    print(f'line 295 {work_id} {select_id}')
+    if not work_id:
+        return
+    if select_id == work_id:
+        Route.Foward(f'work do delete ? id = {work_id}')
+        Route.Foward(f'worker work do delete by work id ? work_id={work_id}')
+        Route.Foward(f'machine work do delete by work id ? work_id={work_id}')
+        Route.Foward(f'material work do delete by work id ? work_id={work_id}')
+            
+    if ex.is_worker(select_id):
+        Route.Foward('worker work do delete ? work_id ={} & id = {}'.format(work_id,select_id))
+    elif ex.is_machine(select_id) or ex.is_dif_machine(select_id):
+        Route.Foward('machine work do delete ? work_id ={} & id = {}'.format(work_id,select_id))
+    elif ex.is_material(select_id) or ex.is_dif_material(select_id):
+        Route.Foward('material work do delete ? work_id ={} & id = {}'.format(work_id,select_id))    
+    
+    Route.Foward('work list')
 
+        
+def search_work(values=None):
+    id = values['-WORK SEARCH INPUT-']
+    if id:
+        Route.Foward('work do list ? key = {}'.format(values['-WORK SEARCH INPUT-']))
+        return
+    Route.Foward('work list')
+    Route.Foward('work count')
+
+def edit_work(values=None):
+    work_id = values['-SELECTED WORK INPUT-']
+    if not work_id:
+        return
+    Route.Foward('work edit ? id = {}'.format(work_id))
+    Route.Foward('work list')
+    
+def create_copy_work(values=None):
+    work_id = values['-SELECTED WORK INPUT-']
+    if not work_id:
+        return    
+    Route.Foward(f'work create copy ? id={work_id}') 
+    
+def check_hang_muc():
+    if repo.hang_muc:
+        return True
+    repond = sg.popup_ok_cancel('Không tìm thấy hạng mục. Bạn có muốn tạo hạng mục mới ?')
+    print(repond)
+    if repond == 'OK':
+        Route.Foward('hang muc create')
+    return False
+    
+def add_work_with_norm_id(values):
+    norm_id = values['-SELECTED NORM INPUT-']
+    if not norm_id:
+        return
+    if check_hang_muc():
+        Route.Foward(f'work create with norm id ? id={norm_id}')
+        Route.Foward('work list')  
+        Route.Foward('work count')    
          
 func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
         '-ADD HM-': add_hang_muc, '-ADD NORM-': add_norm, '-ADD WORK-': add_work,
@@ -342,13 +418,16 @@ func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':a
         '-NORM SEARCH INPUT-'+'_Enter' : search_norm, '-EDIT NORM-' : edit_norm,
          '-CREATE COPY NORM-' : create_copy_norm,
          
+        '-TREE WORK-' : work_tree_select, '-DELETE WORK-': delete_work, '-WORK FIND BUTTON-' : search_work,
+        '-WORK SEARCH INPUT-'+'_Enter' : search_work, '-EDIT WORK-' : edit_work,
+         '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,         
+         
         'Save': save, 'Open': open,
         'Thêm từ dự toán':add_norm_from_excel}
 
 def main():
     register()
     refesh()
-    COPY = None
     
     while True:
         event, values = window.read()
@@ -358,111 +437,7 @@ def main():
         
         if event in func:
             func[event](values)
-
-#################################################### norm
-        if event == 'Copy' and get_metadata(window,'-DELETE NORM-'):
-            COPY = get_metadata(window,'-DELETE NORM-')
-            print(COPY)
-            
-        if event == 'Paste' and get_metadata(window,'-EDIT NORM-'):
-            norm = get_metadata(window,'-EDIT NORM-')[0]
-            COPY = get_metadata(window,'-DELETE NORM-')
-            for item in COPY:
-                pass
-
-        # if event == '-CREATE COPY NORM-' and get_metadata(window,'-DELETE NORM-'):
-        #     norm_id_to_copy = Enumerable(get_metadata(window,'-DELETE NORM-')).where(lambda x: ex.is_norm(x)).to_list()
-        #     for id in norm_id_to_copy:
-        #         Route.Foward(f'norm create copy ? id={id}')
-        
-                    
-                                    
-#################################################### work    
-        if event in ['-ADD WORK WITH NORM ID-'] and repo.hang_muc and get_metadata(window,'-EDIT NORM-'):
-            norm_id =  get_metadata(window,'-EDIT NORM-')[0]
-            print(norm_id)
-            Route.Foward(f'work create with norm id ? id={norm_id}')
-            Route.Foward('work list')  
-            Route.Foward('work count')        
-            
-        if event == '-WORKER FIND BUTTON-':  #and values['-WORKER SEARCH INPUT-']/
-            if values['-WORKER SEARCH INPUT-']:
-                Route.Foward('worker do list ? key = {}'.format(values['-WORKER SEARCH INPUT-']))
-            else:
-                Route.Foward('worker list') 
-                Route.Foward('worker count')
-                
-        if event == 'Copy' and get_metadata(window,'-DELETE WORK-'):
-            COPY = get_metadata(window,'-DELETE WORK-')
-            print(COPY)
-            
-        if event == 'Paste' and get_metadata(window,'-EDIT WORK-'):
-            work = get_metadata(window,'-EDIT WORK-')[0]
-            COPY = get_metadata(window,'-DELETE WORK-')
-            for item in COPY:
-                pass
-
-        if event == '-CREATE COPY WORK-' and get_metadata(window,'-DELETE WORK-'):
-            work_id_to_copy = Enumerable(get_metadata(window,'-DELETE WORK-')).where(lambda x: ex.is_work(x)).to_list()
-            for id in work_id_to_copy:
-                Route.Foward(f'work create copy ? id={id}')               
-                
-        if event == '-TREE WORK-':
-            id = values['-TREE WORK-'] if values['-TREE WORK-'] else None
-            event_tree_click_set_meta_data(window,key='-DELETE WORK-', value=id)
-            if id:
-                if ex.is_hang_muc(id[0]):
-                    event_tree_click_set_meta_data(window,key='-EDIT WORK-',value=[id[0],None,None])
-                elif ex.is_work(id[0]):
-                    event_tree_click_set_meta_data(window,key='-EDIT WORK-',value=[get_metadata(window,'-EDIT WORK-')[0],id[0],None])
-                else:
-                    event_tree_click_set_meta_data(window,key='-EDIT WORK-',value=[get_metadata(window,'-EDIT WORK-')[0],get_metadata(window,'-EDIT WORK-')[1],id[0]])
-                    
-        if event == '-EDIT WORK-' and values['-TREE WORK-']:
-            hm_id, work_id, other_id = get_metadata(window,'-EDIT WORK-')
-            if not other_id and not work_id:
-                Route.Foward('hang muc edit ? id = {}'.format(hm_id))
-            elif not other_id:
-                Route.Foward('work edit ? id = {}'.format(work_id))
-            else:
-                other_id = other_id
-                if ex.is_worker(other_id):
-                    Route.Foward('worker work update ? work_id = {} & id ={}'.format(work_id, other_id))
-                if ex.is_machine(other_id) or ex.is_dif_machine(other_id):
-                    Route.Foward('machine work update ? work_id = {} & id ={}'.format(work_id, other_id))
-                if ex.is_material(other_id) or ex.is_dif_material(other_id):
-                    Route.Foward('material work update ? work_id = {} & id ={}'.format(work_id, other_id))
-                                                        
-        if event == '-DELETE WORK-':
-            hm_id, work_id, other_id = get_metadata(window,'-EDIT WORK-')
-            if work_id and other_id:
-                if ex.is_worker(other_id):
-                    Route.Foward('worker work do delete ? work_id ={} & id = {}'.format(work_id,other_id))
-                elif ex.is_machine(other_id) or ex.is_dif_machine(other_id):
-                    Route.Foward('machine work do delete ? work_id ={} & id = {}'.format(work_id,other_id))
-                else: #ex.is_machine(other_id) or ex.is_dif_machine(other_id):
-                    Route.Foward('material work do delete ? work_id ={} & id = {}'.format(work_id,other_id))
-            elif work_id and not other_id:
-                Route.Foward(f'work do delete ? id = {work_id}')
-                Route.Foward(f'worker work do delete by work id ? work_id={work_id}')
-                Route.Foward(f'machine work do delete by work id ? work_id={work_id}')
-                Route.Foward(f'material work do delete by work id ? work_id={work_id}')
-            
-            Route.Foward(f'work time do delete by work id ? work_id ={work_id}')
-            Route.Foward(f'worker work time do delete by work id ? work_id ={work_id}')
-            
-            Route.Foward('work list')                
-                
-
-                
-                
-
-            
-                
-        # if event == "-GRAPH-":
-        #     graph = window['-GRAPH-']
-        #     graph.draw_circle(values['-GRAPH-'], fill_color='yellow', radius=10)                
-                
+       
         if event == '-MACHINE FIND BUTTON-':  #and values['-WORKER SEARCH INPUT-']/
             if values['-MACHINE SEARCH INPUT-']:
                 Route.Foward('machine do list ? key = {}'.format(values['-MACHINE SEARCH INPUT-']))
