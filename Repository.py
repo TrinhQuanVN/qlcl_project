@@ -607,6 +607,75 @@ class base_repository:
         old.dateNT = model.dateNT
         old.dateYC = model.dateYC
         return True
+    
+    
+############################################ LMTN
+    @property
+    def lmtn(self):
+        return self.context.lmtn
+    
+    @property
+    def _linq_lmtn(self):
+        return Enumerable(self.lmtn)
+
+    @property
+    def lmtn_count(self):
+        return len(self.lmtn)
+    
+    def insert_lmtn(self,model):
+        self.context.lmtn.append(model)
+        
+    def get_lmtn_by_id(self,id):
+        results = self._linq_lmtn.where(lambda x: x.id.lower() == id.lower()).to_list()
+        return results[0] if results else []
+    
+    def delete_lmtn(self,model):
+        if not model:
+            return False
+        self.context.lmtn.remove(model)
+        return True        
+
+    def sorted_lmtn(self):
+        return self._linq_lmtn.order_by(lambda x: x.id)
+       
+    def get_lmtn_by_id(self,id:str) -> Models.lmtn:
+        if not self.lmtn:
+            return None
+        list = self._linq_lmtn.where(lambda x: x.id.lower() == id.lower()).to_list()
+        return list[0] if list else None
+
+    def get_lmtn_by_key(self,key:str):
+        if not self.lmtn:
+            return None
+        list = self._linq_lmtn.where(lambda x: key.lower() in x.id.lower()  or key.lower() in x.name.lower()).to_list()       
+        return list
+
+    def is_lmtn_exist(self,id):
+        return True if self.get_lmtn_by_id(id) else False
+
+    def update_lmtn(self,id,model:Models.lmtn):
+        old = self.get_lmtn_by_id(id=id)
+        old.name = model.name
+        old.dateNT = model.dateNT
+        old.dateYC = model.dateYC
+        old.sltm = model.sltm
+        old.slm = model.slm
+        old.ktm = model.ktm
+        return True
+    
+    @property
+    def default_lmtn(self):
+        return self.context.default_lmtn
+    
+    @property
+    def _linq_default_lmtn(self):
+        return Enumerable(self.default_lmtn)
+    
+    def get_default_lmtn_by_id(self,id:str) -> Models.lmtn:
+        if not self.default_lmtn:
+            return None
+        list = self._linq_default_lmtn.where(lambda x: x.id == id).to_list()
+        return list[0] if list else None
 
 
     

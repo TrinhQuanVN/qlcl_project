@@ -1,5 +1,6 @@
 import datetime
 from telnetlib import SGA
+from turtle import ycor
 import Framework
 import Extension as ex
 import Models
@@ -1054,6 +1055,9 @@ class create_norm_from_excel_view(base_view):
             Framework.Route.Foward(requset)
             
 ############################################################ HANG MUC
+
+
+
 def layout_to_create_hang_muc():
     name_text = sg.Text('Name',s=(5,1))
     name_in = sg.Input(s=(30,1),k='-NAME IN-',enable_events=True,expand_x=True)
@@ -1069,17 +1073,25 @@ def layout_to_create_hang_muc():
     
     return layout
 
-def window_to_create_hang_muc(layout, title):
+
+def general_window(layout, title,elemnt_bind:dict=None):
     window = sg.Window(title,layout,font=('Any',13),keep_on_top=True,finalize=True)
-    window['-NAME IN-'].bind("<Return>", "_Enter")
-    window.bind('<Escape>','-ESCAPE-')
-    return window    
+    if not elemnt_bind:
+        return window
+    for element, bind in elemnt_bind.items():
+        if element:
+            window[element].bind(bind[0],bind[1])
+        else:
+            window.bind(bind[0],bind[1])
+    return window 
 
 class hang_muc_create_view(base_view):
     def Render(self):
-        window = sg.Window('Create hạng mục',layout_to_create_hang_muc(),font=('Any',13),keep_on_top=True,finalize=True)
-        window['-NAME IN-'].bind("<Return>", "_Enter")
-        window.bind('<Escape>','-ESCAPE-')
+        window = general_window(layout= layout_to_create_hang_muc(),
+                                title= 'Create hạng mục',
+                                elemnt_bind= {'' : ['<Escape>','-ESCAPE-'],
+                                              '-NAME IN-' : ["<Return>", "_Enter"]})
+        
         while True:
             event,values = window.read()
             if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
@@ -1096,9 +1108,11 @@ class hang_muc_create_view(base_view):
         
 class phan_viec_create_view(base_view):
     def Render(self):
-        window = window_to_create_hang_muc(layout_to_create_hang_muc(),'Create phần việc')
-        window['-NAME IN-'].bind("<Return>", "_Enter")
-        window.bind('<Escape>','-ESCAPE-')
+        window = general_window(layout= layout_to_create_hang_muc(),
+                                title= 'Create phần việc',
+                                elemnt_bind= {'' : ['<Escape>','-ESCAPE-'],
+                                              '-NAME IN-' : ["<Return>", "_Enter"]})        
+        
         while True:
             event,values = window.read()
             if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
@@ -1112,3 +1126,98 @@ class phan_viec_create_view(base_view):
                 for key in ['-ID IN-']:
                     window[key].update('')
         window.close()
+        
+############################################################ LMTN
+def layout_text_input(text, input_key, text_size=(7,1), input_size= (50,1), input_en_event=False):
+    return [sg.Text(text,s=text_size),
+            sg.Input(s=input_size, k=input_key, enable_events= input_en_event, expand_x=True)]
+
+
+class lmtn_choose_default(base_view):
+    def Render(self):
+        dateNT = self.kwargs['dateNT']
+        default_lmtn = self.kwargs['default']
+        # d = dict(zip([item.name for item in default_lmtn], [item.id for item in default_lmtn]))
+        layout= [
+            [sg.Listbox(values= default_lmtn,
+                        size=(50,20),
+                        k='-LB-',
+                        font=('Any' , 11),
+                        enable_events=True,
+                        bind_return_key=True)],
+            
+            [sg.Button('Choose',s=(10,1),k='-CHOOSE-'),
+             sg.Button('Cancel',s=(10,1),k='-CANCEL-')]
+        ]
+        window = general_window(layout= layout,
+                                title= 'Choose default LMTN',
+                                elemnt_bind= {'' : ['<Escape>','-ESCAPE-'],
+                                              '-LB-' : ["<Return>", "_Enter"]})            
+
+        while True:
+            event, values = window.read()
+            print(event, values)
+            if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
+                self.foward('lmtn create without default', dateNT = dateNT)
+                break
+            elif event in ['-CHOOSE-','-LB-'+'_Enter']:
+                self.foward('lmtn create with default', default_id= values['-LB-'][0].id, dateNT = dateNT)
+
+                break
+        window.close()
+
+class lmtn_create_with_default_view(base_view):
+    def Render(self):
+        dateNT = self.kwargs['dateNT']
+        default = self.kwargs['default']
+        layout =[
+            # [sg.Combo(default_dict.keys(),s=(20,1),expand_x=True,k='-COMBO-',enable_events=True)],
+            layout_text_input('Name','-NAME IN-'),
+            # layout_text_input('Work ID','-WORK ID IN-'),
+            # layout_text_input('Work ID','-WORK ID IN-'),
+            layout_text_input('DateNT','-DATENT IN-'),
+            # layout_text_input('DateYC','-WORK ID IN-'),
+            layout_text_input('SLTM','-SLTM IN-'),
+            layout_text_input('SLM','-SLM IN-'),
+            layout_text_input('KTM','-KTM IN-'),
+            layout_text_input('YC','-YC IN-'),
+            
+            [sg.Button('Create',s=(10,1),k='-CREATE-'),
+             sg.Button('Clear',s=(10,1),k='-CLEAR-'),
+             sg.Button('Cancel',s=(10,1),k='-CANCEL-')]
+        ]        
+        
+        
+        window = general_window(layout= layout,
+                                title= 'Create LMTN',
+                                elemnt_bind= {'' : ['<Escape>','-ESCAPE-'],})
+        
+        window['-NAME IN-'].update(default.name)
+        window['-SLTM IN-'].update(default.sltm)
+        window['-SLM IN-'].update(default.slm)
+        window['-KTM IN-'].update(default.ktm)
+        window['-YC IN-'].update(default.yc)
+        window['-DATENT IN-'].update(dateNT)
+        
+        while True:
+            event,values = window.read()
+            if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
+                break
+            elif event in ['-CREATE-','-NAME IN-'+'_Enter']:
+                id = next(Models.lmtn.id_iter)
+                Models.lmtn()
+                self.foward('lmtn do create',
+                            name = values['-NAME IN-'],
+                            sltm = values['-SLTM IN-'],
+                            slm = values['-SLM IN-'],
+                            ktm = values['-KTM IN-'],
+                            yc = values['-YC IN-'],
+                            dateNT = values['-DATENT IN-'],
+                            id=id)
+                # self.foward('work list')
+                break
+            elif event == '-CLEAR-':
+                for key in ['-ID IN-']:
+                    window[key].update('')
+        window.close()
+          

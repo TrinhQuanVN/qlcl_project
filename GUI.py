@@ -80,7 +80,7 @@ def tab_work_layout():
          sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),
          sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),
          sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-'),
-         sg.Input(k='-SELECTED WORK INPUT-',visible=False)],
+         sg.Input(k='-SELECTED WORK INPUT-',visible=True)],
         
         [sg.Tree(data=sg.TreeData(),
                  headings=['ID','Unit','Amount','Days','Start','End'],

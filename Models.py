@@ -181,11 +181,15 @@ class ntcv:
     afternoon = [13.5 + i*0.5 for i in range(5)]
     all_day = morning + afternoon
     np.random.seed(1111)
-    def __init__(self,name,work_id=None,dateNT:datetime.datetime=None,dateYC:datetime.datetime=None,id=None) -> None:
+    def __init__(self,name,
+                 work_id=None,
+                 dateNT:datetime.datetime=None,
+                 dateYC:datetime.datetime=None,
+                 id=None) -> None:
         self.work_id = work_id if work_id else 'ztcv'
         self.name = name
         self._dateNT = dateNT + datetime.timedelta(hours= np.random.choice(self.all_day)) if dateNT else None
-        self._dateYC = None if not dateNT else self._dateNT + datetime.timedelta(hours= 1) if not dateYC else dateYC
+        self._dateYC = None if not dateNT else self._dateNT - datetime.timedelta(days= 1) if not dateYC else dateYC
         self.id = next(self.id_iter) if not id else id
         
     @property
@@ -204,21 +208,27 @@ class ntcv:
     def dateYC(self):
         return self._dateYC.strftime(r'%d/%m/%y %H:%M') if self._dateYC else ''
     
+    def __str__(self) -> str:
+        return self.name
+    
     def to_save_list(self):
         return [self.__class__.__name__,self.name,self.work_id,self._dateNT_timestamp,self._dateYC_timestamp,self.id]
     
-class ntvl(ntcv):
+class lmtn(ntcv):
+
     id_iter = count()
     np.random.seed(2222)
     def __init__(self, name, work_id=None,
                  dateNT: datetime.datetime = None,
                  dateYC: datetime.datetime = None,
-                 sltm=None, slm=None, ktm=None, id=None) -> None:
+                 sltm = None, slm = None, ktm = None, yc=None,
+                 id = None) -> None:
         super().__init__(name, work_id, dateNT, dateYC)
         self.id = next(self.id_iter) if not id else id
         self.sltm = sltm
         self.slm = slm
         self.ktm = ktm
+        self.yc = yc
     
     def to_save_list(self):
         return [self.__class__.__name__,

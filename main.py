@@ -90,6 +90,15 @@ def to_ntcv(parameter:Parameter):
                        dateNT= ex.to_date(parameter['dateNT']) if parameter['dateNT'] else None,
                        id=parameter['id'])
 
+def to_ntcv(parameter:Parameter):
+    return Models.lmtn(name= parameter['name'],
+                       sltm= parameter['sltm'],
+                       ltm= parameter['ltm'],
+                       ktm= parameter['ktm'],
+                       yc= parameter['yc'],
+                       dateNT= ex.to_date(parameter['dateNT']) if parameter['dateNT'] else None,
+                       id=parameter['id'])
+
 def register():
 #################################################### NTCV
     Route.Register('ntcv create', controller.create_ntcv)
@@ -98,7 +107,13 @@ def register():
     Route.Register('ntcv do list',lambda p: controller.list_ntcv(p['key'])) 
     Route.Register('ntcv count',controller.count_ntcv)
     Route.Register('ntcv do count',lambda p: controller.count_ntcv(p['count']))
-   
+
+#################################################### LMTN
+    Route.Register('lmtn choose default',lambda p: controller.choose_default_lmtn(p['dateNT']))
+    Route.Register('lmtn create with default',lambda p: controller.create_lmtn( dateNT=p['dateNT'], default_id=p['default_id']))
+    Route.Register('lmtn do create', lambda p: controller.create_lmtn(model=to_ntcv(p)))
+    
+
 #################################################### File
     Route.Register('file cons save', controller.save_file)
     Route.Register('file cons do save',lambda p: controller.save_file(p['path']))
@@ -316,11 +331,7 @@ def create_copy_norm(values=None):
 def work_tree_select(values=None):
     if not values['-TREE WORK-']:
         return
-    value = values['-TREE WORK-'][0]
-    if not value:
-        return
-    if ex.is_norm(value):
-        window['-SELECTED WORK INPUT-'].update(value)
+    window['-SELECTED WORK INPUT-'].update(values['-TREE WORK-'][0])
         
 def delete_work(values=None):
     work_id = values['-SELECTED WORK INPUT-']
@@ -391,20 +402,29 @@ def change_tab(values):
          '-NTVL TAB-': 'ntvl list',
          '-NKTC TAB-': 'nktc list',}
     Route.Foward(d[values['-TAB GROUP-']])
+    
+def choose_default_lmtn(values=None):
+    work_id = values['-SELECTED WORK INPUT-']
+    if not work_id:
+        Route.Foward("lmtn choose default?dateNT=''")
+    work = repo.get_work_by_id(work_id)
+    Route.Foward(f"lmtn choose default?dateNT={work.start}")
+    
+
          
 func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
         '-ADD HM-': add_hang_muc, '-ADD NORM-': add_norm, '-ADD WORK-': add_work,
         
         '-TREE NORM-' : norm_tree_select, '-DELETE NORM-': delete_norm, '-NORM FIND BUTTON-' : search_norm,
         '-NORM SEARCH INPUT-'+'_Enter' : search_norm, '-EDIT NORM-' : edit_norm,
-         '-CREATE COPY NORM-' : create_copy_norm,
+        '-CREATE COPY NORM-' : create_copy_norm,
          
         '-TREE WORK-' : work_tree_select, '-DELETE WORK-': delete_work, '-WORK FIND BUTTON-' : search_work,
         '-WORK SEARCH INPUT-'+'_Enter' : search_work, '-EDIT WORK-' : edit_work,
-         '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,   
+        '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,   
                
-         '-TAB GROUP-': change_tab, #Change tab do item list
-         
+        '-TAB GROUP-': change_tab, #Change tab do item list
+        'Add LMTN' : choose_default_lmtn,
         'Save': save, 'Open': open,
         'Thêm từ dự toán' : add_norm_from_excel}
 
@@ -423,7 +443,7 @@ def main():
     
     while True:
         event, values = window.read()
-        print(event, values)
+        # print(event, values)
         if event in [None,'Exit']:
             break
         

@@ -810,11 +810,47 @@ class base_controller:
             
     def _list_ntcv(self,ntcv:list):
         treedata = sg.TreeData()
-        # if not ntcv:
-        #     self.Update(key='-TREE NTCV-',values=treedata)
-        #     self.count_ntcv(0)
         for item in ntcv:
             treedata.Insert('',item.id,item.id,[item.dateNT,item.dateYC,item.name])
             
         self.Update(key='-TREE NTCV-',values=treedata)
         self.count_ntcv(len(ntcv))
+        
+############################################ LMTN
+    def choose_default_lmtn(self,dateNT):
+        self.Render(Views.lmtn_choose_default,dateNT = dateNT, default = self.Repository.default_lmtn)
+
+    def create_lmtn(self,model=None,default_id=None,dateNT=None):
+        if not model:
+            if default_id:
+                self.Render(Views.lmtn_create_with_default_view, default= self.Repository.get_default_lmtn_by_id(default_id), dateNT= dateNT)
+                return
+        self.Repository.insert_lmtn(model)
+        print(f'Phần việc {model.id} is created')
+                
+    def delete_lmtn(self,id:str):
+        if self.Repository.delete_lmtn(id):
+            print(f'Hang muc {id} is deleted ')
+            
+    def count_lmtn(self,count=None):
+        num = count if count else self.Repository.lmtn_count
+        self.Update(key='-LMTN COUNT TEXT-',values=num)
+        
+    def list_lmtn(self,key=None):
+        if not self.Repository.lmtn:
+            return
+        if not key:
+            self._list_lmtn(self.Repository.lmtn)
+            self.count_lmtn()
+            print('lmtn list showed!')
+            return
+        self._list_lmtn(self.Repository.get_lmtn_by_key(key=key))
+        print(f'lmtn list with key {key} is showed !')
+            
+    def _list_lmtn(self,lmtn:list):
+        treedata = sg.TreeData()
+        for item in lmtn:
+            treedata.Insert('',item.id,item.id,[item.dateNT,item.dateYC,item.name,item.sltm, item.slm, item.ktm])
+            
+        self.Update(key='-TREE lmtn-',values=treedata)
+        self.count_lmtn(len(lmtn))

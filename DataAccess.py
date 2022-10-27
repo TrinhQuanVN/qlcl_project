@@ -22,6 +22,40 @@ class data_access:
     phan_viec = []
     
     ntcv = []
+    lmtn = []
+
+    default_lmtn = [Models.lmtn('Bê tông M250, đá 1x2, PCB40, phụ gia R7',
+                                sltm= 1, slm= 3, ktm= '15x15x15cm',
+                                yc= 'Xác định cường độ mác bê tông R7,R28 có phụ gia R7',
+                                id='df0'),
+                    
+                    Models.lmtn('Bê tông M250, đá 1x2, PCB40',
+                                sltm= 1, slm= 3, ktm= '15x15x15cm',
+                                yc= 'Xác định cường độ mác bê tông R7,R28',
+                                id='df1'),
+                    
+                    Models.lmtn('Bê tông M200, đá 1x2, PCB30',
+                                sltm= 1, slm= 3, ktm= '15x15x15cm',
+                                yc= 'Xác định cường độ mác bê tông R7,R28',
+                                id='df2'),  
+                    
+                    Models.lmtn('Bê tông M150, đá 4x6, PCB30',
+                                sltm= 1, slm= 3, ktm= '15x15x15cm',
+                                yc= 'Xác định cường độ mác bê tông R7,R28',
+                                id='df3'),                    
+
+                    Models.lmtn('Vữa xi măng M100, PCB30',
+                                sltm= 1, slm= 3, ktm= '7.07x7.07x7.07cm',
+                                yc= 'Xác định cường độ vữa XM R7,R28',
+                                id='df4'),
+
+                    Models.lmtn('Vữa xi măng M75, PCB30',
+                                sltm= 1, slm= 3, ktm= '7.07x7.07x7.07cm',
+                                yc= 'Xác định cường độ vữa XM R7,R28',
+                                id='df5'),
+                                                           
+                    ]
+
     
     def __init__(self,path) -> None:
         self.path = path
@@ -71,7 +105,10 @@ class data_access:
                         self.phan_viec.append(Models.phan_viec(*row[1:]))
                         
                     if Models.ntcv.__name__ in row:
-                        self.ntcv.append(Models.ntcv(*row[1:]))                    
+                        self.ntcv.append(Models.ntcv(*row[1:]))
+                        
+                    if Models.lmtn.__name__ in row:
+                        self.lmtn.append(Models.lmtn(*row[1:]))                                             
                         
     def save_change(self):
         if self.path:
@@ -137,6 +174,10 @@ class data_access:
                 if self.ntcv:
                     for item in self.ntcv:
                         write.writerows([item.to_save_list()]) 
+                        
+                if self.lmtn:
+                    for item in self.lmtn:
+                        write.writerows([item.to_save_list()])                        
                         
     
                         
