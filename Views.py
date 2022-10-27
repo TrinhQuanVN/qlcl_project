@@ -181,7 +181,7 @@ def work_create_layout(norm = None, hang_muc = None, phan_viec =None,
     layout =[
         [hm_text,hm_combo],
         [pv_text,pv_combo],
-        [name_text,name_in],
+        [name_text,name_in,sg.Checkbox('NTCV',k='-CheckBox NTCV-',default=True)],
         [unit_text,unit_in],
         [amount_text,amount_in],
         [start_text,start_in],
@@ -317,14 +317,25 @@ class work_create_with_norm_id_view(base_view):
             for i in range(10):                        
                 if values[f'-COMBO MATERIAL{i}-']:
                     window[f'-UNIT MATERIAL{i}-'].update(values[f'-COMBO MATERIAL{i}-'].unit)
+
+        def create_ntcv():
+            if window['-CheckBox NTCV-']:
+                print('haha')
         
         def create(values=None):
+            work_id = next(Models.work.id_iter)
+            if window['-CheckBox NTCV-']:
+                ntcv_id = next(Models.ntcv.id_iter)
+                self.foward('ntcv do create',
+                            name= values['-NAME IN-'],
+                            work_id= work_id,
+                            dateNT= values['-END IN-'],
+                            id =ntcv_id)
             # try:
             #     amount = float(values['-AMOUNT IN-'])
             # except ValueError:
             #     window['-AMOUNT IN-'].set_focus()
             #     return
-            work_id = next(Models.work.id_iter)
             self.foward('work do create',
                             id =work_id,
                             name = values['-NAME IN-'],
@@ -354,6 +365,7 @@ class work_create_with_norm_id_view(base_view):
                                 id=values[f'-COMBO MATERIAL{i}-'].id,
                                 amount=values[f'-INPUT MATERIAL{i}-'])                       
 
+            create_ntcv()
             self.foward('work list')
             
             window.close()
@@ -361,8 +373,8 @@ class work_create_with_norm_id_view(base_view):
         def clear(values=None):
             for key in ['-NAME IN-','-UNIT IN-','-AMOUNT IN-']:
                 window[key].update('')
-        
-        func = {'-AMOUNT IN-'+'_Enter':multi_amount, 
+
+        func = {'-AMOUNT IN-'+'_Enter':multi_amount,
                 '-CREATE-':create, '-CLEAR-':clear}
         
         for i in range(10):
@@ -379,7 +391,6 @@ class work_create_with_norm_id_view(base_view):
             if event in func:
                 func[event](values)
             
-    
         window.close()
 
 class work_create_view(base_view):

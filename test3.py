@@ -5,7 +5,7 @@ from py_linq import Enumerable
 import re
 from itertools import count
 import Extension as ex
-
+import Models
 def main():
     def display_date_time(date_time:datetime.datetime):
         format = '%d/%M/%y'
@@ -28,8 +28,13 @@ def main():
     b = next(a)
     # print(type(b))
     
-    a = ex.try_parse_string_to_float('a')
-    print(a)
+    a = Models.ntcv(0,'ntcv0',datetime.datetime(2022,11,1))
+    b = Models.ntcv(0,'ntcv0',datetime.datetime(2022,11,1))
+    for i in range(10):
+        a = Models.ntcv(i,f'ntcv{i}',datetime.datetime(2022,11,1))
+        print(a.dateNT, a.dateYC)
+   
+      
         
 if __name__ == "__main__":
     main() 

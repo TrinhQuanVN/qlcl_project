@@ -13,7 +13,9 @@ def T(text='',k='',s=(5,1),justification='r',font=('Any',11)):
 
 
 right_click_menu_def = [[], ['Quan', 'Yeu', 'Hang','More Nothing','Exit']]
-right_click_menu_tab_norm = [['a'], ['Create a copy', 'Edit', 'Delete', 'More']]
+right_click_menu_tab_norm = [[], ['Create a copy', 'Edit', 'Delete', 'More']]
+right_click_menu_tab_work = [[], ['Create a copy', 'Edit', 'Delete', 'Add LMTN', 'Add NTVL']]
+
 GRAPH_SIZE = (640,480)
 def menu_layout():
     menu_def = [['Công trình', ['Save','Open','Exit']],
@@ -60,6 +62,7 @@ def tab_norm_layout():
                  col0_width=50,col_widths=[6,6,6],
                  auto_size_columns=False,
                  enable_events=True,
+                 right_click_menu= right_click_menu_tab_norm,
                  select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
         
         [sg.Push(), 
@@ -86,6 +89,8 @@ def tab_work_layout():
                  col0_width=50,
                  col_widths=[6,6,6],
                  auto_size_columns=False,
+                 right_click_menu= right_click_menu_tab_work,
+                 select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                  enable_events=True)],
         
         [sg.Push(),
@@ -100,33 +105,103 @@ def tab_work_layout():
 
 def tab_lmtn_layout():
     layout = [
-        [Text('Find',(5,1)).GUI,sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-')],
-        [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE LMTN-',col0_heading='WORK',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True)],
-        [sg.Push(),sg.Button('Add HM',s=(10,1),k='-ADD HM-'),sg.Button('Add',s=(10,1),k='-ADD WORK-'),sg.Button('Edit',s=(10,1),k='-EDIT WORK-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY WORK-'),sg.Button('Delete',s=(10,1),k='-DELETE WORK-')]
+        [sg.Text('Find',s=(5,1)),
+         sg.Input(s=(20,1),k='-LMTN SEARCH INPUT-'),
+         sg.Text(s=(5,1),k='-LMTN COUNT TEXT-'),
+         sg.Button('Find',s=(10,1),k='-LMTN FIND BUTTON-')],
+        
+        [sg.Tree(data=sg.TreeData(),
+                 headings=['LMTN','SLTM','STM','KTM'],
+                 k='-TREE LMTN-',
+                 col0_heading='Date',
+                 col0_width=10,
+                 col_widths=[10,6,6,6],
+                 auto_size_columns=False,
+                 enable_events=True)],
+        
+        [sg.Push(),
+         
+        #  sg.Button('Add HM',s=(10,1),k='-ADD HM-'),
+         sg.Button('Add',s=(10,1),k='-ADD LMTN-'),
+         sg.Button('Edit',s=(10,1),k='-EDIT LMTN-'),
+         sg.Button('Create a copy',s=(15,1),k='-CREATE COPY LMTN-'),
+         sg.Button('Delete',s=(10,1),k='-DELETE LMTN-')]
     ]
     return layout
 
 def tab_ntvl_layout():
     layout = [
-        [Text('Find',(5,1)).GUI,sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-')],
-        [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE NTVL-',col0_heading='WORK',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True)],
-        [sg.Push(),sg.Button('Add HM',s=(10,1),k='-ADD HM-'),sg.Button('Add',s=(10,1),k='-ADD WORK-'),sg.Button('Edit',s=(10,1),k='-EDIT WORK-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY WORK-'),sg.Button('Delete',s=(10,1),k='-DELETE WORK-')]
+        [sg.Text('Find',s=(5,1)),
+         sg.Input(s=(20,1),k='-NTVL SEARCH INPUT-'),
+         sg.Text(s=(5,1),k='-NTVL COUNT TEXT-'),
+         sg.Button('Find',s=(10,1),k='-NTVL FIND BUTTON-')],
+        
+        [sg.Tree(data=sg.TreeData(),
+                 headings=['Date YC','NTVL'],
+                 k='-TREE NTVL-',
+                 col0_heading='Date NT',
+                 col0_width=10,
+                 col_widths=[10,20],
+                 auto_size_columns=False,
+                 enable_events=True)],
+        
+        [sg.Push(),
+        #  sg.Button('Add HM',s=(10,1),k='-ADD HM-'),
+         sg.Button('Add',s=(10,1),k='-ADD NTVL-'),
+         sg.Button('Edit',s=(10,1),k='-EDIT NTVL-'),
+         sg.Button('Create a copy',s=(15,1),k='-CREATE COPY NTVL-'),
+         sg.Button('Delete',s=(10,1),k='-DELETE NTVL-')]
     ]
     return layout
 
 def tab_ntcv_layout():
     layout = [
-        [Text('Find',(5,1)).GUI,sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-')],
-        [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE NTCV-',col0_heading='WORK',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True)],
-        [sg.Push(),sg.Button('Add HM',s=(10,1),k='-ADD HM-'),sg.Button('Add',s=(10,1),k='-ADD WORK-'),sg.Button('Edit',s=(10,1),k='-EDIT WORK-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY WORK-'),sg.Button('Delete',s=(10,1),k='-DELETE WORK-')]
+        [sg.Text('Find',s=(5,1)),
+         sg.Input(s=(20,1),k='-NTCV SEARCH INPUT-'),
+         sg.Text(s=(5,1),k='-NTCV COUNT TEXT-'),
+         sg.Button('Find',s=(10,1),k='-NTCV FIND BUTTON-')],
+        
+        [sg.Tree(data=sg.TreeData(),
+                 headings=['DateNT','DateYC','Name'],
+                 k='-TREE NTCV-',
+                 col0_heading='ID',
+                 col0_width=2,
+                 col_widths=[4,4,50],
+                 auto_size_columns=False,
+                 justification='c',
+                 enable_events=True)],
+        
+        [sg.Push(),
+        #  sg.Button('Add HM',s=(10,1),k='-ADD NTCV-'),
+         sg.Button('Add',s=(10,1),k='-ADD NTCV-'),
+         sg.Button('Edit',s=(10,1),k='-EDIT NTCV-'),
+         sg.Button('Create a copy',s=(15,1),k='-CREATE COPY NTCV-'),
+         sg.Button('Delete',s=(10,1),k='-DELETE NTCV-')]
     ]
     return layout
 
 def tab_nktc_layout():
     layout = [
-        [Text('Find',(5,1)).GUI,sg.Input(s=(20,1),k='-WORK SEARCH INPUT-'),sg.Text(s=(5,1),k='-WORK COUNT TEXT-'),sg.Button('Find',s=(10,1),k='-WORK FIND BUTTON-')],
-        [sg.Tree(data=sg.TreeData(),headings=['ID','UNIT','amount'],k='-TREE NKTC-',col0_heading='WORK',col0_width=50,col_widths=[6,6,6],auto_size_columns=False,enable_events=True)],
-        [sg.Push(),sg.Button('Add HM',s=(10,1),k='-ADD HM-'),sg.Button('Add',s=(10,1),k='-ADD WORK-'),sg.Button('Edit',s=(10,1),k='-EDIT WORK-'),sg.Button('Create a copy',s=(15,1),k='-CREATE COPY WORK-'),sg.Button('Delete',s=(10,1),k='-DELETE WORK-')]
+        [sg.Text('Find',s=(5,1)),
+         sg.Input(s=(20,1),k='-NKTC SEARCH INPUT-'),
+         sg.Text(s=(5,1),k='-NKTC COUNT TEXT-'),
+         sg.Button('Find',s=(10,1),k='-NKTC FIND BUTTON-')],
+        
+        [sg.Tree(data=sg.TreeData(),
+                 headings=['NKTC'],
+                 k='-TREE NKTC-',
+                 col0_heading='Date',
+                 col0_width=20,
+                 col_widths=[],
+                 auto_size_columns=False,
+                 enable_events=True)],
+        
+        [sg.Push(),
+        #  sg.Button('Add HM',s=(10,1),k='-ADD HM-'),
+         sg.Button('Add',s=(10,1),k='-ADD NKTC-'),
+         sg.Button('Edit',s=(10,1),k='-EDIT NKTC-'),
+         sg.Button('Create a copy',s=(15,1),k='-CREATE COPY NKTC-'),
+         sg.Button('Delete',s=(10,1),k='-DELETE NKTC-')]
     ]
     return layout
 
@@ -138,12 +213,13 @@ def main_layout():
             # [sg.Tab('Worker',tab_worker_layout(),k='-WORKER TAB-')],
             # [sg.Tab('Machine',tab_machine_layout(),k='-MACHINE TAB-')],
             # [sg.Tab('Material',tab_material_layout(),k='-MATERIAL TAB-')],
-            [sg.Tab('Norm',tab_norm_layout(),k='-NORM TAB-',right_click_menu=right_click_menu_tab_norm)],
+            [sg.Tab('Norm',tab_norm_layout(),k='-NORM TAB-')],
             [sg.Tab('Work',tab_work_layout(),k='-WORK TAB-')],
+            [sg.Tab('NTCV',tab_ntcv_layout(),k='-NTCV TAB-')],
             [sg.Tab('NKTC',tab_nktc_layout(),k='-NKTC TAB-')],
             [sg.Tab('LMTN',tab_lmtn_layout(),k='-LMTN TAB-')],
             [sg.Tab('NTVL',tab_ntvl_layout(),k='-NTVL TAB-')],
-            [sg.Tab('NTCV',tab_ntcv_layout(),k='-NTCV TAB-')],
+            # [sg.Tab('NTCV',tab_ntcv_layout(),k='-NTCV TAB-')],
             
             ],k='-TAB GROUP-',enable_events=True)],
         

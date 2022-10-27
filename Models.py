@@ -1,6 +1,7 @@
 import datetime
 from itertools import count
 import pandas as pd
+import numpy as np
 class worker:
     def __init__(self,id:str,name:str,unit:str) -> None:
         self.id = id
@@ -173,3 +174,55 @@ class worker_work_time:
 
     def to_save_list(self):
         return [self.__class__.__name__,self.work_id,self.id,self.amount,self.date.timestamp()]
+    
+class ntcv:
+    id_iter = count()
+    morning = [7 + i*0.5 for i in range(7)]
+    afternoon = [13.5 + i*0.5 for i in range(5)]
+    all_day = morning + afternoon
+    np.random.seed(1111)
+    def __init__(self,name,work_id=None,dateNT:datetime.datetime=None,dateYC:datetime.datetime=None,id=None) -> None:
+        self.work_id = work_id if work_id else 'ztcv'
+        self.name = name
+        self._dateNT = dateNT + datetime.timedelta(hours= np.random.choice(self.all_day)) if dateNT else None
+        self._dateYC = None if not dateNT else self._dateNT + datetime.timedelta(hours= 1) if not dateYC else dateYC
+        self.id = next(self.id_iter) if not id else id
+        
+    @property
+    def _dateNT_timestamp(self):
+        return self._dateNT.timestamp() if self._dateNT else ''
+
+    @property
+    def _dateYC_timestamp(self):
+        return self._dateYC.timestamp() if self._dateYC else ''
+        
+    @property
+    def dateNT(self):
+        return self._dateNT.strftime(r'%d/%m/%y %H:%M') if self._dateNT else ''
+
+    @property
+    def dateYC(self):
+        return self._dateYC.strftime(r'%d/%m/%y %H:%M') if self._dateYC else ''
+    
+    def to_save_list(self):
+        return [self.__class__.__name__,self.name,self.work_id,self._dateNT_timestamp,self._dateYC_timestamp,self.id]
+    
+class ntvl(ntcv):
+    id_iter = count()
+    np.random.seed(2222)
+    def __init__(self, name, work_id=None,
+                 dateNT: datetime.datetime = None,
+                 dateYC: datetime.datetime = None,
+                 sltm=None, slm=None, ktm=None, id=None) -> None:
+        super().__init__(name, work_id, dateNT, dateYC)
+        self.id = next(self.id_iter) if not id else id
+        self.sltm = sltm
+        self.slm = slm
+        self.ktm = ktm
+    
+    def to_save_list(self):
+        return [self.__class__.__name__,
+                self.name, self.work_id,
+                self._dateNT_timestamp,self._dateYC_timestamp,
+                self.sltm, self.slm, self.ktm,
+                self.id]    

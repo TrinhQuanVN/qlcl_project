@@ -276,19 +276,19 @@ class base_repository:
 
     def is_norm_exist(self,id):
         return True if self.get_norm_by_id(id) else False
-    
-    def insert_norm(self,model):
-        self.context.norm.append(model)   
-
-    def delete_norm(self,model):
-        self.context.norm.remove(model)
-        return True         
 
     def update_norm(self,id,model:Models.norm):
         old = self.get_norm_by_id(id=id)
         old.name = model.name
         old.unit = model.unit
         return True
+   
+    def insert_norm(self,model):
+        self.context.norm.append(model)   
+
+    def delete_norm(self,model):
+        self.context.norm.remove(model)
+        return True         
 
 
 
@@ -555,6 +555,57 @@ class base_repository:
         if not model:
             return False
         self.context.phan_viec.remove(model)
+        return True
+
+############################################ NTCV
+    @property
+    def ntcv(self):
+        return self.context.ntcv
+    
+    @property
+    def _linq_ntcv(self):
+        return Enumerable(self.ntcv)
+
+    @property
+    def ntcv_count(self):
+        return len(self.ntcv)
+    
+    def insert_ntcv(self,model):
+        self.context.ntcv.append(model)
+        
+    def get_ntcv_by_id(self,id):
+        results = self._linq_ntcv.where(lambda x: x.id.lower() == id.lower()).to_list()
+        return results[0] if results else []
+    
+    def delete_ntcv(self,model):
+        if not model:
+            return False
+        self.context.ntcv.remove(model)
+        return True        
+
+    def sorted_ntcv(self):
+        return self._linq_ntcv.order_by(lambda x: x.id)
+       
+    def get_ntcv_by_id(self,id:str) -> Models.ntcv:
+        if not self.ntcv:
+            return None
+        list = self._linq_ntcv.where(lambda x: x.id.lower() == id.lower()).to_list()
+        return list[0] if list else None
+
+    def get_ntcv_by_key(self,key:str):
+        if not self.ntcv:
+            return None
+        list = self._linq_ntcv.where(lambda x: key.lower() in x.id.lower()  or key.lower() in x.name.lower()).to_list()       
+        return list
+
+    def is_ntcv_exist(self,id):
+        return True if self.get_ntcv_by_id(id) else False
+
+    def update_ntcv(self,id,model:Models.ntcv):
+        old = self.get_ntcv_by_id(id=id)
+        old.name = model.name
+        old.dateNT = model.dateNT
+        old.dateYC = model.dateYC
         return True
 
 

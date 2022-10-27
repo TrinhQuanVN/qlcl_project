@@ -16,124 +16,94 @@ context = DataAccess.data_access(path='')
 repo = Repository.base_repository(context)
 controller = Controllers.base_controller(repo,window)
 
-
+def to_worker(parameter:Parameter):
+    return Models.worker(id= parameter['id'],
+                          name= parameter['name'],
+                          unit= parameter['unit'])
 
 def to_machine(parameter:Parameter):
-    id = parameter['id']
-    name = parameter['name']
-    unit = parameter['unit']
-    return Models.machine(id,name,unit)
+    return Models.machine(id= parameter['id'],
+                          name= parameter['name'],
+                          unit= parameter['unit'])
 
 def to_material(parameter:Parameter):
-    id = parameter['id']
-    name = parameter['name']
-    unit = parameter['unit']
-    return Models.material(id,name,unit)
-
-def to_worker(parameter:Parameter):
-    id = parameter['id']
-    name = parameter['name']
-    unit = parameter['unit']
-    return Models.worker(id,name,unit)
+    return Models.material(id= parameter['id'],
+                          name= parameter['name'],
+                          unit= parameter['unit'])
 
 def to_norm(parameter:Parameter):
-    id = parameter['id']
-    name = parameter['name']
-    unit = parameter['unit']
-    return Models.norm(id,name,unit)
+    return Models.norm(id= parameter['id'],
+                          name= parameter['name'],
+                          unit= parameter['unit'])
 
 def to_worker_norm(parameter:Parameter):
-    id1 = parameter['norm_id']
-    id2 = parameter['id']
-    amount = parameter['amount']
-    return Models.worker_norm(id1,id2,amount)
+    return Models.worker_norm(norm_id= parameter['norm_id'],
+                              id= parameter['id'],
+                              amount= parameter['amount'])
 
 def to_machine_norm(parameter:Parameter):
-    id1 = parameter['norm_id']
-    id2 = parameter['id']
-    amount = parameter['amount']
-    return Models.machine_norm(id1,id2,amount)
+    return Models.machine_norm(norm_id= parameter['norm_id'],
+                              id= parameter['id'],
+                              amount= parameter['amount'])
 
 def to_material_norm(parameter:Parameter):
-    id1 = parameter['norm_id']
-    id2 = parameter['id']
-    amount = parameter['amount']
-    return Models.material_norm(id1,id2,amount)
+    return Models.material_norm(norm_id= parameter['norm_id'],
+                              id= parameter['id'],
+                              amount= parameter['amount'])
 
 def to_work(parameter:Parameter):
-    id = parameter['id']
-    name = parameter['name']
-    unit = parameter['unit']
-    amount = float(parameter['amount']) if parameter['amount'] else 0
-    hm_id = parameter['hm_id']
-    pv_id = parameter['pv_id'] if parameter['pv_id'] else 0
-    start = ex.to_date(parameter['start']) if parameter['start'] else None
-    end = ex.to_date(parameter['end']) if parameter['end'] else None
-    
-    return Models.work(name,unit,amount,hm_id,pv_id,start,end,id)
+    return Models.work(name= parameter['name'],
+                       unit= parameter['unit'],
+                       amount= float(parameter['amount']) if parameter['amount'] else 0,
+                       hm_id= int(parameter['hm_id']),
+                       pv_id= int(parameter['pv_id']) if parameter['pv_id'] else 0,
+                       start= ex.to_date(parameter['start']) if parameter['start'] else None,
+                       end= ex.to_date(parameter['end']) if parameter['end'] else None,
+                       id= parameter['id'])
 
 def to_worker_work(parameter:Parameter):
-    id1 = parameter['work_id']
-    id2 = parameter['id']
-    amount = parameter['amount']
-    return Models.worker_work(id1,id2,amount)
+    return Models.worker_work(work_id= parameter['work_id'],
+                            id= parameter['id'],
+                            amount = parameter['amount'])
 
 def to_machine_work(parameter:Parameter):
-    id1 = parameter['work_id']
-    id2 = parameter['id']
-    amount = parameter['amount']
-    return Models.machine_work(id1,id2,amount)
+    return Models.machine_work(work_id= parameter['work_id'],
+                            id= parameter['id'],
+                            amount = parameter['amount'])
 
 def to_material_work(parameter:Parameter):
-    id1 = parameter['work_id']
-    id2 = parameter['id']
-    amount = parameter['amount']
-    return Models.material_work(id1,id2,amount)
+    return Models.material_work(work_id= parameter['work_id'],
+                            id= parameter['id'],
+                            amount = parameter['amount'])
 
 def to_hang_muc(parameter:Parameter):
-    id = parameter['id']
-    name = parameter['name']
-    return Models.hang_muc(name,id)
+    return Models.hang_muc(name= parameter['name'],
+                           id=parameter['id'])
 
 def to_phan_viec(parameter:Parameter):
-    id = parameter['id']
-    name = parameter['name']
-    return Models.phan_viec(name,id)
+    return Models.phan_viec(name= parameter['name'],
+                           id=parameter['id'])
 
-
-def to_work_time(parameter:Parameter) -> Models.work_time:
-    work_id = parameter['work_id']
-    start = datetime.datetime.strptime(parameter['start'],r'%d/%m/%y') if 'start' in parameter else None
-    end = datetime.datetime.strptime(parameter['end'],r'%d/%m/%y') if 'end' in parameter else None
-    return Models.work_time(work_id,start,end)    
-
-def to_worker_work_time(parameter:Parameter) -> Models.worker_work_time:
-    work_id = parameter['work_id']
-    id = parameter['id']
-    amount = parameter['amount']
-    date = datetime.datetime.strptime(parameter['date'],r'%d/%m/%y')
-    return Models.worker_work_time(work_id,id,amount,date)
-
+def to_ntcv(parameter:Parameter):
+    return Models.ntcv(name= parameter['name'],
+                       work_id= parameter['work_id'] if parameter['work_id'] else None,
+                       dateNT= ex.to_date(parameter['dateNT']) if parameter['dateNT'] else None,
+                       id=parameter['id'])
 
 def register():
-#################################################### worker work time
-    Route.Register('worker work time do create by work time',lambda p: controller.create_worker_work_time_by_work_time(to_work_time(p)))
-    Route.Register('worker work time do delete by work id',lambda p: controller.delete_worker_work_by_work_id(p['work_id']))
-    
-#################################################### work time
-    Route.Register('work time do delete by work id',lambda p: controller.delete_work_time(p['work_id']))
-    Route.Register('work time do create',lambda p: controller.create_work_time(to_work_time(p)))
-    Route.Register('work time list',controller.list_work_time)
-    Route.Register('work time draw',controller.draw_work_time)
-    Route.Register('work time update',lambda p: controller.edit_wrok_time(work_id=p['work_id']))
-    Route.Register('work time do update',lambda p: controller.edit_wrok_time(work_id=p['work_id'],model=to_work_time(p)))
-    
-#################################################### HANG MUC
+#################################################### NTCV
+    Route.Register('ntcv create', controller.create_ntcv)
+    Route.Register('ntcv do create', lambda p: controller.create_ntcv(to_ntcv(p)))
+    Route.Register('ntcv list',controller.list_ntcv)    
+    Route.Register('ntcv do list',lambda p: controller.list_ntcv(p['key'])) 
+    Route.Register('ntcv count',controller.count_ntcv)
+    Route.Register('ntcv do count',lambda p: controller.count_ntcv(p['count']))
+   
+#################################################### File
     Route.Register('file cons save', controller.save_file)
     Route.Register('file cons do save',lambda p: controller.save_file(p['path']))
     Route.Register('file cons load', controller.load_file)
     Route.Register('file cons do load',lambda p: controller.load_file(p['path']))
-    
     
 #################################################### HANG MUC
     Route.Register('hang muc create', controller.create_hang_muc)
@@ -181,10 +151,12 @@ def register():
     Route.Register('norm do create',lambda p: controller.create_norm(to_norm(p)))
     Route.Register('norm list',controller.list_norm)    
     Route.Register('norm do list',lambda p: controller.list_norm(p['key'])) 
+    Route.Register('norm count',controller.count_norm)
+    Route.Register('norm do count',lambda p: controller.count_norm(p['count']))
+    
     Route.Register('norm do create from excel',lambda p: controller.create_from_excel(p['path']))
     Route.Register('norm create from excel',controller.create_from_excel)
-    Route.Register('norm count',controller.count_norm)
-    Route.Register('norm do count',lambda p: controller.count_norm(p['count']))  
+  
     Route.Register('norm edit',lambda p: controller.edit_norm(p['id']))  
     Route.Register('norm do edit',lambda p: controller.edit_norm(p['id'],to_norm(p)))  
     Route.Register('norm do delete',lambda p: controller.delete_norm(p['id']))
@@ -410,6 +382,15 @@ def add_work_with_norm_id(values):
         Route.Foward(f'work create with norm id ? id={norm_id}')
         Route.Foward('work list')  
         Route.Foward('work count')    
+
+def change_tab(values):
+    d = {'-NTCV TAB-': 'ntcv list',
+         '-WORK TAB-': '', # work list
+         '-NORM TAB-': '', # norm list
+         '-LMTN TAB-': 'lmtn list',
+         '-NTVL TAB-': 'ntvl list',
+         '-NKTC TAB-': 'nktc list',}
+    Route.Foward(d[values['-TAB GROUP-']])
          
 func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
         '-ADD HM-': add_hang_muc, '-ADD NORM-': add_norm, '-ADD WORK-': add_work,
@@ -420,7 +401,9 @@ func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':a
          
         '-TREE WORK-' : work_tree_select, '-DELETE WORK-': delete_work, '-WORK FIND BUTTON-' : search_work,
         '-WORK SEARCH INPUT-'+'_Enter' : search_work, '-EDIT WORK-' : edit_work,
-         '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,         
+         '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,   
+               
+         '-TAB GROUP-': change_tab, #Change tab do item list
          
         'Save': save, 'Open': open,
         'Thêm từ dự toán' : add_norm_from_excel}
@@ -440,7 +423,7 @@ def main():
     
     while True:
         event, values = window.read()
-        print(event)
+        print(event, values)
         if event in [None,'Exit']:
             break
         

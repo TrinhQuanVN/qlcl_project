@@ -21,6 +21,8 @@ class data_access:
     hang_muc = []
     phan_viec = []
     
+    ntcv = []
+    
     def __init__(self,path) -> None:
         self.path = path
         
@@ -67,6 +69,9 @@ class data_access:
 
                     if Models.phan_viec.__name__ in row:
                         self.phan_viec.append(Models.phan_viec(*row[1:]))
+                        
+                    if Models.ntcv.__name__ in row:
+                        self.ntcv.append(Models.ntcv(*row[1:]))                    
                         
     def save_change(self):
         if self.path:
@@ -128,7 +133,10 @@ class data_access:
                 if self.work_time:
                     for item in self.work_time:
                         write.writerows([item.to_save_list()])                        
- 
+
+                if self.ntcv:
+                    for item in self.ntcv:
+                        write.writerows([item.to_save_list()]) 
                         
     
                         

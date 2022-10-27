@@ -780,3 +780,41 @@ class base_controller:
     def delete_phan_viec(self,id:str):
         if self.Repository.delete_phan_viec(id):
             print(f'Hang muc {id} is deleted ')
+            
+############################################ NTCV
+    def create_ntcv(self,model=None):
+        if not model:
+            self.Render(Views.ntcv_create_view)
+            return
+        self.Repository.insert_ntcv(model)
+        print(f'Phần việc {model.id} is created')
+                
+    def delete_ntcv(self,id:str):
+        if self.Repository.delete_ntcv(id):
+            print(f'Hang muc {id} is deleted ')
+            
+    def count_ntcv(self,count=None):
+        num = count if count else self.Repository.ntcv_count
+        self.Update(key='-NTCV COUNT TEXT-',values=num)
+        
+    def list_ntcv(self,key=None):
+        if not self.Repository.ntcv:
+            return
+        if not key:
+            self._list_ntcv(self.Repository.ntcv)
+            self.count_ntcv()
+            print('ntcv list showed!')
+            return
+        self._list_ntcv(self.Repository.get_ntcv_by_key(key=key))
+        print(f'ntcv list with key {key} is showed !')
+            
+    def _list_ntcv(self,ntcv:list):
+        treedata = sg.TreeData()
+        # if not ntcv:
+        #     self.Update(key='-TREE NTCV-',values=treedata)
+        #     self.count_ntcv(0)
+        for item in ntcv:
+            treedata.Insert('',item.id,item.id,[item.dateNT,item.dateYC,item.name])
+            
+        self.Update(key='-TREE NTCV-',values=treedata)
+        self.count_ntcv(len(ntcv))
