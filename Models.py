@@ -215,7 +215,6 @@ class ntcv:
         return [self.__class__.__name__,self.name,self.work_id,self._dateNT_timestamp,self._dateYC_timestamp,self.id]
     
 class lmtn(ntcv):
-
     id_iter = count()
     np.random.seed(2222)
     def __init__(self, name, work_id=None,

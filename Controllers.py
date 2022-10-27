@@ -852,5 +852,5 @@ class base_controller:
         for item in lmtn:
             treedata.Insert('',item.id,item.id,[item.dateNT,item.dateYC,item.name,item.sltm, item.slm, item.ktm])
             
-        self.Update(key='-TREE lmtn-',values=treedata)
+        self.Update(key='-TREE LMTN-',values=treedata)
         self.count_lmtn(len(lmtn))

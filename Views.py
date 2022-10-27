@@ -1205,7 +1205,6 @@ class lmtn_create_with_default_view(base_view):
                 break
             elif event in ['-CREATE-','-NAME IN-'+'_Enter']:
                 id = next(Models.lmtn.id_iter)
-                Models.lmtn()
                 self.foward('lmtn do create',
                             name = values['-NAME IN-'],
                             sltm = values['-SLTM IN-'],

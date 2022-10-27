@@ -90,10 +90,10 @@ def to_ntcv(parameter:Parameter):
                        dateNT= ex.to_date(parameter['dateNT']) if parameter['dateNT'] else None,
                        id=parameter['id'])
 
-def to_ntcv(parameter:Parameter):
+def to_lmtn(parameter:Parameter):
     return Models.lmtn(name= parameter['name'],
                        sltm= parameter['sltm'],
-                       ltm= parameter['ltm'],
+                       slm= parameter['slm'],
                        ktm= parameter['ktm'],
                        yc= parameter['yc'],
                        dateNT= ex.to_date(parameter['dateNT']) if parameter['dateNT'] else None,
@@ -111,7 +111,8 @@ def register():
 #################################################### LMTN
     Route.Register('lmtn choose default',lambda p: controller.choose_default_lmtn(p['dateNT']))
     Route.Register('lmtn create with default',lambda p: controller.create_lmtn( dateNT=p['dateNT'], default_id=p['default_id']))
-    Route.Register('lmtn do create', lambda p: controller.create_lmtn(model=to_ntcv(p)))
+    Route.Register('lmtn do create', lambda p: controller.create_lmtn(model=to_lmtn(p)))
+    Route.Register('lmtn list',controller.list_lmtn)    
     
 
 #################################################### File
@@ -353,7 +354,6 @@ def delete_work(values=None):
         Route.Foward('material work do delete ? work_id ={} & id = {}'.format(work_id,select_id))    
     
     Route.Foward('work list')
-
         
 def search_work(values=None):
     id = values['-WORK SEARCH INPUT-']

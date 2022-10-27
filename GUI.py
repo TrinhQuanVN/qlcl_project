@@ -111,11 +111,11 @@ def tab_lmtn_layout():
          sg.Button('Find',s=(10,1),k='-LMTN FIND BUTTON-')],
         
         [sg.Tree(data=sg.TreeData(),
-                 headings=['LMTN','SLTM','STM','KTM'],
+                 headings=['DateNT','DateYC','Name','SLTM','SLM','KTM','YC'],
                  k='-TREE LMTN-',
-                 col0_heading='Date',
-                 col0_width=10,
-                 col_widths=[10,6,6,6],
+                 col0_heading='ID',
+                 col0_width=6,
+                 col_widths=[6,6,30,6,6,6,6],
                  auto_size_columns=False,
                  enable_events=True)],
         
@@ -216,8 +216,8 @@ def main_layout():
             [sg.Tab('Norm',tab_norm_layout(),k='-NORM TAB-')],
             [sg.Tab('Work',tab_work_layout(),k='-WORK TAB-')],
             [sg.Tab('NTCV',tab_ntcv_layout(),k='-NTCV TAB-')],
-            [sg.Tab('NKTC',tab_nktc_layout(),k='-NKTC TAB-')],
             [sg.Tab('LMTN',tab_lmtn_layout(),k='-LMTN TAB-')],
+            [sg.Tab('NKTC',tab_nktc_layout(),k='-NKTC TAB-')],
             [sg.Tab('NTVL',tab_ntvl_layout(),k='-NTVL TAB-')],
             # [sg.Tab('NTCV',tab_ntcv_layout(),k='-NTCV TAB-')],
             
