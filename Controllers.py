@@ -676,136 +676,154 @@ class base_controller:
         self.Repository.delete_material_norm(model)
         
     def delete_by_norm_id(self,norm_id:str):
-        models = self.Repository.get_material_norm_by_norm_id(norm_id)
+        models = self.Repository.get_item('material_norm',norm_id=norm_id)
         if models:
             for model in models:
-                if self.Repository.delete_material_norm(model):
+                if self.Repository.delete_item('material_norm',model):
                     print(f'material {model.id} of norm {model.norm_id} is deleted ')
         
 ############################################ worker 
     def delete_worker(self,id:str):
-        if self.Repository.delete_worker(id):
-            print(f'worker {id} is deleted ')
+        model = self.Repository.get_item('worker', id=id)
+        if not model:
+            return
+        self.Repository.delete_item(id)
+        print(f'worker {id} is deleted ')
     
     def create_worker(self,model=None):
         if not model:
             self.Render(Views.work_create_view())
             return
-        self.Repository.insert_worker(model)
+        self.Repository.insert_item('worker',model)
         print(f'worker {model.id} is created')
         
-    def list_worker(self,key=None):
-        if self.Repository.worker:
-            if not key:
-                data = [item.to_list() for item in self.Repository.worker]
-                self.Update(key='-TABLE WORKER-',values=data)
-                return
-            data = [item.to_list() for item in self.Repository.get_worker_by_key(key)]  
-            self.Update(key='-TABLE WORKER-',values=data)
-            self.count_worker(len(data))
+    # def list_worker(self,key=None):
+    #     if self.Repository.worker:
+    #         if not key:
+    #             data = [item.to_list() for item in self.Repository.worker]
+    #             self.Update(key='-TABLE WORKER-',values=data)
+    #             return
+    #         data = [item.to_list() for item in self.Repository.get_worker_by_key(key)]  
+    #         self.Update(key='-TABLE WORKER-',values=data)
+    #         self.count_worker(len(data))
             
     def count_worker(self,count=None):
-        num = count if count else self.Repository.worker_count
+        num = count if count else self.Repository.count_item('worker')
         self.Update(key='-WORKER COUNT TEXT-',values=num)
 ############################################ machine
     def delete_machine(self,id:str):
-        if self.Repository.delete_machine(id):
-            print(f'machine {id} is deleted ')
+        model = self.Repository.get_item('machine', id=id)
+        if not model:
+            return
+        self.Repository.delete_item(id)
+        print(f'machine {id} is deleted ')
     
     def create_machine(self,model=None):
         if not model:
             self.Render(Views.machineCreateView())
             return
-        self.Repository.insert_machine(model)
+        self.Repository.insert_item('machine',model)
         print(f'machine {model.id} is created')
         
-    def list_machine(self,key=None):
-        if self.Repository.machine:
-            if not key:
-                data = [item.to_list() for item in self.Repository.machine]
-                self.Update(key='-TABLE MACHINE-',values=data)
-                return
-            data = [item.to_list() for item in self.Repository.get_machine_by_key(key=key)]  
-            self.Update(key='-TABLE MACHINE-',values=data)
-            self.count_machine(len(data))
+    # def list_machine(self,key=None):
+    #     if self.Repository.machine:
+    #         if not key:
+    #             data = [item.to_list() for item in self.Repository.machine]
+    #             self.Update(key='-TABLE MACHINE-',values=data)
+    #             return
+    #         data = [item.to_list() for item in self.Repository.get_machine_by_key(key=key)]  
+    #         self.Update(key='-TABLE MACHINE-',values=data)
+    #         self.count_machine(len(data))
             
     def count_machine(self,count=None):
-        num = count if count else self.Repository.machine_count
+        num = count if count else self.Repository.count_item('machine')
         self.Update(key='-MACHINE COUNT TEXT-',values=num) 
 ############################################ material 
     def delete_material(self,id:str):
-        if self.Repository.delete_material(id):
-            print(f'material {id} is deleted ')
+        model = self.Repository.get_item('material', id=id)
+        if not model:
+            return
+        self.Repository.delete_item(id)
+        print(f'material {id} is deleted ')
     
     def create_material(self,model=None):
         if not model:
             self.Render(Views.material_create_view())
             return
-        self.Repository.insert_material(model)
+        self.Repository.insert_item('material',model)
         print(f'material {model.id} is created')
         
-    def list_material(self,key=None):
-        if self.Repository.material:
-            if not key:
-                data = [item.to_list() for item in self.Repository.material]
-                self.Update(key='-TABLE MATERIAL-',values=data)
-                return
-            data = [item.to_list() for item in self.Repository.get_material_by_key(key=key)]  
-            self.Update(key='-TABLE MATERIAL-',values=data)
-            self.count_material(len(data))
+    # def list_material(self,key=None):
+    #     if self.Repository.material:
+    #         if not key:
+    #             data = [item.to_list() for item in self.Repository.material]
+    #             self.Update(key='-TABLE MATERIAL-',values=data)
+    #             return
+    #         data = [item.to_list() for item in self.Repository.get_material_by_key(key=key)]  
+    #         self.Update(key='-TABLE MATERIAL-',values=data)
+    #         self.count_material(len(data))
             
     def count_material(self,count=None):
-        num = count if count else self.Repository.material_count
+        num = count if count else self.Repository.count_item('material')
         self.Update(key='-MATERIAL COUNT TEXT-',values=num)       
 ############################################ hang muc 
     def create_hang_muc(self,model=None):
         if not model:
             self.Render(Views.hang_muc_create_view)
             return
-        self.Repository.insert_hang_muc(model)
-        print(f'hang muc {model.id} is created')
+        self.Repository.insert_item('hang_muc',model)
+        print(f'hang_muc {model.id} is created')
                 
     def delete_hang_muc(self,id:str):
-        if self.Repository.delete_hang_muc(id):
-            print(f'Hang muc {id} is deleted ')
+        model = self.Repository.get_item('hang_muc',id=id)
+        if not model:
+            print(f'hang_muc {id} not found ')
+        self.Repository.delete_item('hang_muc',model)
+        print(f'hang_muc {id} is deleted ')
             
 ############################################ Phan viec 
     def create_phan_viec(self,model=None):
         if not model:
             self.Render(Views.phan_viec_create_view)
             return
-        self.Repository.insert_phan_viec(model)
+        self.Repository.insert_item('phan_viec',model)
         print(f'Phần việc {model.id} is created')
                 
     def delete_phan_viec(self,id:str):
-        if self.Repository.delete_phan_viec(id):
-            print(f'Hang muc {id} is deleted ')
+        model = self.Repository.get_item('phan_viec',id=id)
+        if not model:
+            print(f'phan_viec {id} not found ')
+        self.Repository.delete_item('phan_viec',model)
+        print(f'phan_viec {id} is deleted ')
             
 ############################################ NTCV
     def create_ntcv(self,model=None):
         if not model:
             self.Render(Views.ntcv_create_view)
             return
-        self.Repository.insert_ntcv(model)
+        self.Repository.insert_item('ntcv',model)
         print(f'Phần việc {model.id} is created')
                 
     def delete_ntcv(self,id:str):
-        if self.Repository.delete_ntcv(id):
-            print(f'Hang muc {id} is deleted ')
+        model = self.Repository.get_item('ntcv',id=id)
+        if not model:
+            print(f'ntcv {id} not found ')
+        self.Repository.delete_item('ntcv',model)
+        print(f'Hang muc {id} is deleted ')
             
     def count_ntcv(self,count=None):
-        num = count if count else self.Repository.ntcv_count
+        num = count if count else self.Repository.count_item('ntcv')
         self.Update(key='-NTCV COUNT TEXT-',values=num)
         
     def list_ntcv(self,key=None):
         if not self.Repository.ntcv:
             return
         if not key:
-            self._list_ntcv(self.Repository.ntcv)
+            self._list_ntcv(self.Repository.get_item('ntcv'))
             self.count_ntcv()
             print('ntcv list showed!')
             return
-        self._list_ntcv(self.Repository.get_ntcv_by_key(key=key))
+        self._list_ntcv(self.Repository.get_item(what= 'ntcv', key=key))
         print(f'ntcv list with key {key} is showed !')
             
     def _list_ntcv(self,ntcv:list):
@@ -825,26 +843,30 @@ class base_controller:
             if default_id:
                 self.Render(Views.lmtn_create_with_default_view, default= self.Repository.get_default_lmtn_by_id(default_id), dateNT= dateNT)
                 return
-        self.Repository.insert_lmtn(model)
+        self.Repository.insert_item('lmtn',model)
         print(f'Phần việc {model.id} is created')
                 
     def delete_lmtn(self,id:str):
-        if self.Repository.delete_lmtn(id):
-            print(f'Hang muc {id} is deleted ')
+        model = self.Repository.get_item('lmtn',id= id)
+        if not model:
+            print(f'lmtn {id} is not found ')
+            return False
+        self.Repository.delete_item('lmtn', model)
+        print(f'Hang muc {id} is deleted ')
             
     def count_lmtn(self,count=None):
-        num = count if count else self.Repository.lmtn_count
+        num = count if count else self.Repository.count_item('lmtn')
         self.Update(key='-LMTN COUNT TEXT-',values=num)
         
     def list_lmtn(self,key=None):
-        if not self.Repository.lmtn:
+        if not self.Repository.count_item('lmtn'):
             return
         if not key:
-            self._list_lmtn(self.Repository.lmtn)
+            self._list_lmtn(self.Repository.get_item('lmtn'))
             self.count_lmtn()
             print('lmtn list showed!')
             return
-        self._list_lmtn(self.Repository.get_lmtn_by_key(key=key))
+        self._list_lmtn(self.Repository.get_item('lmtn', key=key))
         print(f'lmtn list with key {key} is showed !')
             
     def _list_lmtn(self,lmtn:list):

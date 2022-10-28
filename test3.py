@@ -30,10 +30,10 @@ def main():
     
     a = Models.ntcv(0,'ntcv0',datetime.datetime(2022,11,1))
     b = Models.ntcv(0,'ntcv0',datetime.datetime(2022,11,1))
-    for i in range(10):
-        a = Models.ntcv(i,f'ntcv{i}',datetime.datetime(2022,11,1))
-        print(a.dateNT, a.dateYC)
-   
+    # for i in range(10):
+    #     a = Models.ntcv(i,f'ntcv{i}',datetime.datetime(2022,11,1))
+    #     print(a.dateNT, a.dateYC)
+    print(not 0)
       
         
 if __name__ == "__main__":

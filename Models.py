@@ -2,8 +2,11 @@ import datetime
 from itertools import count
 import pandas as pd
 import numpy as np
+
+
+
 class worker:
-    def __init__(self,id:str,name:str,unit:str) -> None:
+    def __init__(self,id:str, name:str, unit:str) -> None:
         self.id = id
         if ' - ' in name and name.index(' - ') == 0:
             self.name = name[2:].strip()
@@ -16,6 +19,9 @@ class worker:
     
     def to_save_list(self):
         return [self.__class__.__name__,self.id,self.name,self.unit]
+
+    def items(self) -> dict:
+        return {'norm_id': self.name, 'id': self.id, 'amount':self.unit}
     
     def __repr__(self) -> str:
         return self.name
@@ -45,6 +51,9 @@ class worker_norm:
     @amount.setter
     def amount(self,amount):
         self._amount = amount
+
+    def items(self) -> dict:
+        return {'norm_id': self.norm_id, 'id': self.id, 'amount':self.amount}
         
     def to_list(self):
         return [self.norm_id,self.id,self.amount]        
@@ -94,6 +103,10 @@ class work:
             return 0
         return (self._end - self._start + datetime.timedelta(1)).days
 
+    def items(self) -> dict:
+        return {'id': self.id, 'name': self.name, 'unit': self.unit, 'amount':self.amount,
+                'hm_id': self.hm_id, 'pv_id': self.pv_id, 'start': self.start, 'end':self.end}
+
     def to_save_list(self):
         return [self.__class__.__name__,self.name,self.unit,self.amount,self.hm_id,self._start_timestamp,self._end_timestamp,self.id]
    
@@ -110,6 +123,9 @@ class worker_work:
     @amount.setter
     def amount(self,amount):
         self._amount = amount
+
+    def items(self) -> dict:
+        return {'work_id': self.work_id, 'id': self.id, 'amount':self.amount}
     
     def to_list(self):
         return [self.work_id,self.id,self.amount]   
@@ -137,6 +153,9 @@ class hang_muc:
     def __repr__(self) -> str:
         return ' '.join(self.to_save_list())
 
+    def items(self) -> dict:
+        return {'name': self.name,'id': self.id}
+
     def to_save_list(self):
         return [self.__class__.__name__,self.name,self.id]
 
@@ -146,35 +165,6 @@ class phan_viec(hang_muc):
         super().__init__(name, id)
         self.id = next(self.id_iter) if not id else id
         
-class work_time:
-    def __init__(self,work_id:str,start:datetime.datetime,end:datetime.datetime) -> None:
-        self.work_id = work_id 
-        self.start = start if not isinstance(start,str) else (datetime.datetime.fromtimestamp(float(start)) if start else None)
-        self.end = end if not isinstance(end,str) else (datetime.datetime.fromtimestamp(eval(end)) if end else None)
-    
-    @property
-    def days(self):
-        return (self.end - self.start).days + 1 if self.end and self.start else 0
-    
-    def to_list(self):
-        return [self.work_id,self.start,self.end]
-
-    def to_save_list(self):
-        return [self.__class__.__name__,self.work_id,self.start.timestamp() if self.start else None,self.end.timestamp() if self.end else None]
-
-class worker_work_time:
-    def __init__(self,work_id,id,amount,date:datetime.datetime) -> None:
-        self.work_id = work_id
-        self.id = id
-        self.amount = amount if not isinstance(amount,str) else float(amount)
-        self.date = date
-
-    def to_list(self):
-        return [self.work_id,self.id,self.amount,self.date]
-
-    def to_save_list(self):
-        return [self.__class__.__name__,self.work_id,self.id,self.amount,self.date.timestamp()]
-    
 class ntcv:
     id_iter = count()
     morning = [7 + i*0.5 for i in range(7)]
@@ -208,6 +198,10 @@ class ntcv:
     def dateYC(self):
         return self._dateYC.strftime(r'%d/%m/%y %H:%M') if self._dateYC else ''
     
+    def items(self) -> dict:
+        return {'dateNT': self._dateNT, 'dateYC': self._dateYC,
+                'name': self.name,'id': self.id}
+    
     def __str__(self) -> str:
         return self.name
     
@@ -222,16 +216,42 @@ class lmtn(ntcv):
                  dateYC: datetime.datetime = None,
                  sltm = None, slm = None, ktm = None, yc=None,
                  id = None) -> None:
-        super().__init__(name, work_id, dateNT, dateYC)
+        super().__init__(name, work_id, dateNT, dateYC, id)
         self.id = next(self.id_iter) if not id else id
         self.sltm = sltm
         self.slm = slm
         self.ktm = ktm
         self.yc = yc
+
+    def items(self) -> dict:
+        return {'name': self.name, 'id': self.id,
+                'dateNT': self._dateNT, 'dateYC': self._dateYC,
+                'sltm': self.sltm, 'slm': self.slm, 'ktm': self.ktm, 'yc': self.yc,}
     
     def to_save_list(self):
         return [self.__class__.__name__,
                 self.name, self.work_id,
                 self._dateNT_timestamp,self._dateYC_timestamp,
                 self.sltm, self.slm, self.ktm,
-                self.id]    
+                self.id]
+        
+class ntvl(ntcv):
+    id_iter = count()
+    np.random.seed(3333)
+    def __init__(self, name, work_id=None, dateNT: datetime.datetime = None, dateYC: datetime.datetime = None, id=None) -> None:
+        super().__init__(name, work_id, dateNT, dateYC, id) 
+        self.id = next(self.id_iter) if not id else id
+           
+           
+models = {'worker':worker, 'machine': machine, 'material': material,
+          'worker_norm':worker_norm, 'machine_norm': machine_norm, 'material_norm': material_norm,
+          'worker_work':worker_work, 'machine_work': machine_work, 'material_norm': material_work,
+          'norm': norm, 'work': work, 'hang_muc': hang_muc, 'phan_viec': phan_viec,
+          'lmtn': lmtn, 'ntvl': ntvl, 'ntcv': ntcv,}
+
+def main():
+    a = models['worker'](1,'a','b')
+    print(a.name)
+
+if __name__ == "__main__":
+    main()
