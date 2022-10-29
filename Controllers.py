@@ -9,7 +9,7 @@ import Models
 import PySimpleGUI as sg
 import Extension as ex
 from py_linq import Enumerable
-from GUI import GRAPH_SIZE
+# from GUI import GRAPH_SIZE
 
 
 class base_controller:

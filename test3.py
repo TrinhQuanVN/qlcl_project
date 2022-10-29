@@ -9,6 +9,8 @@ import re
 from itertools import count
 import Extension as ex
 import Models
+
+import GUI
 def a():
     def display_date_time(date_time:datetime.datetime):
         format = '%d/%M/%y'
@@ -125,16 +127,21 @@ def main():
     data = [x(1,2,3), x(1,5,6), x(9,2,3)]
     a = get_item(data,a=1,b=2, logic=False)
     
-    print(a)
+    # print(a)
     
 
     hm = Models.phan_viec('hang muc 1',1)
     hm.update({'name':'hang muc an lon'})
-    print(hm.name)
+    # print(hm.name)
     
     a = data_access()
     a.items['worker'].append('a')
-    print(a.items)
+    # print(a.items)
+    
+    key = GUI.KeyGUI
+    print(key.norm_delete)
+    
+    
         
         
 if __name__ == "__main__":
