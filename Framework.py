@@ -90,7 +90,12 @@ class Route(SingletonClass):
             raise Exception(f'Route {route} is registered!!')
         else:
             cls.routeTable.update({route : action})
-            
+
+    @classmethod
+    def Registers(cls,dict:dict):
+        for key, value in dict.items():
+            cls.Register(key, value)
+           
     @classmethod
     def Foward(cls, request:str):
         req = cls.Request(request)

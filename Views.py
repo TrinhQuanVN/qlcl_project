@@ -1,6 +1,4 @@
 import datetime
-from telnetlib import SGA
-from turtle import ycor
 import Framework
 import Extension as ex
 import Models
@@ -19,6 +17,32 @@ def T(text='',k='',s=(5,1),justification='r',font=('Any',11)):
 
 def Btn(button_text='',k='',s=(10,1)):
     return sg.Button(button_text=button_text,k=k,s=s)
+
+def layout(text_input:list,input_size=(30,1),buttons:list=[]):
+    text_size = (max([len(key) for key in text_input]),1)
+    button_size = (max(len(b) for b in buttons),1)
+    l = []
+    for text in text_input:
+        l.append([sg.Text(text,s=text_size),sg.Input(k=f'{text} input',s=input_size)])
+    l.append([sg.Button(b, k=b, s=button_size) for b in buttons])
+    print(l)
+    return l
+
+
+def window(layout, title, elemnt_bind:dict=None, **kwargs):
+    sg.theme('DarkAmber')
+    window = sg.Window(title,layout,font=('Any',13),keep_on_top=True,finalize=True, **kwargs)
+    if not elemnt_bind:
+        return window
+    for element, bind in elemnt_bind.items():
+        if element:
+            window[element].bind(bind[0],bind[1])
+        else:
+            window.bind(bind[0],bind[1])
+    return window 
+    
+layout_create_ntvl = layout(['name','dateNT'], buttons=['Create','Clear','Cancel'])
+
 
 KEYCAP_ESC = '<ESCAPE>'
 KEYCAP_ENTER = "<Return>"
@@ -940,7 +964,7 @@ class norm_edit_view(base_view):
                     window[key].update('')
         window.close()
 ############################################################ WORKER NORM
-class WorkerNormUpdateView:
+class worker_norm_update_view:
     def Render(self,**kwargs):
         worker_norm = kwargs['worker_norm']
         workers = kwargs['workers']
@@ -975,7 +999,7 @@ class WorkerNormUpdateView:
                     window[key].update('')            
         window.close()
 ############################################################ MACHINE NORM
-class MachineNormUpdateView:
+class machine_norm_update_view:
     def Render(self,**kwargs):
         machine_norm = kwargs['machine_norm']
         machines = kwargs['machines']
@@ -1055,9 +1079,6 @@ class create_norm_from_excel_view(base_view):
             Framework.Route.Foward(requset)
             
 ############################################################ HANG MUC
-
-
-
 def layout_to_create_hang_muc():
     name_text = sg.Text('Name',s=(5,1))
     name_in = sg.Input(s=(30,1),k='-NAME IN-',enable_events=True,expand_x=True)
@@ -1073,8 +1094,7 @@ def layout_to_create_hang_muc():
     
     return layout
 
-
-def general_window(layout, title,elemnt_bind:dict=None):
+def general_window(layout, title, elemnt_bind:dict=None):
     window = sg.Window(title,layout,font=('Any',13),keep_on_top=True,finalize=True)
     if not elemnt_bind:
         return window
@@ -1217,6 +1237,47 @@ class lmtn_create_with_default_view(base_view):
                 break
             elif event == '-CLEAR-':
                 for key in ['-ID IN-']:
+                    window[key].update('')
+        window.close()
+        
+class ntvl_create_view(base_view):
+    def Render(self):
+        window = general_window(layout= layout_create_ntvl,
+                                title= 'Create NTVL',
+                                elemnt_bind= {'' : ['<Escape>','-ESCAPE-'],
+                                              'name input' : ["<Return>", "_Enter"]})        
+        if not self.kwargs:
+            while True:
+                event,values = window.read()
+                if event in [sg.WIN_CLOSED,'Cancel','-ESCAPE-']:
+                    break
+                elif event in ['Create']:
+                    self.foward('ntvl do create', 
+                                id= next(Models.ntvl.id_iter),
+                                name= values['name input'],
+                                dateNT= values['dateNT input'],)
+                    break
+                elif event == 'Clear':
+                    for key in ['name input','dateNT input']:
+                        window[key].update('')
+            window.close()
+            
+        work = self.kwargs['work']
+        window['name input'].update(work.name)
+        window['dateNT input'].update(work.start)
+        
+        while True:
+            event,values = window.read()
+            if event in [sg.WIN_CLOSED,'Cancel','-ESCAPE-']:
+                break
+            elif event in ['Create']:
+                self.foward('ntvl do create', 
+                            id='{}'.format(next(Models.ntvl.id_iter)),
+                            name= values['name input'],
+                            dateNT= values['dateNT input'],)
+                break
+            elif event == 'Clear':
+                for key in ['name','dateNT','dateYC']:
                     window[key].update('')
         window.close()
           

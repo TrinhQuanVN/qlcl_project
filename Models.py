@@ -22,6 +22,10 @@ class worker:
 
     def items(self) -> dict:
         return {'norm_id': self.name, 'id': self.id, 'amount':self.unit}
+
+    def update(self,model:dict):
+        self.name = model['name']
+        self.unit = model['unit']
     
     def __repr__(self) -> str:
         return self.name
@@ -51,6 +55,11 @@ class worker_norm:
     @amount.setter
     def amount(self,amount):
         self._amount = amount
+
+    def update(self,model:dict):
+        self.norm_id = model['norm_id']
+        self.id = model['id']
+        self.amount = model['amount']
 
     def items(self) -> dict:
         return {'norm_id': self.norm_id, 'id': self.id, 'amount':self.amount}
@@ -103,6 +112,15 @@ class work:
             return 0
         return (self._end - self._start + datetime.timedelta(1)).days
 
+    def update(self,model:dict):
+        self.name = model['name']
+        self.unit = model['unit']
+        self.amount = model['amount']
+        self.hm_id = model['hm_id']
+        self.pv_id = model['pv_id']
+        self._start = model['_start']
+        self._end = model['_end']
+        
     def items(self) -> dict:
         return {'id': self.id, 'name': self.name, 'unit': self.unit, 'amount':self.amount,
                 'hm_id': self.hm_id, 'pv_id': self.pv_id, 'start': self.start, 'end':self.end}
@@ -123,6 +141,11 @@ class worker_work:
     @amount.setter
     def amount(self,amount):
         self._amount = amount
+
+    def update(self,model:dict):
+        self.work_id = model['work_id']
+        self.id = model['id']
+        self.amount = model['amount']
 
     def items(self) -> dict:
         return {'work_id': self.work_id, 'id': self.id, 'amount':self.amount}
@@ -152,6 +175,9 @@ class hang_muc:
         
     def __repr__(self) -> str:
         return ' '.join(self.to_save_list())
+    
+    def update(self,model:dict):
+        self.name = model['name']
 
     def items(self) -> dict:
         return {'name': self.name,'id': self.id}
@@ -198,6 +224,12 @@ class ntcv:
     def dateYC(self):
         return self._dateYC.strftime(r'%d/%m/%y %H:%M') if self._dateYC else ''
     
+    
+    def update(self,model:dict):
+        self.name = model['name']
+        self.dateNT = model['dateNT']
+        self.dateYC = model['dateYC']
+        
     def items(self) -> dict:
         return {'dateNT': self._dateNT, 'dateYC': self._dateYC,
                 'name': self.name,'id': self.id}
@@ -222,7 +254,16 @@ class lmtn(ntcv):
         self.slm = slm
         self.ktm = ktm
         self.yc = yc
-
+        
+    def update(self,model:dict):
+        self.name = model['name']
+        self.dateNT = model['dateNT']
+        self.dateYC = model['dateYC']
+        self.sltm = model['sltm']
+        self.slm = model['slm']
+        self.ktm = model['ktm']
+        self.yc = model['yc']
+        
     def items(self) -> dict:
         return {'name': self.name, 'id': self.id,
                 'dateNT': self._dateNT, 'dateYC': self._dateYC,

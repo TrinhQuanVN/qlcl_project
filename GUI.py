@@ -137,12 +137,13 @@ def tab_ntvl_layout():
          sg.Button('Find',s=(10,1),k='-NTVL FIND BUTTON-')],
         
         [sg.Tree(data=sg.TreeData(),
-                 headings=['Date YC','NTVL'],
+                 headings=['DateNT','DateYC','Name'],
                  k='-TREE NTVL-',
-                 col0_heading='Date NT',
-                 col0_width=10,
-                 col_widths=[10,20],
+                 col0_heading='ID',
+                 col0_width=2,
+                 col_widths=[4,4,50],
                  auto_size_columns=False,
+                 justification='c',
                  enable_events=True)],
         
         [sg.Push(),

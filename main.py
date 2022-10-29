@@ -90,6 +90,12 @@ def to_ntcv(parameter:Parameter):
                        dateNT= ex.to_date(parameter['dateNT']) if parameter['dateNT'] else None,
                        id=parameter['id'])
 
+def to_ntvl(parameter:Parameter):
+    return Models.ntvl(name= parameter['name'],
+                    #    work_id= parameter['work_id'] if parameter['work_id'] else None,
+                       dateNT= ex.to_date(parameter['dateNT']) if parameter['dateNT'] else None,
+                       id=parameter['id'])
+
 def to_lmtn(parameter:Parameter):
     return Models.lmtn(name= parameter['name'],
                        sltm= parameter['sltm'],
@@ -100,129 +106,131 @@ def to_lmtn(parameter:Parameter):
                        id=parameter['id'])
 
 def register():
-#################################################### NTCV
-    Route.Register('ntcv create', controller.create_ntcv)
-    Route.Register('ntcv do create', lambda p: controller.create_ntcv(to_ntcv(p)))
-    Route.Register('ntcv list',controller.list_ntcv)    
-    Route.Register('ntcv do list',lambda p: controller.list_ntcv(p['key'])) 
-    Route.Register('ntcv count',controller.count_ntcv)
-    Route.Register('ntcv do count',lambda p: controller.count_ntcv(p['count']))
+    Route.Registers({
+    'ntvl create': lambda p: controller.create_ntvl(work_id=p['work_id']),
+    'ntvl do create': lambda p: controller.create_ntvl(to_ntvl(p)),
+    'ntvl list':controller.list_ntvl,
+    'ntvl do list':lambda p: controller.list_ntvl(p['key']), 
+    'ntvl count':controller.count_ntvl,
+    'ntvl do count':lambda p: controller.count_ntvl(p['count']),
+        
+    'ntcv create': controller.create_ntcv,
+    'ntcv do create': lambda p: controller.create_ntcv(to_ntcv(p)),
+    'ntcv list':controller.list_ntcv,
+    'ntcv do list':lambda p: controller.list_ntcv(p['key']), 
+    'ntcv count':controller.count_ntcv,
+    'ntcv do count':lambda p: controller.count_ntcv(p['count']),
+    
+    'lmtn choose default': lambda p: controller.choose_default_lmtn(p['dateNT']),
+    'lmtn create with default': lambda p: controller.create_lmtn( dateNT=p['dateNT'], default_id=p['default_id']),
+    'lmtn do create': lambda p: controller.create_lmtn(model=to_lmtn(p)),
+    'lmtn list': controller.list_lmtn,   
+    
+    'file cons save': controller.save_file,
+    'file cons do save': lambda p: controller.save_file(p['path']),
+    'file cons load': controller.load_file,
+    'file cons do load': lambda p: controller.load_file(p['path']),  
+     
+    'hang muc create': controller.create_hang_muc,
+    'hang muc do create': lambda p: controller.create_hang_muc(to_hang_muc(p)),  
+    
+    'phan viec create': controller.create_phan_viec,
+    'phan viec do create': lambda p: controller.create_phan_viec(to_phan_viec(p)),
+    
+    'work create': controller.create_work,
+    'work do create': lambda p: controller.create_work(model=to_work(p)),
+    'work create with norm id': lambda p: controller.create_work(p['id']),
+    'work list': controller.list_work,   
+    'work do list': lambda p: controller.list_work(p['key']),  
+    
+    'work count': controller.count_work,
+    'work do count': lambda p: controller.count_work(p['count']),
 
-#################################################### LMTN
-    Route.Register('lmtn choose default',lambda p: controller.choose_default_lmtn(p['dateNT']))
-    Route.Register('lmtn create with default',lambda p: controller.create_lmtn( dateNT=p['dateNT'], default_id=p['default_id']))
-    Route.Register('lmtn do create', lambda p: controller.create_lmtn(model=to_lmtn(p)))
-    Route.Register('lmtn list',controller.list_lmtn)    
-    
+    'work edit': lambda p: controller.edit_work(p['id']),
+    'work do edit': lambda p: controller.edit_work(p['id'],to_work(p)), 
+    'work do delete': lambda p: controller.delete_work(p['id']),
+    'work create copy': lambda p: controller.create_copy_work(p['id']),
 
-#################################################### File
-    Route.Register('file cons save', controller.save_file)
-    Route.Register('file cons do save',lambda p: controller.save_file(p['path']))
-    Route.Register('file cons load', controller.load_file)
-    Route.Register('file cons do load',lambda p: controller.load_file(p['path']))
+    'worker work do create': lambda p: controller.create_worker_work(to_worker_work(p)),
+    'worker work do delete by work id': lambda p: controller.delete_worker_work_by_work_id(p['work_id']),
+    'worker work do delete': lambda p: controller.delete_worker_work(p['work_id'],p['id']),
+    'worker work update': lambda p: controller.update_worker_work(p['work_id'],p['id']),
+    'worker work do update': lambda p: controller.update_worker_work(p['work_id'],p['old_id'],to_worker_work(p)),
     
-#################################################### HANG MUC
-    Route.Register('hang muc create', controller.create_hang_muc)
-    Route.Register('hang muc do create', lambda p: controller.create_hang_muc(to_hang_muc(p)))
+    'machine work do create': lambda p: controller.create_machine_work(to_machine_work(p)),
+    'machine work do delete by work id': lambda p: controller.delete_machine_work_by_work_id(p['work_id']),
+    'machine work do delete': lambda p: controller.delete_machine_work(p['work_id'],p['id']),
+    'machine work update': lambda p: controller.update_machine_work(p['work_id'],p['id']),
+    'machine work do update': lambda p: controller.update_machine_work(p['work_id'],p['old_id'],to_machine_work(p)),
     
-#################################################### Phan viec
-    Route.Register('phan viec create', controller.create_phan_viec)
-    Route.Register('phan viec do create', lambda p: controller.create_phan_viec(to_phan_viec(p)))
-#################################################### work
-    Route.Register('work create', controller.create_work)
-    Route.Register('work do create',lambda p: controller.create_work(model=to_work(p)))
-    Route.Register('work create with norm id', lambda p: controller.create_work(p['id']))
-    Route.Register('work list',controller.list_work)    
-    Route.Register('work do list',lambda p: controller.list_work(p['key']))  
+    'material work do create': lambda p: controller.create_material_work(to_material_work(p)),
+    'material work do delete by work id': lambda p: controller.delete_material_work_by_work_id(p['work_id']),
+    'material work do delete': lambda p: controller.delete_material_work(p['work_id'],p['id']),
+    'material work update':lambda p: controller.update_material_work(p['work_id'],p['id']),
+    'material work do update': lambda p: controller.update_material_work(p['work_id'],p['old_id'],to_material_work(p)),   
+       
+    'norm create': controller.create_norm,
+    'norm do create': lambda p: controller.create_norm(to_norm(p)),
+    'norm list': controller.list_norm,  
+    'norm do list': lambda p: controller.list_norm(p['key']),
+    'norm count': controller.count_norm,
+    'norm do count': lambda p: controller.count_norm(p['count']),
     
-    Route.Register('work count',controller.count_work)
-    Route.Register('work do count',lambda p: controller.count_work(p['count']))
-
-    Route.Register('work edit',lambda p: controller.edit_work(p['id']))  
-    Route.Register('work do edit',lambda p: controller.edit_work(p['id'],to_work(p)))  
-    Route.Register('work do delete',lambda p: controller.delete_work(p['id']))
-    Route.Register('work create copy',lambda p: controller.create_copy_work(p['id']))
-
-#################################################### worker work    
-    Route.Register('worker work do create',lambda p: controller.create_worker_work(to_worker_work(p)))
-    Route.Register('worker work do delete by work id',lambda p: controller.delete_worker_work_by_work_id(p['work_id']))
-    Route.Register('worker work do delete',lambda p: controller.delete_worker_work(p['work_id'],p['id']))
-    Route.Register('worker work update',lambda p: controller.update_worker_work(p['work_id'],p['id']))
-    Route.Register('worker work do update',lambda p: controller.update_worker_work(p['work_id'],p['old_id'],to_worker_work(p)))
-#################################################### machine work    
-    Route.Register('machine work do create',lambda p: controller.create_machine_work(to_machine_work(p)))
-    Route.Register('machine work do delete by work id',lambda p: controller.delete_machine_work_by_work_id(p['work_id']))
-    Route.Register('machine work do delete',lambda p: controller.delete_machine_work(p['work_id'],p['id']))
-    Route.Register('machine work update',lambda p: controller.update_machine_work(p['work_id'],p['id']))
-    Route.Register('machine work do update',lambda p: controller.update_machine_work(p['work_id'],p['old_id'],to_machine_work(p)))
-#################################################### material work    
-    Route.Register('material work do create',lambda p: controller.create_material_work(to_material_work(p)))
-    Route.Register('material work do delete by work id',lambda p: controller.delete_material_work_by_work_id(p['work_id']))
-    Route.Register('material work do delete',lambda p: controller.delete_material_work(p['work_id'],p['id']))
-    Route.Register('material work update',lambda p: controller.update_material_work(p['work_id'],p['id']))
-    Route.Register('material work do update',lambda p: controller.update_material_work(p['work_id'],p['old_id'],to_material_work(p))) 
-      
-#################################################### norm    
-    Route.Register('norm create', controller.create_norm)
-    Route.Register('norm do create',lambda p: controller.create_norm(to_norm(p)))
-    Route.Register('norm list',controller.list_norm)    
-    Route.Register('norm do list',lambda p: controller.list_norm(p['key'])) 
-    Route.Register('norm count',controller.count_norm)
-    Route.Register('norm do count',lambda p: controller.count_norm(p['count']))
-    
-    Route.Register('norm do create from excel',lambda p: controller.create_from_excel(p['path']))
-    Route.Register('norm create from excel',controller.create_from_excel)
+    'norm do create from excel': lambda p: controller.create_from_excel(p['path']),
+    'norm create from excel': controller.create_from_excel,
   
-    Route.Register('norm edit',lambda p: controller.edit_norm(p['id']))  
-    Route.Register('norm do edit',lambda p: controller.edit_norm(p['id'],to_norm(p)))  
-    Route.Register('norm do delete',lambda p: controller.delete_norm(p['id']))
-    Route.Register('norm create copy',lambda p: controller.create_copy_norm(p['id']))
+    'norm edit':lambda p: controller.edit_norm(p['id']),
+    'norm do edit': lambda p: controller.edit_norm(p['id'],to_norm(p)),
+    'norm do delete': lambda p: controller.delete_norm(p['id']),
+    'norm create copy': lambda p: controller.create_copy_norm(p['id']),
     
 #################################################### workER norm    
-    Route.Register('worker norm do create',lambda p: controller.create_worker_norm(to_worker_norm(p)))
-    Route.Register('worker norm do delete by norm id',lambda p: controller.delete_by_norm_id(p['norm_id']))
-    Route.Register('worker norm do delete',lambda p: controller.delete_worker_norm(p['norm_id'],p['id']))
-    Route.Register('worker norm update',lambda p: controller.update_worker_norm(p['norm_id'],p['id']))
-    Route.Register('worker norm do update',lambda p: controller.update_worker_norm(p['norm_id'],p['old_id'],to_worker_norm(p)))
+    'worker norm do create' : lambda p: controller.create_worker_norm(to_worker_norm(p)),
+    'worker norm do delete by norm id': lambda p: controller.delete_by_norm_id(p['norm_id']),
+    'worker norm do delete': lambda p: controller.delete_worker_norm(p['norm_id'],p['id']),
+    'worker norm update': lambda p: controller.update_worker_norm(p['norm_id'],p['id']),
+    'worker norm do update': lambda p: controller.update_worker_norm(p['norm_id'],p['old_id'],to_worker_norm(p)),
    
 #################################################### machine norm   
-    Route.Register('machine norm do create',lambda p: controller.create_machine_norm(to_machine_norm(p)))
-    Route.Register('machine norm do delete by norm id',lambda p: controller.delete_by_norm_id(p['norm_id']))
-    Route.Register('machine norm do delete',lambda p: controller.delete_machine_norm(p['norm_id'],p['id']))
-    Route.Register('machine norm update',lambda p: controller.update_machine_norm(p['norm_id'],p['id']))
-    Route.Register('machine norm do update',lambda p: controller.update_machine_norm(p['norm_id'],p['old_id'],to_machine_norm(p)))
+    'machine norm do create': lambda p: controller.create_machine_norm(to_machine_norm(p)),
+    'machine norm do delete by norm id': lambda p: controller.delete_by_norm_id(p['norm_id']),
+    'machine norm do delete': lambda p: controller.delete_machine_norm(p['norm_id'],p['id']),
+    'machine norm update': lambda p: controller.update_machine_norm(p['norm_id'],p['id']),
+    'machine norm do update': lambda p: controller.update_machine_norm(p['norm_id'],p['old_id'],to_machine_norm(p)),
         
 #################################################### material norm    
-    Route.Register('material norm do create',lambda p: controller.create_material_norm(to_material_norm(p)))
-    Route.Register('material norm do delete by norm id',lambda p: controller.delete_by_norm_id(p['norm_id']))
-    Route.Register('material norm do delete',lambda p: controller.delete_material_norm(p['norm_id'],p['id']))
-    Route.Register('material norm update',lambda p: controller.update_material_norm(p['norm_id'],p['id']))
-    Route.Register('material norm do update',lambda p: controller.update_material_norm(p['norm_id'],p['old_id'],to_material_norm(p)))
+    'material norm do create': lambda p: controller.create_material_norm(to_material_norm(p)),
+    'material norm do delete by norm id': lambda p: controller.delete_by_norm_id(p['norm_id']),
+    'material norm do delete': lambda p: controller.delete_material_norm(p['norm_id'],p['id']),
+    'material norm update': lambda p: controller.update_material_norm(p['norm_id'],p['id']),
+    'material norm do update': lambda p: controller.update_material_norm(p['norm_id'],p['old_id'],to_material_norm(p)),
         
 #################################################### workER    
-    Route.Register('worker create', controller.create_worker)
-    Route.Register('worker do create',lambda p: controller.create_worker(to_worker(p)))
-    # Route.Register('worker list',controller.list_worker)
-    # Route.Register('worker do list',lambda p: controller.list_worker(p['key']))   
-    # Route.Register('worker count',controller.count_worker)
-    # Route.Register('worker do count',lambda p: controller.count_worker(p['count'])) 
+    'worker create': controller.create_worker,
+    'worker do create': lambda p: controller.create_worker(to_worker(p)),
+    # 'worker list': controller.list_worker,
+    # 'worker do list': lambda p: controller.list_worker(p['key']),  
+    # 'worker count': controller.count_worker,
+    # 'worker do count': lambda p: controller.count_worker(p['count']), 
       
 #################################################### machine   
-    Route.Register('machine create', controller.create_machine)
-    Route.Register('machine do create',lambda p: controller.create_machine(to_machine(p)))
-    # Route.Register('machine list',controller.list_machine)
-    # Route.Register('machine do list',lambda p: controller.list_machine(p['key']))   
-    # Route.Register('machine count',controller.count_machine)
-    # Route.Register('machine do count',lambda p: controller.count_machine(p['count'])) 
+    'machine create': controller.create_machine,
+    'machine do create': lambda p: controller.create_machine(to_machine(p)),
+    # 'machine list': controller.list_machine,
+    # 'machine do list': lambda p: controller.list_machine(p['key']),   
+    # 'machine count': controller.count_machine,
+    # 'machine do count': lambda p: controller.count_machine(p['count']), 
        
 #################################################### material    
-    Route.Register('material create', controller.create_material)
-    Route.Register('material do create',lambda p: controller.create_material(to_material(p)))
-    # Route.Register('material list',controller.list_material)
-    # Route.Register('material do list',lambda p: controller.list_material(p['key']))   
-    # Route.Register('material count',controller.count_material)
-    # Route.Register('material do count',lambda p: controller.count_material(p['count']))  
-
+    'material create': controller.create_material,
+    'material do create':lambda p: controller.create_material(to_material(p)),
+    # 'material list': controller.list_material,
+    # 'material do list': lambda p: controller.list_material(p['key']),   
+    # 'material count': controller.count_material,
+    # 'material do count': lambda p: controller.count_material(p['count']), 
+     
+    })
+    
 def refesh():
     Route.Foward('material list')
     Route.Foward('machine list')
@@ -377,7 +385,7 @@ def create_copy_work(values=None):
     Route.Foward(f'work create copy ? id={work_id}') 
     
 def check_hang_muc():
-    if repo.hang_muc:
+    if repo.get_item('hang_muc'):
         return True
     repond = sg.popup_ok_cancel('Không tìm thấy hạng mục. Bạn có muốn tạo hạng mục mới ?')
     print(repond)
@@ -407,11 +415,14 @@ def choose_default_lmtn(values=None):
     work_id = values['-SELECTED WORK INPUT-']
     if not work_id:
         Route.Foward("lmtn choose default?dateNT=''")
-    work = repo.get_work_by_id(work_id)
+    work = repo.get_item('work',id=work_id)[0]
     Route.Foward(f"lmtn choose default?dateNT={work.start}")
     
+def create_ntvl(values=None):
+    work_id = values['-SELECTED WORK INPUT-']
+    Route.Foward(f'ntvl create? work_id = {work_id}')
+             
 
-         
 func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
         '-ADD HM-': add_hang_muc, '-ADD NORM-': add_norm, '-ADD WORK-': add_work,
         
@@ -424,7 +435,7 @@ func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':a
         '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,   
                
         '-TAB GROUP-': change_tab, #Change tab do item list
-        'Add LMTN' : choose_default_lmtn,
+        'Add LMTN' : choose_default_lmtn, 'Add NTVL' : create_ntvl,
         'Save': save, 'Open': open,
         'Thêm từ dự toán' : add_norm_from_excel}
 
