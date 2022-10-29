@@ -100,7 +100,7 @@ class layout(Enum):
      
     norm_tree_element = [sg.Tree(data=sg.TreeData(), 
                         headings=['ID','UNIT','amount'], 
-                        k=KeyGUI.norm_tree, col0_heading='NORM',
+                        k=KeyGUI.norm_tree.value, col0_heading='NORM',
                         col0_width=50, col_widths=[6,6,6],
                         auto_size_columns=False, enable_events=True,
                         right_click_menu= right_click_menu_tab_norm,
@@ -108,7 +108,7 @@ class layout(Enum):
     
     work_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['ID','Unit','Amount','Days','Start','End'],
-                        k= KeyGUI.work_tree,
+                        k= KeyGUI.work_tree.value,
                         col0_heading='WORK',
                         col0_width=50,
                         col_widths=[6,6,6],
@@ -119,18 +119,18 @@ class layout(Enum):
 
     lmtn_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name','SLTM','SLM','KTM','YC'],
-                        k= KeyGUI.lmtn_tree,
+                        k= KeyGUI.lmtn_tree.value,
                         col0_heading='ID',
-                        col0_width=6,
-                        col_widths=[6,6,30,6,6,6,6],
+                        col0_width= 6,
+                        col_widths= [6,6,30,6,6,6,6],
                         auto_size_columns=False,
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
-                        enable_events=True)],
+                        enable_events=True)]
     
     ntvl_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name'],
-                        k= KeyGUI.ntvl_tree,
+                        k= KeyGUI.ntvl_tree.value,
                         col0_heading='ID',
                         col0_width=2,
                         col_widths=[4,4,50],
@@ -141,7 +141,7 @@ class layout(Enum):
 
     ntcv_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name'],
-                        k= KeyGUI.ntcv_tree,
+                        k= KeyGUI.ntcv_tree.value,
                         col0_heading='ID',
                         col0_width=2,
                         col_widths=[4,4,50],
@@ -152,7 +152,7 @@ class layout(Enum):
 
     nktc_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name'],
-                        k= KeyGUI.nktc_tree,
+                        k= KeyGUI.nktc_tree.value,
                         col0_heading='ID',
                         col0_width=2,
                         col_widths=[4,4,50],
@@ -263,7 +263,6 @@ class layout(Enum):
 
     main_layout =   [
                     menubar_main_element,
-                    
                     [sg.TabGroup([
                         # [sg.Tab('Worker',tab_worker_layout(),k='-WORKER TAB-')],
                         # [sg.Tab('Machine',tab_machine_layout(),k='-MACHINE TAB-')],
@@ -271,7 +270,7 @@ class layout(Enum):
                         [sg.Tab('Norm', norm_tab_layout, k= KeyGUI.norm_tab.value, expand_x= True, expand_y= True)],
                         [sg.Tab('Work', work_tab_layout, k= KeyGUI.work_tab.value, expand_x= True, expand_y= True)],
                         [sg.Tab('NTCV', ntcv_tab_layout, k= KeyGUI.ntcv_tab.value, expand_x= True, expand_y= True)],
-                        # [sg.Tab('LMTN', lmtn_tab_layout, k= KeyGUI.lmtn_tab.value, expand_x= True, expand_y= True)],
+                        [sg.Tab('LMTN', lmtn_tab_layout, k= KeyGUI.lmtn_tab.value, expand_x= True, expand_y= True)],
                         [sg.Tab('NTVL', ntvl_tab_layout, k= KeyGUI.ntvl_tab.value, expand_x= True, expand_y= True)],
                         [sg.Tab('NKTC', nktc_tab_layout, k= KeyGUI.nktc_tab.value, expand_x= True, expand_y= True)],
                         # [sg.Tab('NTCV',tab_ntcv_layout(),k='-NTCV TAB-')],
@@ -318,17 +317,6 @@ def GUI():
                 # location=(300,300),
                 margins=(0, 0)
     )
-    
-    # window['-TABLE MACHINE-'].expand(True,True)
-    # window['-TABLE MATERIAL-'].expand(True,True)
-    # window['-TABLE WORKER-'].expand(True,True)
-    # window[KeyGUI.norm_tree.value].expand(True,True)
-    # window[KeyGUI.work_tree.value].expand(True,True)
-    # window[KeyGUI.lmtn_tree.value].expand(True,True)
-    # window[KeyGUI.ntvl_tree.value].expand(True,True)
-    # window[KeyGUI.ntcv_tree.value].expand(True,True)
-    # window[KeyGUI.nktc_tree.value].expand(True,True)
-    
     
     
     window[KeyGUI.main_tab.value].expand(True,True)
