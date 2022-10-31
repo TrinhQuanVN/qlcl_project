@@ -98,6 +98,7 @@ class Route(SingletonClass):
            
     @classmethod
     def Foward(cls, request:str):
+        print(f'request is: {request}')
         req = cls.Request(request)
         if not req.route in cls.routeTable:
             print('ROUTE NOT FOUND')

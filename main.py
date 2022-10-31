@@ -8,10 +8,11 @@ import Controllers
 import DataAccess
 import Repository
 from Framework import Extension, Parameter,Route
-from GUI import GUI
+from GUI import GUI, KeyGUI
 import PySimpleGUI as sg
-################################################### GUI #######################################
+
 window = GUI()
+
 context = DataAccess.data_access(path='')
 repo = Repository.base_repository(context)
 controller = Controllers.base_controller(repo,window)
@@ -107,8 +108,8 @@ def to_lmtn(parameter:Parameter):
 
 def register():
     Route.Registers({
-    'ntvl create': lambda p: controller.create_ntvl(work_id=p['work_id']),
-    'ntvl do create': lambda p: controller.create_ntvl(to_ntvl(p)),
+    # 'ntvl create': lambda p: controller.create_ntvl(work_id=p['work_id']),
+    'ntvl do create': lambda p: controller.create_ntvl(model=to_ntvl(p)),
     'ntvl list':controller.list_ntvl,
     'ntvl do list':lambda p: controller.list_ntvl(p['key']), 
     'ntvl count':controller.count_ntvl,
@@ -139,17 +140,17 @@ def register():
     
     'work create': controller.create_work,
     'work do create': lambda p: controller.create_work(model=to_work(p)),
-    'work create with norm id': lambda p: controller.create_work(p['id']),
+    # 'work create with norm id': lambda p: controller.create_work(p['id']),
     'work list': controller.list_work,   
-    'work do list': lambda p: controller.list_work(p['key']),  
+    # 'work do list': lambda p: controller.list_work(p['key']),  
     
     'work count': controller.count_work,
     'work do count': lambda p: controller.count_work(p['count']),
 
-    'work edit': lambda p: controller.edit_work(p['id']),
-    'work do edit': lambda p: controller.edit_work(p['id'],to_work(p)), 
-    'work do delete': lambda p: controller.delete_work(p['id']),
-    'work create copy': lambda p: controller.create_copy_work(p['id']),
+    # 'work edit': lambda p: controller.edit_work(p['id']),
+    # 'work do edit': lambda p: controller.edit_work(p['id'],to_work(p)), 
+    # 'work do delete': lambda p: controller.delete_work(p['id']),
+    # 'work create copy': lambda p: controller.create_copy_work(p['id']),
 
     'worker work do create': lambda p: controller.create_worker_work(to_worker_work(p)),
     'worker work do delete by work id': lambda p: controller.delete_worker_work_by_work_id(p['work_id']),
@@ -176,10 +177,9 @@ def register():
     'norm count': controller.count_norm,
     'norm do count': lambda p: controller.count_norm(p['count']),
     
-    'norm do create from excel': lambda p: controller.create_from_excel(p['path']),
-    'norm create from excel': controller.create_from_excel,
+    'norm do create from excel': lambda p: controller.create_from_excel(path=p['path']),
   
-    'norm edit':lambda p: controller.edit_norm(p['id']),
+    # 'norm edit':lambda p: controller.edit_norm(p['id']),
     'norm do edit': lambda p: controller.edit_norm(p['id'],to_norm(p)),
     'norm do delete': lambda p: controller.delete_norm(p['id']),
     'norm create copy': lambda p: controller.create_copy_norm(p['id']),
@@ -245,199 +245,44 @@ def refesh():
     Route.Foward('work count')
     Route.Foward('work list')
 
-def add_worker(values=None):
-    Route.Foward('worker create')
-    Route.Foward('worker list') 
-    Route.Foward('worker count')
-    
-def add_machine(values=None):
-    Route.Foward('machine create')
-    Route.Foward('machine list')
-    Route.Foward('machine count')
-    
-def add_material(values=None):
-    Route.Foward('material create')
-    Route.Foward('material list')   
-    Route.Foward('material count')    
-    
 def add_hang_muc(values=None):
     Route.Foward('hang muc create')
     Route.Foward('work list')   
 
-def add_norm_from_excel(values=None):
-    Route.Foward('norm create from excel')   
-    refesh()
-
-def add_norm(values=None):
-    Route.Foward('norm create')
-    Route.Foward('norm list')  
-    Route.Foward('norm count')   
-
-def add_work(values=None):
-    if repo.hang_muc:
-        Route.Foward('work create')
-        Route.Foward('work list')  
-        Route.Foward('work count')        
-
-def save(values=None):
-    Route.Foward('file cons save')
-    
-def open(values=None):
-    Route.Foward('file cons load')
-
-def norm_tree_select(values=None):
-    if not values['-TREE NORM-']:
-        return
-    value = values['-TREE NORM-'][0]
-    if not value:
-        return
-    if ex.is_norm(value):
-        window['-SELECTED NORM INPUT-'].update(value)
-    
-def delete_norm(values=None):
-    norm_id = values['-SELECTED NORM INPUT-']
-    select_id = values['-TREE NORM-'][0]
-    print(f'line 295 {norm_id} {select_id}')
-    if not norm_id:
-        return
-    if select_id == norm_id:
-        Route.Foward(f'norm do delete ? id = {norm_id}')
-        Route.Foward(f'worker norm do delete by norm id ? norm_id={norm_id}')
-        Route.Foward(f'machine norm do delete by norm id ? norm_id={norm_id}')
-        Route.Foward(f'material norm do delete by norm id ? norm_id={norm_id}')
-            
-    if ex.is_worker(select_id):
-        Route.Foward('worker norm do delete ? norm_id ={} & id = {}'.format(norm_id,select_id))
-    elif ex.is_machine(select_id) or ex.is_dif_machine(select_id):
-        Route.Foward('machine norm do delete ? norm_id ={} & id = {}'.format(norm_id,select_id))
-    else:
-        Route.Foward('material norm do delete ? norm_id ={} & id = {}'.format(norm_id,select_id))    
-    
-    Route.Foward('norm list')
-
-def search_norm(values=None):
-    id = values['-NORM SEARCH INPUT-']
-    if id:
-        Route.Foward('norm do list ? key = {}'.format(values['-NORM SEARCH INPUT-']))
-        return
-    Route.Foward('norm list')
-    Route.Foward('norm count')
-
-def edit_norm(values=None):
-    norm_id = values['-SELECTED NORM INPUT-']
-    if not norm_id:
-        return
-    Route.Foward('norm edit ? id = {}'.format(norm_id))
-    Route.Foward('norm list')
-    
-def create_copy_norm(values=None):
-    norm_id = values['-SELECTED NORM INPUT-']
-    if not norm_id:
-        return    
-    Route.Foward(f'norm create copy ? id={norm_id}')    
-
-############################## WORK
-def work_tree_select(values=None):
-    if not values['-TREE WORK-']:
-        return
-    window['-SELECTED WORK INPUT-'].update(values['-TREE WORK-'][0])
-        
-def delete_work(values=None):
-    work_id = values['-SELECTED WORK INPUT-']
-    select_id = values['-TREE WORK-'][0]
-    print(f'line 295 {work_id} {select_id}')
-    if not work_id:
-        return
-    if select_id == work_id:
-        Route.Foward(f'work do delete ? id = {work_id}')
-        Route.Foward(f'worker work do delete by work id ? work_id={work_id}')
-        Route.Foward(f'machine work do delete by work id ? work_id={work_id}')
-        Route.Foward(f'material work do delete by work id ? work_id={work_id}')
-            
-    if ex.is_worker(select_id):
-        Route.Foward('worker work do delete ? work_id ={} & id = {}'.format(work_id,select_id))
-    elif ex.is_machine(select_id) or ex.is_dif_machine(select_id):
-        Route.Foward('machine work do delete ? work_id ={} & id = {}'.format(work_id,select_id))
-    elif ex.is_material(select_id) or ex.is_dif_material(select_id):
-        Route.Foward('material work do delete ? work_id ={} & id = {}'.format(work_id,select_id))    
-    
-    Route.Foward('work list')
-        
-def search_work(values=None):
-    id = values['-WORK SEARCH INPUT-']
-    if id:
-        Route.Foward('work do list ? key = {}'.format(values['-WORK SEARCH INPUT-']))
-        return
-    Route.Foward('work list')
-    Route.Foward('work count')
-
-def edit_work(values=None):
-    work_id = values['-SELECTED WORK INPUT-']
-    if not work_id:
-        return
-    Route.Foward('work edit ? id = {}'.format(work_id))
-    Route.Foward('work list')
-    
-def create_copy_work(values=None):
-    work_id = values['-SELECTED WORK INPUT-']
-    if not work_id:
-        return    
-    Route.Foward(f'work create copy ? id={work_id}') 
-    
-def check_hang_muc():
-    if repo.get_item('hang_muc'):
-        return True
-    repond = sg.popup_ok_cancel('Không tìm thấy hạng mục. Bạn có muốn tạo hạng mục mới ?')
-    print(repond)
-    if repond == 'OK':
-        Route.Foward('hang muc create')
-    return False
-    
-def add_work_with_norm_id(values):
-    norm_id = values['-SELECTED NORM INPUT-']
-    if not norm_id:
-        return
-    if check_hang_muc():
-        Route.Foward(f'work create with norm id ? id={norm_id}')
-        Route.Foward('work list')  
-        Route.Foward('work count')    
-
 def change_tab(values):
-    d = {'-NTCV TAB-': 'ntcv list',
-         '-WORK TAB-': '', # work list
-         '-NORM TAB-': '', # norm list
-         '-LMTN TAB-': 'lmtn list',
-         '-NTVL TAB-': 'ntvl list',
-         '-NKTC TAB-': 'nktc list',}
-    Route.Foward(d[values['-TAB GROUP-']])
+    d = {KeyGUI.ntcv_tab.value : 'ntcv list',
+         KeyGUI.work_tab.value: 'work list', # 
+         KeyGUI.norm_tab.value: 'norm list', # 
+         KeyGUI.lmtn_tab.value: 'lmtn list',
+         KeyGUI.ntvl_tab.value: 'ntvl list',
+         KeyGUI.nktc_tab.value: 'nktc list',}
+    Route.Foward(d[values[KeyGUI.group_tab.value]])
     
-def choose_default_lmtn(values=None):
-    work_id = values['-SELECTED WORK INPUT-']
-    if not work_id:
-        Route.Foward("lmtn choose default?dateNT=''")
-    work = repo.get_item('work',id=work_id)[0]
-    Route.Foward(f"lmtn choose default?dateNT={work.start}")
-    
-def create_ntvl(values=None):
-    work_id = values['-SELECTED WORK INPUT-']
-    Route.Foward(f'ntvl create? work_id = {work_id}')
-             
-
-func = {'-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
-        '-ADD HM-': add_hang_muc, '-ADD NORM-': add_norm, '-ADD WORK-': add_work,
+func = {
+        # '-ADD WORKER-':add_worker,'-ADD MACHINE-':add_machine,'-ADD MATERIAL-':add_material,
+        KeyGUI.hang_muc_create.value: controller.create_hang_muc,
+        KeyGUI.norm_create.value: controller.create_norm,
+        KeyGUI.work_create.value: controller.create_work,
         
-        '-TREE NORM-' : norm_tree_select, '-DELETE NORM-': delete_norm, '-NORM FIND BUTTON-' : search_norm,
-        '-NORM SEARCH INPUT-'+'_Enter' : search_norm, '-EDIT NORM-' : edit_norm,
-        '-CREATE COPY NORM-' : create_copy_norm,
+        KeyGUI.norm_delete.value: controller.delete_norm,
+        KeyGUI.norm_find_button.value: controller.list_norm,
+        KeyGUI.norm_search_input.value+'_Enter' : controller.list_norm,
+        KeyGUI.norm_edit.value : controller.edit_norm,
+        KeyGUI.norm_copy.value : controller.create_copy_norm,
+        KeyGUI.norm_tree.value + ' double click': controller.edit_norm,
+        
          
-        '-TREE WORK-' : work_tree_select, '-DELETE WORK-': delete_work, '-WORK FIND BUTTON-' : search_work,
-        '-WORK SEARCH INPUT-'+'_Enter' : search_work, '-EDIT WORK-' : edit_work,
-        '-CREATE COPY WORK-' : create_copy_work, '-ADD WORK WITH NORM ID-' : add_work_with_norm_id,   
+        KeyGUI.work_delete.value: controller.delete_work,
+        KeyGUI.work_find_button.value : controller.list_work,
+        KeyGUI.work_find_button.value+'_Enter' : controller.list_work,
+        # KeyGUI.work_edit.value : controller.,
+        KeyGUI.work_copy.value : controller.create_copy_work,
+        KeyGUI.norm_id_create_work.value : controller.create_work,   
                
-        '-TAB GROUP-': change_tab, #Change tab do item list
-        'Add LMTN' : choose_default_lmtn, 'Add NTVL' : create_ntvl,
-        'Save': save, 'Open': open,
-        'Thêm từ dự toán' : add_norm_from_excel}
+        KeyGUI.group_tab.value: change_tab, #Change tab do item list
+        KeyGUI.lmtn_create : controller.create_lmtn, # 'Add NTVL' : controller.create_ntvl,
+        # 'Save': save, 'Open': open,
+        'Thêm từ dự toán' : controller.create_from_excel}
 
 
 def load_test():
@@ -450,33 +295,17 @@ def load_test():
 def main():
     register()
     load_test()
-    refesh()
+    # refesh()
     
     while True:
         event, values = window.read()
-        # print(event, values)
+        print(event)
+        print(values)
         if event in [None,'Exit']:
             break
         
         if event in func:
-            func[event](values)
-       
-        if event == '-MACHINE FIND BUTTON-':  #and values['-WORKER SEARCH INPUT-']/
-            if values['-MACHINE SEARCH INPUT-']:
-                Route.Foward('machine do list ? key = {}'.format(values['-MACHINE SEARCH INPUT-']))
-            else:
-                Route.Foward('machine list')
-                Route.Foward('machine count')
-                
-        if event == '-MATERIAL FIND BUTTON-':  #and values['-WORKER SEARCH INPUT-']/
-            if values['-MATERIAL SEARCH INPUT-']:
-                Route.Foward('material do list ? key = {}'.format(values['-MATERIAL SEARCH INPUT-']))
-            else:
-                Route.Foward('material list')
-                Route.Foward('material count')
-
-
-            
+            func[event](values = values)
 
     window.close()
 

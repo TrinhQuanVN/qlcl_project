@@ -81,7 +81,7 @@ class material_norm(worker_norm):
 class work:
     id_iter = count()
     def __init__(self,name,unit,amount,hm_id,pv_id=None,start:datetime.datetime=None,end:datetime.datetime=None,id=None) -> None:
-        self.id = next(self.id_iter) if not id else id
+        self.id = 'W{}'.format(next(self.id_iter)) if not id else id
         self.name = name
         self.unit = unit
         self.amount = float(amount)

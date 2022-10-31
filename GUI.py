@@ -71,13 +71,13 @@ class KeyGUI(Enum):
     nktc_copy = '-nktc copy button-'
     nktc_delete = '-nktc delete button-'
     
-    norm_tab ='-norm tab-'
-    work_tab ='-work tab-'
-    lmtn_tab ='-lmtn tab-'
-    ntvl_tab ='-ntvl tab-'
-    ntcv_tab ='-ntcv tab-'
-    nktc_tab ='-nktc tab-'
-    main_tab = '-main tab-'
+    norm_tab = '-norm tab-'
+    work_tab = '-work tab-'
+    lmtn_tab = '-lmtn tab-'
+    ntvl_tab = '-ntvl tab-'
+    ntcv_tab = '-ntcv tab-'
+    nktc_tab = '-nktc tab-'
+    group_tab = '-group tab-'
     
 class layout(Enum):
     WINDOWN_SIZE = (640,480)
@@ -90,7 +90,7 @@ class layout(Enum):
     font9 = ('Courier',9)
     
     right_click_menu_def = [[], ['Quan', 'Yeu', 'Hang','More Nothing','Exit']]
-    right_click_menu_tab_norm = [[], ['Create a copy', 'Edit', 'Delete', 'More']]
+    right_click_menu_tab_norm = [[], ['Create work','Create a copy', 'Edit', 'Delete', 'More']]
     right_click_menu_tab_work = [[], ['Create a copy', 'Edit', 'Delete', 'Add LMTN', 'Add NTVL']]
     
     menu_def = [['Công trình', ['Save','Open','Exit']],
@@ -104,7 +104,8 @@ class layout(Enum):
                         col0_width=50, col_widths=[6,6,6],
                         auto_size_columns=False, enable_events=True,
                         right_click_menu= right_click_menu_tab_norm,
-                        select_mode=sg.TABLE_SELECT_MODE_BROWSE)]
+                        expand_x=True, expand_y= True,
+                        select_mode=sg.TABLE_SELECT_MODE_EXTENDED)]
     
     work_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['ID','Unit','Amount','Days','Start','End'],
@@ -115,6 +116,7 @@ class layout(Enum):
                         auto_size_columns=False,
                         right_click_menu= right_click_menu_tab_work,
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
+                        expand_x=True, expand_y= True,
                         enable_events=True)]    
 
     lmtn_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -126,6 +128,7 @@ class layout(Enum):
                         auto_size_columns=False,
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
+                        expand_x=True, expand_y= True,
                         enable_events=True)]
     
     ntvl_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -137,6 +140,7 @@ class layout(Enum):
                         auto_size_columns=False,
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
+                        expand_x=True, expand_y= True,
                         enable_events=True)]
 
     ntcv_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -148,6 +152,7 @@ class layout(Enum):
                         auto_size_columns=False,
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
+                        expand_x=True, expand_y= True,
                         enable_events=True)]
 
     nktc_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -159,14 +164,15 @@ class layout(Enum):
                         auto_size_columns=False,
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
+                        expand_x=True, expand_y= True,
                         enable_events=True)]
    
     norm_tab_layout = [
                     [sg.Text('Find',s=text_size10), 
                     sg.Input(s= input_size20,k=KeyGUI.norm_search_input.value), 
                     sg.Text(s= text_size10,k= KeyGUI.norm_count_text.value), 
-                    sg.Button('Find',s= button_size10,k=KeyGUI.norm_search_input.value), 
-                    sg.Input(KeyGUI.norm_selected_input.value,visible=False)],
+                    sg.Button('Find',s= button_size10,k=KeyGUI.norm_find_button.value), 
+                    sg.Input(k= KeyGUI.norm_selected_input.value,visible=True)],
                     
                     norm_tree_element,
                     
@@ -183,7 +189,7 @@ class layout(Enum):
                     sg.Input(s= input_size20,k=KeyGUI.work_search_input.value), 
                     sg.Text(s= text_size10,k= KeyGUI.work_count_text.value), 
                     sg.Button('Find',s= button_size10,k=KeyGUI.work_search_input.value), 
-                    sg.Input(KeyGUI.work_selected_input.value,visible=False)],
+                    sg.Input(k = KeyGUI.work_selected_input.value,visible=False)],
                     
                     work_tree_element,
                     
@@ -202,7 +208,7 @@ class layout(Enum):
                     sg.Input(s= input_size20,k=KeyGUI.lmtn_search_input.value), 
                     sg.Text(s= text_size10,k= KeyGUI.lmtn_count_text.value), 
                     sg.Button('Find',s= button_size10,k=KeyGUI.lmtn_search_input.value), 
-                    sg.Input(KeyGUI.lmtn_selected_input.value,visible=False)],
+                    sg.Input(k = KeyGUI.lmtn_selected_input.value,visible=False)],
                     
                     lmtn_tree_element,
                     
@@ -218,7 +224,7 @@ class layout(Enum):
                     sg.Input(s= input_size20,k=KeyGUI.ntvl_search_input.value), 
                     sg.Text(s= text_size10,k= KeyGUI.ntvl_count_text.value), 
                     sg.Button('Find',s= button_size10,k=KeyGUI.ntvl_search_input.value), 
-                    sg.Input(KeyGUI.ntvl_selected_input.value,visible=False)],
+                    sg.Input(k= KeyGUI.ntvl_selected_input.value,visible=False)],
                     
                     ntvl_tree_element,
                     
@@ -234,7 +240,7 @@ class layout(Enum):
                     sg.Input(s= input_size20,k=KeyGUI.ntcv_search_input.value), 
                     sg.Text(s= text_size10,k= KeyGUI.ntcv_count_text.value), 
                     sg.Button('Find',s= button_size10,k=KeyGUI.ntcv_search_input.value), 
-                    sg.Input(KeyGUI.ntcv_selected_input.value,visible=False)],
+                    sg.Input(k= KeyGUI.ntcv_selected_input.value,visible=False)],
                     
                     ntcv_tree_element,
                     
@@ -250,7 +256,7 @@ class layout(Enum):
                     sg.Input(s= input_size20,k=KeyGUI.nktc_search_input.value), 
                     sg.Text(s= text_size10,k= KeyGUI.nktc_count_text.value), 
                     sg.Button('Find',s= button_size10,k=KeyGUI.nktc_search_input.value), 
-                    sg.Input(KeyGUI.nktc_selected_input.value,visible=False)],
+                    sg.Input(k= KeyGUI.nktc_selected_input.value,visible=False)],
                     
                     nktc_tree_element,
                     
@@ -267,15 +273,14 @@ class layout(Enum):
                         # [sg.Tab('Worker',tab_worker_layout(),k='-WORKER TAB-')],
                         # [sg.Tab('Machine',tab_machine_layout(),k='-MACHINE TAB-')],
                         # [sg.Tab('Material',tab_material_layout(),k='-MATERIAL TAB-')],
-                        [sg.Tab('Norm', norm_tab_layout, k= KeyGUI.norm_tab.value, expand_x= True, expand_y= True)],
-                        [sg.Tab('Work', work_tab_layout, k= KeyGUI.work_tab.value, expand_x= True, expand_y= True)],
-                        [sg.Tab('NTCV', ntcv_tab_layout, k= KeyGUI.ntcv_tab.value, expand_x= True, expand_y= True)],
-                        [sg.Tab('LMTN', lmtn_tab_layout, k= KeyGUI.lmtn_tab.value, expand_x= True, expand_y= True)],
-                        [sg.Tab('NTVL', ntvl_tab_layout, k= KeyGUI.ntvl_tab.value, expand_x= True, expand_y= True)],
-                        [sg.Tab('NKTC', nktc_tab_layout, k= KeyGUI.nktc_tab.value, expand_x= True, expand_y= True)],
-                        # [sg.Tab('NTCV',tab_ntcv_layout(),k='-NTCV TAB-')],
+                        [sg.Tab('Norm', norm_tab_layout, k= KeyGUI.norm_tab.value)],
+                        [sg.Tab('Work', work_tab_layout, k= KeyGUI.work_tab.value)],
+                        [sg.Tab('NTCV', ntcv_tab_layout, k= KeyGUI.ntcv_tab.value)],
+                        [sg.Tab('LMTN', lmtn_tab_layout, k= KeyGUI.lmtn_tab.value)],
+                        [sg.Tab('NTVL', ntvl_tab_layout, k= KeyGUI.ntvl_tab.value)],
+                        [sg.Tab('NKTC', nktc_tab_layout, k= KeyGUI.nktc_tab.value)],
                         
-                        ],k= KeyGUI.main_tab.value, enable_events=True)],
+                        ],k= KeyGUI.group_tab.value, enable_events= True,expand_x= True, expand_y= True)],
                     
                     [sg.Sizegrip()]
                 ]
@@ -307,8 +312,7 @@ class layout(Enum):
 
 
 def GUI():
-    sg.theme('DarkAmber')
-    
+    sg.theme('Dark')
     window = sg.Window('Main',
                 layout=layout.main_layout.value,
                 right_click_menu=layout.right_click_menu_def.value, 
@@ -317,9 +321,8 @@ def GUI():
                 # location=(300,300),
                 margins=(0, 0)
     )
-    
-    
-    window[KeyGUI.main_tab.value].expand(True,True)
+
+    window[KeyGUI.group_tab.value].expand(True,True)
     
     window[KeyGUI.norm_search_input.value].bind('<Return>', '_Enter')
     window[KeyGUI.work_search_input.value].bind('<Return>', '_Enter')
@@ -330,6 +333,14 @@ def GUI():
     # window[InputDinhMucTim.key].bind("<Return>", "_Enter")
     # window[InputCongTacKhoiLuong.key].bind("<Return>", "_Enter") 
     # window[InputCongTrinhEnd.key].bind("<Return>", "_Enter")
+    window[KeyGUI.norm_tree.value].bind('<Double-Button-1>' , " double click")
+    window[KeyGUI.work_tree.value].bind('<Double-Button-1>' , " double click")
+    window[KeyGUI.lmtn_tree.value].bind('<Double-Button-1>' , " double click")
+    window[KeyGUI.ntvl_tree.value].bind('<Double-Button-1>' , " double click")
+    window[KeyGUI.ntcv_tree.value].bind('<Double-Button-1>' , " double click")
+    window[KeyGUI.nktc_tree.value].bind('<Double-Button-1>' , " double click")
+    
+    
     window.bind('<F1>','-F1-')
     window.bind('<F2>','-F2-')
     window.bind('<F3>','-F3-')

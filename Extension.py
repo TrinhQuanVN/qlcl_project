@@ -3,6 +3,7 @@ import re
 import pandas as pd
 import numpy as np
 import PySimpleGUI as sg
+
 def is_work(letter:str):
     return True if re.match(r'(W)([\d])',letter) else False
 

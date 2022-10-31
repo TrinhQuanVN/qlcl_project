@@ -44,11 +44,11 @@ class base_repository:
     #         return True
     #     return False
   
-    # def update_norm(self,id,model:Models.norm):
-    #     old = self.get_norm_by_id(id=id)
-    #     old.name = model.name
-    #     old.unit = model.unit
-    #     return True
+    def update_norm(self,id,model:Models.norm):
+        old = self.get_norm_by_id(id=id)
+        old.name = model.name
+        old.unit = model.unit
+        return True
  
     # def update_worker_norm(self,norm_id,id,model):
     #     old = self.get_worker_norm(norm_id,id)
@@ -209,9 +209,11 @@ class base_repository:
             model (_type_): model to insert
         """
         self.whats[what].append(model)
+        print(f'a {what} is inserted successfully')
         
     def delete_item(self,what:str,model):
         self.whats[what].remove(model)
+        print(f'a {what} is deleted successfully')
         return True
         
         

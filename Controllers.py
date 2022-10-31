@@ -9,7 +9,7 @@ import Models
 import PySimpleGUI as sg
 import Extension as ex
 from py_linq import Enumerable
-# from GUI import GRAPH_SIZE
+from GUI import KeyGUI
 
 
 class base_controller:
@@ -262,72 +262,227 @@ class base_controller:
 #             end = ex.display_date_time(item.end) if item.end else ''
 #             dtree.insert('',item.work_id,item.work_id,[start,end])
 #         self.window['-TREE TIME-'].update(dtree)
+
+############################################ norm
+    def _norm_create_copy(self,norm_id):
+        model = self.Repository.get_item('norm', id= norm_id)
+        if not model:
+            return
+        model = model[0]
+        copy_model = Models.norm(f'copy_{norm_id}', model.name, model.unit)
+        self.create_norm(copy_model)
+            
+        worker_norm = self.Repository.get_item('worker_norm',norm_id=id)
+        if worker_norm:
+            for item in worker_norm:
+                self.create_worker_norm(Models.worker_norm(copy_model.id,item.id,item.amount))
+                
+        machine_norm = self.Repository.get_item('machine_norm',norm_id=id)
+        if machine_norm:
+            for item in machine_norm:
+                self.create_machine_norm(Models.machine_norm(copy_model.id,item.id,item.amount)) 
+                
+        material_norm = self.Repository.get_item('material_norm',norm_id=id)
+        if material_norm:
+            for item in material_norm:
+                self.create_material_norm(Models.material_norm(copy_model.id,item.id,item.amount))
+       
+    def create_copy_norm(self,values):
+        norm_ids = self._analyze_tree_select('norm', values)
+        if not norm_ids:
+            return
+        for id in norm_ids:
+                self._norm_create_copy(id)
+        self.list_norm()
+
+    def _norm_delete(self,norm_id):
+        model = self.Repository.get_item('norm',id= norm_id)
+        normer_norm = self.Repository.get_item('normer_norm', norm_id = norm_id)
+        machine_norm = self.Repository.get_item('machine_norm', norm_id = norm_id)
+        material_norm = self.Repository.get_item('material_norm', norm_id = norm_id)        
+        if not model:
+            return
+        model = model[0]
+        if normer_norm:
+            for x in normer_norm:
+                self.Repository.delete_item('normer_norm',model)
+        if machine_norm:
+            for x in machine_norm:
+                self.Repository.insert_item('machine_norm', model) 
+        if material_norm:
+            for x in material_norm:
+                self.Repository.insert_item('material_norm', model)         
+        if self.Repository.delete_item('norm',model):
+            print(f'norm {model.id} is deleted')
+                                   
+    def delete_norm(self,values):
+        norm_ids = self._analyze_tree_select('norm', values)
+        if not norm_ids:
+            return
+        for id in norm_ids:
+            self._norm_delete(id)
+
+    def edit_norm(self,values,model=None):
+        norm_ids = self._analyze_tree_select('norm', values)
+        if not norm_ids:
+            return
+        if len(norm_ids) >1:
+            sg.popup_ok('Please selecte one norm at time to edit!!')
+            return
+        if not self.Repository.get_item('norm',id= norm_ids[0]):
+            print(f'norm {norm_ids[0]} is not existed')
+            return
+        if not model:
+            self.Render(Views.norm_edit_view,
+                        norm=self.Repository.get_item('norm', id= norm_ids[0])[0],
+                        worker_norm= self.Repository.get_item('worker_norm',norm_id= norm_ids[0]),
+                        machine_norm= self.Repository.get_item('machine_norm',norm_id= norm_ids[0]),
+                        material_norm= self.Repository.get_item('material_norm',norm_id= norm_ids[0]),
+                        worker= self.Repository.get_worker_by_norm_id(norm_ids[0]),
+                        machine= self.Repository.get_machine_by_norm_id(norm_ids[0]),
+                        material= self.Repository.get_material_by_norm_id(norm_ids[0]),
+                        workers=self.Repository.get_item('worker'),
+                        materials=self.Repository.get_item('material'),
+                        machines=self.Repository.get_item('machine'))
+            return
+        if self.Repository.update_norm(norm_ids[0], model):
+            print(f'norm {norm_ids[0]} is updated')
+    
+    def create_norm(self,values=None,model=None):
+        if not model:
+            self.Render(Views.norm_create_view,
+                        worker=self.Repository.get_item('worker'),
+                        machine=self.Repository.get_item('machine'),
+                        material=self.Repository.get_item('material'))
+            return
+        self.Repository.insert_item('norm',model)
+        print(f'norm {model.id} is created')
+     
+    def count_norm(self,count=None):
+        num = count if count else self.Repository.count_item('norm')
+        self.Update(key= KeyGUI.norm_count_text.value, values=num)
+        
+    def list_norm(self,values=None):
+        if not values:
+            if not self.Repository.get_item('norm'):
+                return
+            self._list_norm(self.Repository.get_item('norm'))
+            return
+                      
+        key = values[KeyGUI.norm_search_input.value]
+        print('key is {}'.format(key))
+        if key:
+            self._list_norm(self.Repository.get_item('norm', match_mode=1, logic='or', to_lower=True, id=key, name=key[0]))
+            print(f'norm list with key {key} is showed !')
+            
+    def _list_norm(self,norms:list):
+        treedata = sg.TreeData()
+        if not norms:
+            self.Update(key= KeyGUI.norm_tree.value,values=treedata)
+            self.count_norm(0)
+        for item in norms:
+            treedata.Insert('',item.id,item.name,[item.id,item.unit])
+            
+        self.Update(key= KeyGUI.norm_tree.value,values=treedata)
+        self.count_norm(len(norms))
+                 
+    def create_from_excel(self,values=None,path=None):
+        if not path:
+            self.Render(Views.create_norm_from_excel_view)
+            return
+        count = self._read_excel_get_norm(path)
+        print(f'{count} norms have been created successfully')
+            
+    def _read_excel_get_norm(self,path):
+        values = ex.read_excel(path)
+        count = 0
+        for row in values:
+            if ex.is_norm(row[1]) and not self.Repository.get_item('norm',id=row[1]):
+                count +=1
+                self.Repository.insert_item('norm',Models.norm(*row[1:4]))
+
+            if ex.is_norm(row[0]) and ex.is_worker(row[1]):
+                if not self.Repository.get_item('worker') or not self.Repository.get_item('worker',id=row[1]):
+                    self.Repository.insert_item('worker',Models.worker(*row[1:4]))
+                self.Repository.insert_item('worker_norm',Models.worker_norm(row[0],row[1],row[-1]))
+                
+            elif ex.is_norm(row[0]) and ex.is_machine(row[1]) or ex.is_dif_machine(row[1]):
+                if not self.Repository.get_item('machine') or not self.Repository.get_item('machine',id=row[1]):
+                    self.Repository.insert_item('machine',Models.machine(*row[1:4]))
+                self.Repository.insert_item('machine_norm',Models.machine_norm(row[0],row[1],row[-1]))
+
+            elif ex.is_norm(row[0]) and ex.is_material(row[1]) or ex.is_dif_material(row[1]):
+                if not self.Repository.get_item('material') or not self.Repository.get_item('material',id=row[1]):
+                    self.Repository.insert_item('material',Models.material(*row[1:4]))
+                self.Repository.insert_item('material_norm',Models.material_norm(row[0],row[1],row[-1]))
+                
+        return count
+
 ############################################ work
-    def create_copy_work(self,id):
-        model = self.Repository.get_work_by_id(id)
-        stt = self.Repository._linq_work.where(lambda x: len(x.id) >8 and x.id[:8].lower() == id.lower()).to_list()
-        copy_id = model.id + f"_copy{len(stt)}"
+    def _analyze_tree_select(self,tree:str, values):
+        if tree == 'norm':
+            ids = values[KeyGUI.norm_tree.value]
+            if not ids:
+                return
+            return [x for x in ids if ex.is_norm(x)]
+        elif tree == 'work':
+            ids = values[KeyGUI.work_tree.value]
+            if not ids:
+                return
+            return [x for x in ids if ex.is_work(x)]
+                    
+    def _work_create_copy(self,id):
+        model = self.Repository.get_item('work',id = id)
+        if not model:
+            return
+        model = model[0]
+        copy_id = 'W{}'.format(next(Models.work.id_iter))
         copy_model = Models.work(model.name,model.unit,model.amount,model.hm_id,copy_id)
         self.create_work(model=copy_model)
         
-        worker_work = self.Repository.get_worker_work_by_work_id(id)
+        worker_work = self.Repository.get_item('worker_work',work_id=id)
         if worker_work:
             for item in worker_work:
                 self.create_worker_work(Models.worker_work(copy_model.id,item.id,item.amount))
                 
-        machine_work = self.Repository.get_machine_work_by_work_id(id)
+        machine_work = self.Repository.get_item('machine_work',work_id=id)
         if machine_work:
             for item in machine_work:
                 self.create_machine_work(Models.machine_work(copy_model.id,item.id,item.amount)) 
                 
-        material_work = self.Repository.get_material_work_by_work_id(id)
+        material_work = self.Repository.get_item('material_work',work_id=id)
         if material_work:
             for item in material_work:
                 self.create_material_work(Models.material_work(copy_model.id,item.id,item.amount))
-                
-        self.list_work()
-                                   
-    def delete_work(self,id):
-        model = self.Repository.get_work_by_id(id)
-        if model:
-            if self.Repository.delete_work(model):
-                print(f'work {model.id} is deleted')
-        
-    def edit_work(self,id,model=None):
-        if not self.Repository.is_work_exist(id):
-            print('work {id} is not existed')
-            return
-        if not model:
-            hang_mucs = self.Repository.hang_muc
-            work = self.Repository.get_work_by_id(id)
-            hang_muc = self.Repository.get_hang_muc_by_id(work.hm_id)
-            
-            worker_work = self.Repository.get_worker_work_by_work_id(id)
-            machine_work = self.Repository.get_machine_work_by_work_id(id)
-            material_work = self.Repository.get_material_work_by_work_id(id)
-            
-            worker = self.Repository.get_worker_by_work_id(id)
-            machine = self.Repository.get_machine_by_work_id(id)
-            material = self.Repository.get_material_by_work_id(id)
-            self.Render(Views.work_edit_view,
-                        hang_mucs=hang_mucs,hang_muc=hang_muc,
-                        work=work,
-                        worker_work=worker_work,machine_work=machine_work,material_work=material_work,
-                        worker=worker, machine=machine, material=material,
-                        workers=self.Repository.worker,materials=self.Repository.material,machines=self.Repository.machine)
-            return
-        if self.Repository.update_work(id,model):
-            print(f'work {id} is updated')
-        else:
-            print(f'work {id} is not updated')
-    
-    def create_work(self,norm_id=None,model=None):
+       
+    def _create_work_by_norm(self,norm_id):
+        norm = self.Repository.get_item('norm', id= norm_id)[0]
+        worker_norm = self.Repository.get_item('worker_norm', norm_id = norm_id)
+        machine_norm = self.Repository.get_item('machine_norm', norm_id = norm_id)
+        material_norm = self.Repository.get_item('material_norm', norm_id = norm_id)
+        work = Models.work(norm.name, 
+                            norm.unit,
+                            amount = 1,
+                            hm_id= self.Repository.get_item('hang_muc')[-1],
+                            pv_id= self.Repository.get_item('phan_viec')[-1],)
+        self.Repository.insert_item('work',work)
+        if worker_norm:
+            for x in worker_norm:
+                self.Repository.insert_item('worker_work',Models.worker_work(work.id,x.id,x.amount))
+        if machine_norm:
+            for x in machine_norm:
+                self.Repository.insert_item('machine_work',Models.machine_work(work.id,x.id,x.amount)) 
+        if material_norm:
+            for x in material_norm:
+                self.Repository.insert_item('material_work',Models.material_work(work.id,x.id,x.amount))  
+        print('work id={} is created'.format(work.id))               
+                      
+    def create_work(self,values=None,model=None):
         if not model:
             hang_muc = self.Repository.get_item('hang_muc')
             if not self.Repository.get_item('phan_viec'):
-                self.create_phan_viec(Models.phan_viec('phần việc khác',0))
-            
-            if not norm_id:
+                self.create_phan_viec(Models.phan_viec('phần việc khác',0))            
+            if not values:
                 self.Render(Views.work_create_view,
                             hang_muc = hang_muc,
                             phan_viec = self.Repository.get_item('phan_viec'),
@@ -335,63 +490,117 @@ class base_controller:
                             material = self.Repository.get_item('material'),
                             machine = self.Repository.get_item('machine'))
                 return
-            else:
-                self.Render(Views.work_create_with_norm_id_view,
-                            hang_muc = hang_muc,
-                            phan_viec = self.Repository.get_item('phan_viec'),
-                            worker = self.Repository.get_worker_by_norm_id(norm_id),
-                            machine = self.Repository.get_machine_by_norm_id(norm_id),
-                            material = self.Repository.get_material_by_norm_id(norm_id),
-                            norm = self.Repository.get_item('norm',id=norm_id)[0],
-                            worker_norm = self.Repository.get_item('worker_norm',norm_id=norm_id),
-                            machine_norm = self.Repository.get_item('machine_norm',norm_id=norm_id),
-                            material_norm = self.Repository.get_item('material_norm',norm_id=norm_id),
-                            workers = self.Repository.get_item('worker'),
-                            materials = self.Repository.get_item('material'),
-                            machines = self.Repository.get_item('machine'))
-                return 
+            norm_ids = [x for x in values[KeyGUI.norm_tree.value] if ex.is_norm(x)]
+            for id in norm_ids:
+                self._create_work_by_norm(id)
+            return
         self.Repository.insert_item('work',model)
-        print(f'work {model.id} is created')                         
+        print(f'work {model.id} is created')
+        
+        self.list_work()
 
-     
+    def _work_delete(self,work_id):
+        model = self.Repository.get_item('work',id= work_id)
+        worker_work = self.Repository.get_item('worker_work', work_id = work_id)
+        machine_work = self.Repository.get_item('machine_work', work_id = work_id)
+        material_work = self.Repository.get_item('material_work', work_id = work_id)        
+        if not model:
+            return
+        model = model[0]
+        if worker_work:
+            for x in worker_work:
+                self.Repository.delete_item('worker_work',model)
+        if machine_work:
+            for x in machine_work:
+                self.Repository.insert_item('machine_work', model) 
+        if material_work:
+            for x in material_work:
+                self.Repository.insert_item('material_work', model)         
+        if self.Repository.delete_item('work',model):
+            print(f'work {model.id} is deleted')
+
+    def delete_work(self,values):
+        work_ids = values[KeyGUI.work_tree.value]
+        if not work_ids:
+            return
+        for id in work_ids:
+            self._work_delete(id)
+
+    def create_copy_work(self,values):
+        work_ids = self._analyze_tree_select('work', values)
+        if not work_ids:
+            return
+        for id in work_ids:
+                self._work_create_copy(id)
+        self.list_work()
+
+    # def edit_work(self,values=None,model=None):
+    #     work_ids = self._analyze_tree_select('work', values)
+    #     if not work_ids:
+    #         return
+    #     if len(work_ids) >1:
+    #         sg.popup_ok('Please selecte one work at time to edit!!')
+    #         return
+    #     if not self.Repository.get_item('work',id= work_ids[0]):
+    #         print(f'work {work_ids[0]} is not existed')
+    #         return
+    #     if not model:
+    #         hang_mucs = self.Repository.get_item('hang_muc')
+    #         phan_viecs = self.Repository.get_item('phan_viecs')
+            
+    #         work = self.Repository.get_item('work', id =work_ids[0])
+    #         hang_muc = self.Repository.get_item('hang_muc',id = work.hm_id)
+    #         phan_viec = self.Repository.get_item('phan_viec',id = work.pv_id)
+            
+            
+    #         worker_work = self.Repository.get_item('worker_work',work_id = work.id)
+    #         machine_work = self.Repository.get_item('machine_work',work_id = work.id)
+    #         material_work = self.Repository.get_item('material_work',work_id = work.id)
+            
+    #         worker = self.Repository.get_worker_by_work_id(id)
+    #         machine = self.Repository.get_machine_by_work_id(id)
+    #         material = self.Repository.get_material_by_work_id(id)
+    #         self.Render(Views.work_edit_view,
+    #                     hang_mucs=hang_mucs,
+    #                     hang_muc=hang_muc,
+    #                     work=work,
+    #                     worker_work=worker_work,
+    #                     machine_work=machine_work,
+    #                     material_work=material_work,
+    #                     worker=worker,
+    #                     machine=machine,
+    #                     material=material,
+    #                     workers=self.Repository.worker,
+    #                     materials=self.Repository.material,
+    #                     machines=self.Repository.machine)
+    #         return
+    #     if self.Repository.update_work(id,model):
+    #         print(f'work {id} is updated')
+    #     else:
+    #         print(f'work {id} is not updated')
+    
     def count_work(self,count=None):
         num = count if count else self.Repository.count_item('work')
-        self.Update(key='-WORK COUNT TEXT-',values=num)
+        self.Update(key= KeyGUI.work_count_text.value,values=num)
         
-    def list_work(self,key=None):
-        if not key:
+    def list_work(self,values=None):
+        if not values:
+            if not self.Repository.get_item('work'):
+                return
             self._list_work(self.Repository.get_item('work'))
-            print('work list showed!')
-            self.count_work()
             return
-        self._list_work(self.Repository.get_item('work',match_mode=1,logic='or',to_lower=True,id=key,name=key))
-        print(f'work list with key {key} is showed !')
+                      
+        key = values[KeyGUI.work_search_input.value]
+        if key:
+            self._list_work(self.Repository.get_item('work', match_mode=1, logic='or', to_lower=True, id=key, name=key[0]))
+            print(f'work list with key {key} is showed !')
             
     def _list_work(self,works:list):
         treedata = sg.TreeData()
-            
         for item in works:
             treedata.Insert('',item.id,item.name,[item.id,item.unit,item.amount,item.work_day,item.start,item.end])
             
-            worker_works = self.Repository.get_item('worker_work',work_id=item.id)
-            if worker_works:
-                for x in worker_works:
-                    y = self.Repository.get_item('worker',id=x.id)[0]
-                    treedata.Insert(x.work_id,x.id,y.name,[y.id,y.unit,x.amount])
-                    
-            machine_works = self.Repository.get_item('machine_work',work_id=item.id)
-            if machine_works:
-                for x in machine_works:
-                    y = self.Repository.get_item('machine',id=x.id)[0]
-                    treedata.Insert(x.work_id,x.id,y.name,[y.id,y.unit,x.amount])                    
-
-            material_works = self.Repository.get_item('material_work',work_id=item.id)
-            if material_works:
-                for x in material_works:
-                    y = self.Repository.get_item('material',id=x.id)[0]
-                    treedata.Insert(x.work_id,x.id,y.name,[y.id,y.unit,x.amount])
-                    
-        self.Update(key='-TREE WORK-',values=treedata)
+        self.Update(key=KeyGUI.work_tree.value,values=treedata)
         self.count_work(len(works))
 
  
@@ -477,146 +686,7 @@ class base_controller:
         self.Repository.insert_item('material_work',model)
         print(f'materialwork is created')
         
-############################################ norm
-    def create_copy_norm(self,id):
-        model = self.Repository.get_item('norm',id=id)
-        stt = Enumerable(self.Repository.get_item('norm')).where(lambda x: len(x.id) >8 and x.id[:8].lower() == id.lower()).to_list()
-        copy_id = model.id + f"_copy{len(stt)}"
-        copy_model = Models.norm(copy_id,model.name,model.unit)
-        self.create_norm(copy_model)
-        
-        worker_norm = self.Repository.get_item('worker_norm',norm_id=id)
-        if worker_norm:
-            for item in worker_norm:
-                self.create_worker_norm(Models.worker_norm(copy_model.id,item.id,item.amount))
-                
-        machine_norm = self.Repository.get_item('machine_norm',norm_id=id)
-        if machine_norm:
-            for item in machine_norm:
-                self.create_machine_norm(Models.machine_norm(copy_model.id,item.id,item.amount)) 
-                
-        material_norm = self.Repository.get_item('material_norm',norm_id=id)
-        if material_norm:
-            for item in material_norm:
-                self.create_material_norm(Models.material_norm(copy_model.id,item.id,item.amount))
-                
-        self.list_norm()
-                                   
-    def delete_norm(self,id):
-        model = self.Repository.get_item('norm',id=id)
-        if model:
-            if self.Repository.delete_item('norm',model):
-                print(f'norm {model.id} is deleted')
-        
-    def edit_norm(self,id,model=None):
-        if not self.Repository.get_item('norm',id=id):
-            print('norm {id} is not existed')
-            return
-        if not model:
-            norm = self.Repository.get_item('norm', id=id)
-            worker_norm = self.Repository.get_item('worker_norm',id_norm=id)
-            machine_norm = self.Repository.get_item('machine_norm',id_norm=id)
-            material_norm = self.Repository.get_item('material_norm',id_norm=id)
-            
-            worker = self.Repository.get_worker_by_norm_id(id)
-            machine = self.Repository.get_machine_by_norm_id(id)
-            material = self.Repository.get_material_by_norm_id(id)
-            self.Render(Views.norm_edit_view,norm=norm,
-                                        worker_norm=worker_norm,machine_norm=machine_norm,material_norm=material_norm,
-                                        worker=worker, machine=machine, material=material,
-                                        workers=self.Repository.get_item('worker'),
-                                        materials=self.Repository.get_item('material'),
-                                        machines=self.Repository.get_item('machine'))
-            return
-        if self.Repository.update_norm(id,model):
-            print(f'norm {id} is updated')
-        else:
-            print(f'norm {id} is not updated')
-    
-    def create_norm(self,model=None):
-        if not model:
-            self.Render(Views.norm_create_view,
-                        worker=self.Repository.get_item('worker'),
-                        machine=self.Repository.get_item('machine'),
-                        material=self.Repository.get_item('material'))
-            return
-        self.Repository.insert_item('norm',model)
-        print(f'norm {model.id} is created')
-     
-    def count_norm(self,count=None):
-        num = count if count else self.Repository.count_item('norm')
-        self.Update(key='-NORM COUNT TEXT-',values=num)
-        
-    def list_norm(self,key=None):
-        if self.Repository.get_item('norm'):
-            if not key:
-                self._list_norm(self.Repository.get_item('norm'))
-                print('norm list showed!')
-                return
-            self._list_norm(self.Repository.get_item('norm', match_mode=1, logic='or', to_lower=True, id=key, name=key))
-            print(f'norm list with key {key} is showed !')
-            
-    def _list_norm(self,norms:list):
-        treedata = sg.TreeData()
-        if not norms:
-            self.Update(key='-TREE NORM-',values=treedata)
-            self.count_norm(0)
-        for item in norms:
-            treedata.Insert('',item.id,item.name,[item.id,item.unit])
-            
-            worker_norms = self.Repository.get_item('worker_norm', norm_id=item.id)
-            if worker_norms:
-                for x in worker_norms:
-                    y = self.Repository.get_item('worker',id=x.id)[0]
-                    treedata.Insert(x.norm_id,x.id,y.name,[y.id,y.unit,x.amount])
-                    
-            machine_norms = self.Repository.get_item('machine_norm', norm_id=item.id)
-            if machine_norms:
-                for x in machine_norms:
-                    y = self.Repository.get_item('machine',id=x.id)[0]
-                    treedata.Insert(x.norm_id,x.id,y.name,[y.id,y.unit,x.amount])                    
-
-            material_norms = self.Repository.get_item('material_norm', norm_id=item.id)
-            if material_norms:
-                for x in material_norms:
-                    y = self.Repository.get_item('material',id=x.id)[0]
-                    treedata.Insert(x.norm_id,x.id,y.name,[y.id,y.unit,x.amount])
-                    
-        self.Update(key='-TREE NORM-',values=treedata)
-        self.count_norm(len(norms))
-                 
-    def create_from_excel(self,path=None):
-        if not path:
-            self.Render(Views.create_norm_from_excel_view)
-            return
-        count = self._read_excel_get_norm(path)
-        print(f'{count} norms have been created successfully')
-            
-    def _read_excel_get_norm(self,path):
-        values = ex.read_excel(path)
-        count = 0
-        for row in values:
-            if ex.is_norm(row[1]) and not self.Repository.get_item('norm',id=row[1]):
-                count +=1
-                self.Repository.insert_item('norm',Models.norm(*row[1:4]))
-
-            if ex.is_norm(row[0]) and ex.is_worker(row[1]):
-                if not self.Repository.get_item('worker') or not self.Repository.get_item('worker',id=row[1]):
-                    self.Repository.insert_item('worker',Models.worker(*row[1:4]))
-                self.Repository.insert_item('worker_norm',Models.worker_norm(row[0],row[1],row[-1]))
-                
-            elif ex.is_norm(row[0]) and ex.is_machine(row[1]) or ex.is_dif_machine(row[1]):
-                if not self.Repository.get_item('machine') or not self.Repository.get_item('machine',id=row[1]):
-                    self.Repository.insert_item('machine',Models.machine(*row[1:4]))
-                self.Repository.insert_item('machine_norm',Models.machine_norm(row[0],row[1],row[-1]))
-
-            elif ex.is_norm(row[0]) and ex.is_material(row[1]) or ex.is_dif_material(row[1]):
-                if not self.Repository.get_item('material') or not self.Repository.get_item('material',id=row[1]):
-                    self.Repository.insert_item('material',Models.material(*row[1:4]))
-                self.Repository.insert_item('material_norm',Models.material_norm(row[0],row[1],row[-1]))
-                
-        return count
-  
+ 
 ############################################ worker norm
     def create_worker_norm(self,model):
         self.Repository.insert_item('worker_norm',model)
@@ -730,9 +800,9 @@ class base_controller:
     #         self.Update(key='-TABLE WORKER-',values=data)
     #         self.count_worker(len(data))
             
-    def count_worker(self,count=None):
-        num = count if count else self.Repository.count_item('worker')
-        self.Update(key='-WORKER COUNT TEXT-',values=num)
+    # def count_worker(self,count=None):
+    #     num = count if count else self.Repository.count_item('worker')
+    #     self.Update(key= KeyGUI.worker_count_text,values=num)
 ############################################ machine
     def delete_machine(self,id:str):
         model = self.Repository.get_item('machine', id=id)
@@ -758,9 +828,9 @@ class base_controller:
     #         self.Update(key='-TABLE MACHINE-',values=data)
     #         self.count_machine(len(data))
             
-    def count_machine(self,count=None):
-        num = count if count else self.Repository.count_item('machine')
-        self.Update(key='-MACHINE COUNT TEXT-',values=num) 
+    # def count_machine(self,count=None):
+    #     num = count if count else self.Repository.count_item('machine')
+    #     self.Update(key='-MACHINE COUNT TEXT-',values=num) 
 ############################################ material 
     def delete_material(self,id:str):
         model = self.Repository.get_item('material', id=id)
@@ -786,9 +856,9 @@ class base_controller:
     #         self.Update(key='-TABLE MATERIAL-',values=data)
     #         self.count_material(len(data))
             
-    def count_material(self,count=None):
-        num = count if count else self.Repository.count_item('material')
-        self.Update(key='-MATERIAL COUNT TEXT-',values=num)       
+    # def count_material(self,count=None):
+    #     num = count if count else self.Repository.count_item('material')
+    #     self.Update(key='-MATERIAL COUNT TEXT-',values=num)       
 ############################################ hang muc 
     def create_hang_muc(self,model=None):
         if not model:
@@ -836,7 +906,7 @@ class base_controller:
             
     def count_ntcv(self,count=None):
         num = count if count else self.Repository.count_item('ntcv')
-        self.Update(key='-NTCV COUNT TEXT-',values=num)
+        self.Update(key= KeyGUI.ntcv_count_text.value,values=num)
         
     def list_ntcv(self,key=None):
         if not self.Repository.get_item('ntcv'):
@@ -854,14 +924,24 @@ class base_controller:
         for item in ntcv:
             treedata.Insert('',item.id,item.id,[item.dateNT,item.dateYC,item.name])
             
-        self.Update(key='-TREE NTCV-',values=treedata)
+        self.Update(key=KeyGUI.ntcv_tree.value,values=treedata)
         self.count_ntcv(len(ntcv))
         
 ############################################ LMTN
-    def choose_default_lmtn(self,dateNT):
-        self.Render(Views.lmtn_choose_default,dateNT = dateNT, default = self.Repository.default_lmtn)
+    def choose_default_lmtn(self, dateNT=None):
+        self.Render(Views.lmtn_choose_default, dateNT = dateNT, default = self.Repository.default_lmtn)
 
-    def create_lmtn(self,model=None,default_id=None,dateNT=None):
+    def create_lmtn(self,values,model=None,default_id=None,dateNT=None):
+        work_id = self._analyze_tree_select('work', values)
+        if not work_id:
+            self.choose_default_lmtn()
+        if len(work_id) > 1:
+            sg.popup_ok('Please select only one work !!')
+            return
+        work = self.Repository.get_item('work',id=work_id[0])
+        if work:
+            self.choose_default_lmtn(dateNT = work[0].start)
+            return
         if not model:
             if default_id:
                 self.Render(Views.lmtn_create_with_default_view, default= self.Repository.get_default_lmtn_by_id(default_id), dateNT= dateNT)
@@ -879,7 +959,7 @@ class base_controller:
             
     def count_lmtn(self,count=None):
         num = count if count else self.Repository.count_item('lmtn')
-        self.Update(key='-LMTN COUNT TEXT-',values=num)
+        self.Update(key=KeyGUI.lmtn_count_text.value,values=num)
         
     def list_lmtn(self,key=None):
         if not self.Repository.count_item('lmtn'):
@@ -897,13 +977,14 @@ class base_controller:
         for item in lmtn:
             treedata.Insert('',item.id,item.id,[item.dateNT,item.dateYC,item.name,item.sltm, item.slm, item.ktm])
             
-        self.Update(key='-TREE LMTN-',values=treedata)
+        self.Update(key= KeyGUI.lmtn_tree.value,values=treedata)
         self.count_lmtn(len(lmtn))
         
         
 ############################################ NTVL
-    def create_ntvl(self,model=None,work_id=None):
+    def create_ntvl(self,model=None,values=None):
         if not model:
+            work_id = values[KeyGUI.work_selected_input.value]
             if not work_id:
                 self.Render(Views.ntvl_create_view)
                 return
@@ -922,7 +1003,7 @@ class base_controller:
             
     def count_ntvl(self,count=None):
         num = count if count else self.Repository.count_item('ntvl')
-        self.Update(key='-NTVL COUNT TEXT-',values=num)
+        self.Update(key= KeyGUI.ntvl_count_text.value,values=num)
         
     def list_ntvl(self,key=None):
         if not self.Repository.get_item('ntvl'):
@@ -940,5 +1021,5 @@ class base_controller:
         for item in ntvl:
             treedata.Insert('',item.id,item.id,[item.dateNT,item.dateYC,item.name])
             
-        self.Update(key='-TREE NTVL-',values=treedata)
+        self.Update(key= KeyGUI.ntvl_tree.value,values=treedata)
         self.count_ntvl(len(ntvl))

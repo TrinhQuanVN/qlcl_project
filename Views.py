@@ -25,7 +25,6 @@ def layout(text_input:list,input_size=(30,1),buttons:list=[]):
     for text in text_input:
         l.append([sg.Text(text,s=text_size),sg.Input(k=f'{text} input',s=input_size)])
     l.append([sg.Button(b, k=b, s=button_size) for b in buttons])
-    print(l)
     return l
 
 
@@ -78,7 +77,6 @@ class base_view:
         for key in kwargs:
             request.append('{} = {} &'.format(key,kwargs[key]))
         result = route + '?' + ''.join(request)
-        print(result.strip()[:-1])
         Framework.Route.Foward(result.strip()[:-1])
 
 class save_file_menu_bar_view(base_view):
@@ -345,8 +343,7 @@ class work_create_with_norm_id_view(base_view):
 
         def create_ntcv():
             if window['-CheckBox NTCV-']:
-                print('haha')
-        
+                pass
         def create(values=None):
             work_id = next(Models.work.id_iter)
             if window['-CheckBox NTCV-']:
@@ -409,7 +406,6 @@ class work_create_with_norm_id_view(base_view):
             
         while True:
             event, values = window.read()
-            print(event)
             if event in [sg.WIN_CLOSED, '-ESCAPE-', '-CANCEL-']:
                 break
             
@@ -1176,7 +1172,6 @@ class lmtn_choose_default(base_view):
 
         while True:
             event, values = window.read()
-            print(event, values)
             if event in [sg.WIN_CLOSED,'-CANCEL-','-ESCAPE-']:
                 self.foward('lmtn create without default', dateNT = dateNT)
                 break
