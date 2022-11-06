@@ -140,7 +140,7 @@ def main():
     
     key = GUI.KeyGUI
     print(key.norm_delete)
-    
+    print(type(hm.__class__.__name__))
     
         
         

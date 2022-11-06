@@ -47,6 +47,11 @@ class data_access:
                 reader = csv.reader(file,delimiter='&')
                 for row in reader:
                     self.items[row[0]].append(Models.models[row[0]](*row[1:]))
+        if not self.items['hang_muc']:
+            self.items['hang_muc'].append(Models.hang_muc('Hạng mục mặc định'))
+
+        if not self.items['phan_viec']:
+            self.items['phan_viec'].append(Models.phan_viec('Phần việc mặc định'))
                        
     def save_change(self):
         if self.path:

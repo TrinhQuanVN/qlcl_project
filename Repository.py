@@ -6,18 +6,16 @@ from py_linq import Enumerable
 class base_repository:
     def __init__(self,context:DataAccess.data_access) -> None:
         self.context = context
-        # self.context.load()
+        self.context.load()
 
     @property
     def whats(self):
         return self.context.items
 
-    # def update_work(self,id,model:Models.work):
-    #     old = self.get_work_by_id(id=id)
-    #     old.name = model.name
-    #     old.unit = model.unit
-    #     old.amount = model.amount
-    #     return True
+    def update_work(self,id,model:Models.work):
+        old = self.get_item('work',id=id)[0]
+        old.update(model.items())
+        print(f'work {old.id} is updated successfully')
 
     # def update_worker_work(self,work_id,id,model):
     #     old = self.get_worker_work(work_id,id)
@@ -201,20 +199,25 @@ class base_repository:
                         result += enum.to_list() 
                 return set(result)
 
-    def insert_item(self,what:str, model):
+    def insert_item(self,what:str=None, model=None):
         """insert item to data
 
         Args:
             what (str): what data list name to insert
             model (_type_): model to insert
         """
+        if not model: return
+        if not what:
+            what = model.__class__.__name__
         self.whats[what].append(model)
-        print(f'a {what} is inserted successfully')
+        print(f'a {what} whose id {model.id} is inserted successfully')
         
-    def delete_item(self,what:str,model):
+    def delete_item(self,what:str=None,model=None):
+        if not model: return
+        if not what:
+            what = model.__class__.__name__
         self.whats[what].remove(model)
-        print(f'a {what} is deleted successfully')
-        return True
+        print(f'a {what} whose id {model.id} is deleted successfully')
         
         
 

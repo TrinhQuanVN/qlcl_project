@@ -2,7 +2,7 @@ import datetime
 from itertools import count
 import pandas as pd
 import numpy as np
-
+import Extension as ex
 
 
 class worker:
@@ -81,7 +81,7 @@ class material_norm(worker_norm):
 class work:
     id_iter = count()
     def __init__(self,name,unit,amount,hm_id,pv_id=None,start:datetime.datetime=None,end:datetime.datetime=None,id=None) -> None:
-        self.id = 'W{}'.format(next(self.id_iter)) if not id else id
+        self.id = self.new_key() if not id else id
         self.name = name
         self.unit = unit
         self.amount = float(amount)
@@ -90,14 +90,9 @@ class work:
         self._start = start
         self._end = end
         
-    @property
-    def _start_timestamp(self):
-        return self._start.timestamp() if self._start else ''
-    
-    @property
-    def _end_timestamp(self):
-        return self._end.timestamp() if self._end else ''
-    
+    def new_key(self):
+        return 'W{}'.format(next(self.id_iter))
+
     @property
     def start(self):
         return self._start.strftime(r'%d/%m/%y') if self._start else ''
@@ -105,6 +100,22 @@ class work:
     @property
     def end(self):
         return self._end.strftime(r'%d/%m/%y') if self._end else ''
+
+    @start.setter
+    def start(self,date):
+        self._start = date
+
+    @end.setter
+    def end(self,date):
+        self._end = date
+        
+    @property
+    def _start_timestamp(self):
+        return self._start.timestamp() if self._start else ''
+    
+    @property
+    def _end_timestamp(self):
+        return self._end.timestamp() if self._end else ''
 
     @property
     def work_day(self):
@@ -118,12 +129,12 @@ class work:
         self.amount = model['amount']
         self.hm_id = model['hm_id']
         self.pv_id = model['pv_id']
-        self._start = model['_start']
-        self._end = model['_end']
+        self._start = model['start']
+        self._end = model['end']
         
     def items(self) -> dict:
         return {'id': self.id, 'name': self.name, 'unit': self.unit, 'amount':self.amount,
-                'hm_id': self.hm_id, 'pv_id': self.pv_id, 'start': self.start, 'end':self.end}
+                'hm_id': self.hm_id, 'pv_id': self.pv_id, 'start': self._start, 'end':self._end}
 
     def to_save_list(self):
         return [self.__class__.__name__,self.name,self.unit,self.amount,self.hm_id,self._start_timestamp,self._end_timestamp,self.id]
@@ -167,7 +178,7 @@ class material_work(worker_work):
 class hang_muc:
     id_iter = count()
     def __init__(self,name,id=None) -> None:
-        self.id = next(self.id_iter) if not id else id
+        self.id = 'hm{}'.format(next(self.id_iter)) if not id else id
         self.name = name
         
     def __str__(self) -> str:
@@ -189,7 +200,7 @@ class phan_viec(hang_muc):
     id_iter = count()
     def __init__(self, name, id=None) -> None:
         super().__init__(name, id)
-        self.id = next(self.id_iter) if not id else id
+        self.id = 'pv{}'.format(next(self.id_iter)) if not id else id
         
 class ntcv:
     id_iter = count()
