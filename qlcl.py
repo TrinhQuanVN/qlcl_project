@@ -309,7 +309,8 @@ class QLCL:
         
         
     def handling_event(self,event,values):
-        event_dict = {KeyGUI.group_tab.value: self.show}
+        event_dict = {KeyGUI.group_tab.value: self.show,
+                      KeyGUI.work_add_from_excel_btn.value: self.work_add_from_excel_btn_click}
         self.values = values
         if event in event_dict:
             event_dict[event]()
@@ -331,7 +332,12 @@ class QLCL:
             self._work_add_from_excel(path)
 
     def _work_add_from_excel(self,path):
-        df = pd.read_excel(path)
+        try:
+            df = pd.read_excel(path)
+            return 1
+        except:
+            print(f'Error on {self.__class__.__name__}._work_add_from_excel')
+            return 0
     
     def event_create_norm_from_du_toan(self,path):
         pass
@@ -349,6 +355,7 @@ class QLCL:
 
 def main():
     norm_db = data_access('norm.db')
+
     # norm_repo = repository(norm_db)
     
     
@@ -363,6 +370,7 @@ def main():
             qlcl.handling_event(event, values)
     
     norm_db.close_norm_db()
+    norm_db.close_qlcl_db()
 
 if __name__ == "__main__":
     start = time.time()
