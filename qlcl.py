@@ -1,4 +1,4 @@
-from data_access import data_access
+from data_access import norm_db, qlcl_db
 from repository1 import repository
 import time
 import PySimpleGUI as sg
@@ -137,11 +137,11 @@ class layout(Enum):
                         enable_events=True,)]
     
     work_tree_element = [sg.Tree(data=sg.TreeData(),
-                        headings=['ID','Unit','Amount','Days','Start','End'],
+                        headings=['work','norm_id','unit','amount','start','end'],
                         k= KeyGUI.work_tree.value,
-                        col0_heading='WORK',
-                        col0_width=50,
-                        col_widths=[6,6,6],
+                        col0_heading='ID',
+                        col0_width=6,
+                        col_widths=[40,6,6,6,6,6],
                         auto_size_columns=False,
                         right_click_menu= right_click_menu_tab_work,
                         select_mode=sg.TABLE_SELECT_MODE_EXTENDED,
@@ -302,10 +302,17 @@ class layout(Enum):
                 ]
 
 class QLCL:
-    def __init__(self, window, norm_db:data_access) -> None:
+    def __init__(self, window, norm_db:norm_db, qlcl_db:qlcl_db) -> None:
         self.window = window
         self.norm_db = norm_db
+        self.qlcl_db = qlcl_db
+        self.norm_db.connect()
+        self.qlcl_db.connect()
+        self.norm_db.create_database()
+        self.qlcl_db.create_database()
+        
         self.norm_tree = self.window[KeyGUI.norm_tree.value]
+        self.work_tree = self.window[KeyGUI.work_tree.value]
         
         
     def handling_event(self,event,values):
@@ -318,8 +325,8 @@ class QLCL:
     def show(self):
         # display tree
         tree_name = self.values[KeyGUI.group_tab.value]
-        print(tree_name)
-        display_dict = {KeyGUI.norm_tab.value: self.show_tree_norm}
+        display_dict = {KeyGUI.norm_tab.value: self.show_tree_norm,
+                        KeyGUI.work_tab.value: self.show_tree_work,}
         if tree_name in display_dict:
             display_dict[tree_name]()
             
@@ -329,14 +336,37 @@ class QLCL:
                                  default_extension='.xlsx',
                                  file_types=(("Excel Files", "*.xlsx"),))
         if path:
-            self._work_add_from_excel(path)
+            if self._work_add_from_excel(path):
+                sg.PopupOK('Công việc thêm thành công', auto_close=True, keep_on_top=True)
+            
 
     def _work_add_from_excel(self,path):
         try:
-            df = pd.read_excel(path)
+            self._import_to_data_base(self._read_excel(path))
             return 1
         except:
             print(f'Error on {self.__class__.__name__}._work_add_from_excel')
+            return 0
+    
+    @staticmethod
+    def _read_excel(path):
+        try:
+            df_dict = {}
+            xls = pd.ExcelFile(path)
+            for name in xls.sheet_names:
+                df_dict[name] = xls.parse(name,header=0,index_col=0,)
+            return df_dict
+        except:
+            print(f'Error on staticmethod qlcl._read_excel')
+            return 0
+
+    def _import_to_data_base(self, df_dict:dict):
+        try:
+            if 'work' in df_dict:
+                df_dict['work'].to_sql(name='work',con=self.qlcl_db.conn,if_exists='replace')
+            return 1
+        except:
+            print(f'Error on {self.__class__.__name__}._import_to_data_base')
             return 0
     
     def event_create_norm_from_du_toan(self,path):
@@ -346,6 +376,17 @@ class QLCL:
         norm = self.norm_db.fetchall("SELECT * FROM norm ORDER BY id")
         if norm:
             self._norm_tree_display(norm)
+
+    def show_tree_work(self):
+        work = self.qlcl_db.fetchall("SELECT * FROM work ORDER BY id")
+        if work:
+            self._work_tree_display(work)
+
+    def _work_tree_display(self, work):
+        treedata = sg.TreeData()
+        for item in work:
+            treedata.Insert('',item[0],item[0],[item[1],item[2], item[3], item[4], item[5], item[6]])
+        self.work_tree.update(treedata)
             
     def _norm_tree_display(self, norm):
         treedata = sg.TreeData()
@@ -354,13 +395,11 @@ class QLCL:
         self.norm_tree.update(treedata)
 
 def main():
-    norm_db = data_access('norm.db')
-
-    # norm_repo = repository(norm_db)
-    
+    normDB = norm_db('norm.db')
+    qlclDB = qlcl_db('qlcl.db')
     
     window = sg.Window('Quản lý chất lượng công trình', layout.main_layout.value, finalize=True, resizable=True, margins=(0, 0))
-    qlcl = QLCL(window, norm_db)
+    qlcl = QLCL(window, normDB, qlclDB)
     while True:
         event, values = window.read()
         print(event,'\n', values)
@@ -369,8 +408,8 @@ def main():
         else:
             qlcl.handling_event(event, values)
     
-    norm_db.close_norm_db()
-    norm_db.close_qlcl_db()
+    normDB.disconect()
+    qlclDB.disconect()
 
 if __name__ == "__main__":
     start = time.time()
