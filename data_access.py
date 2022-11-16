@@ -31,15 +31,15 @@ class data_access:
             self.conn.commit()
             return 1
         except Error:
-            print(f'Erroron {self.__class__.__name__}.execute: ',Error)
+            print(f'Error {self.__class__.__name__}.execute: {Error}')
             return 0
 
     def fetchall(self, sql, parameter=None):
         try:
             self.cur.execute(sql) if not parameter else self.cur.execute(sql, parameter)
             return self.cur.fetchall()
-        except Error:
-            print(f'Erroron {self.__class__.__name__}.execute: ',Error)
+        except Error as e:
+            print(f'Erroron {self.__class__.__name__}.fetchall: {e}')
             return 0
 
 
@@ -104,8 +104,8 @@ class qlcl_db(data_access):
                             name text,
                             unit text,
                             amount real,
-                            start text,
-                            end text,
+                            start datetime,
+                            end datetime,
                             FOREIGN KEY (norm_id) REFERENCES norm (id)
                         )""")
 

@@ -1,3 +1,4 @@
+import sqlite3
 from data_access import norm_db, qlcl_db
 from repository1 import repository
 import time
@@ -317,11 +318,11 @@ class QLCL:
         
     def handling_event(self,event,values):
         event_dict = {KeyGUI.group_tab.value: self.show,
-                      KeyGUI.work_add_from_excel_btn.value: self.work_add_from_excel_btn_click}
+                      KeyGUI.work_add_from_excel_btn.value: self.qlcl_add_from_excel_btn_click}
         self.values = values
         if event in event_dict:
             event_dict[event]()
-            
+                
     def show(self):
         # display tree
         tree_name = self.values[KeyGUI.group_tab.value]
@@ -330,19 +331,18 @@ class QLCL:
         if tree_name in display_dict:
             display_dict[tree_name]()
             
-    def work_add_from_excel_btn_click(self):
+    def qlcl_add_from_excel_btn_click(self):
         path = sg.popup_get_file('Nhập đường dẫn file excel công việc',
                                  'Công việc',
                                  default_extension='.xlsx',
                                  file_types=(("Excel Files", "*.xlsx"),))
         if path:
-            if self._work_add_from_excel(path):
+            if self._qlcl_add_from_excel(path):
                 sg.PopupOK('Công việc thêm thành công', auto_close=True, keep_on_top=True)
             
-
-    def _work_add_from_excel(self,path):
+    def _qlcl_add_from_excel(self,path):
         try:
-            self._import_to_data_base(self._read_excel(path))
+            self._import_qlcl_to_data_base(self._read_excel(path))
             return 1
         except:
             print(f'Error on {self.__class__.__name__}._work_add_from_excel')
@@ -360,7 +360,7 @@ class QLCL:
             print(f'Error on staticmethod qlcl._read_excel')
             return 0
 
-    def _import_to_data_base(self, df_dict:dict):
+    def _import_qlcl_to_data_base(self, df_dict:dict):
         try:
             if 'work' in df_dict:
                 df_dict['work'].to_sql(name='work',con=self.qlcl_db.conn,if_exists='replace')
@@ -394,6 +394,67 @@ class QLCL:
             treedata.Insert('',item[0],item[1],[item[0],item[2]])
         self.norm_tree.update(treedata)
 
+    def _get_worker_amount_by_norm_id(self,norm_id:tuple):
+        if not norm_id:
+            return 0
+        if len(norm_id) == 1:
+            sql = f"""SELECT amount from worker_norm 
+                    where norm_id = ?)"""
+            parameter = norm_id[0]
+        else:
+            f"""SELECT amount from worker_norm 
+                                            where norm_id in ({','.join(list('?'*len(norm_id)))}))"""
+            parameter = norm_id                          
+        worker_norm = self.norm_db.fetchall(sql,parameter)
+        if worker_norm:
+            return worker_norm[0]
+        return 0
+    
+    def _get_max_day_work(self):
+        sql = 'select max(end) from work'
+        return self.qlcl_db.fetchall(sql)
+    
+    def _get_min_day_work(self):
+        sql = 'select min(start) from work'
+        return self.qlcl_db.fetchall(sql)        
+    
+    def _get_work_name_by_day(self,day):
+        sql = """select name from work where start <= ? and end >= ? order by id"""
+        parameter = (day,day)
+        work_name = self.qlcl_db.fetchall(sql,parameter)
+        if not work_name:
+            return ""
+        return ', '.join((name for sub in work_name for name in sub))
+
+    # def _get_lmtn_name_by_day(self,day):
+    #     sql = """select name from lmtn where yc <= ? and nt >= ? order by id"""
+    #     parameter = (day,day)
+    #     lmtn_name = self.qlcl_db.fetchall(sql,parameter)
+    #     if not lmtn_name:
+    #         return ""
+    #     return ', '.join((name for sub in lmtn_name for name in sub))
+    
+    def _get_machine_name_by_norm_id(self, norm_id:tuple):
+        if not norm_id:
+            return 0
+        if len(norm_id) == 1:
+            sql = f"""SELECT name FROM machine where id in 
+                                            (select m.id from machine_norm m 
+                                            left join norm n on m.norm_id = n.id 
+                                            where n.id = ?)"""
+            parameter = norm_id[0]
+        else:
+            sql = f"""SELECT name FROM machine where id in 
+                                            (select m.id from machine_norm m 
+                                            left join norm n on m.norm_id = n.id 
+                                            where n.id in ({','.join(list('?'*len(norm_id)))}))"""
+            parameter = norm_id                          
+        machine_name = self.norm_db.fetchall(sql, parameter)
+        if not machine_name:
+            return ""
+        return ''.join((name for sub in machine_name for name in sub))
+        
+
 def main():
     normDB = norm_db('norm.db')
     qlclDB = qlcl_db('qlcl.db')
@@ -411,7 +472,28 @@ def main():
     normDB.disconect()
     qlclDB.disconect()
 
+def main1():
+    # normDB = norm_db('norm.db')
+    # normDB.connect()
+    conn = sqlite3.connect('qlcl.db')
+    cur = conn.cursor()
+    # norm_id = ["AB.25111", "AB.25111","AB.11321"]
+    norm_id = "AB.25111"
+    day = "2022-01-03 00:00:00"
+    sql = """select name from work where start <= ? and end >= ? order by id"""
+    parameter = (day,day)
+
+    # cur.execute(f"""SELECT name FROM machine where id in 
+    #                                         (select m.id from machine_norm m 
+    #                                         left join norm n on m.norm_id = n.id 
+    #                                         where n.id in ({','.join(list('?'*len(norm_id)))}))""", norm_id)
+    cur.execute(sql,parameter)
+    work_name = cur.fetchall()
+    print(', '.join((name for sub in work_name for name in sub)))    
+    conn.close()
+    # normDB.disconect()
+
 if __name__ == "__main__":
     start = time.time()
-    main()
+    main1()
     print('time exe: ', round((time.time()-start)*10**3,2),' ms')
