@@ -42,6 +42,14 @@ class data_access:
             print(f'Erroron {self.__class__.__name__}.fetchall: {e}')
             return 0
 
+    def fetchone(self, sql, parameter=None):
+        try:
+            self.cur.execute(sql) if not parameter else self.cur.execute(sql, parameter)
+            return self.cur.fetchone()
+        except Error as e:
+            print(f'Erroron {self.__class__.__name__}.fetchone: {e}')
+            return 0
+
 
 class norm_db(data_access):
     def create_database(self):
@@ -108,7 +116,21 @@ class qlcl_db(data_access):
                             end datetime,
                             FOREIGN KEY (norm_id) REFERENCES norm (id)
                         )""")
-
+            self.execute("""CREATE TABLE IF NOT EXISTS ntcv (
+                            id text PRIMARY KEY,
+                            name text,
+                            day datetime,
+                        )""")
+            self.execute("""CREATE TABLE IF NOT EXISTS ntvl (
+                            id text PRIMARY KEY,
+                            name text,
+                            day datetime,
+                        )""")
+            self.execute("""CREATE TABLE IF NOT EXISTS lmtn (
+                            id text PRIMARY KEY,
+                            name text,
+                            day datetime,
+                        )""")                        
             return 1
         except Error:
             print(f'Error {self.__class__.__name__}.create_database: ',Error)

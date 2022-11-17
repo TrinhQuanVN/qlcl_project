@@ -1,3 +1,4 @@
+import datetime
 import sqlite3
 from data_access import norm_db, qlcl_db
 from repository1 import repository
@@ -345,7 +346,7 @@ class QLCL:
             self._import_qlcl_to_data_base(self._read_excel(path))
             return 1
         except:
-            print(f'Error on {self.__class__.__name__}._work_add_from_excel')
+            print(f'Error on {self.__class__.__name__}._qlcl_add_from_excel')
             return 0
     
     @staticmethod
@@ -364,9 +365,15 @@ class QLCL:
         try:
             if 'work' in df_dict:
                 df_dict['work'].to_sql(name='work',con=self.qlcl_db.conn,if_exists='replace')
+            if 'ntcv' in df_dict:
+                df_dict['ntcv'].to_sql(name='ntcv',con=self.qlcl_db.conn,if_exists='replace')
+            if 'ntvl' in df_dict:
+                df_dict['ntvl'].to_sql(name='ntvl',con=self.qlcl_db.conn,if_exists='replace')
+            if 'lmtn' in df_dict:
+                df_dict['lmtn'].to_sql(name='lmtn',con=self.qlcl_db.conn,if_exists='replace')                                
             return 1
         except:
-            print(f'Error on {self.__class__.__name__}._import_to_data_base')
+            print(f'Error on {self.__class__.__name__}._import_qlcl_to_data_base')
             return 0
     
     def event_create_norm_from_du_toan(self,path):
@@ -453,7 +460,57 @@ class QLCL:
         if not machine_name:
             return ""
         return ''.join((name for sub in machine_name for name in sub))
+
+    def _summary_nktc(self):
+        format = r'%Y-%m-%d %H:%M:%S'
+        # ngay dau tien lam viec
+        min_day = datetime.datetime.strptime(self.qlcl_db.fetchone('select min(start) from work')[0], format)
+        # ngay ket thuc lam viec
+        max_day = datetime.datetime.strptime(self.qlcl_db.fetchone('select max(start) from work')[0], format)
+        # so ngay lam viec    
+        days = (max_day - min_day).days
         
+        nktcs = []
+        
+        for d in [min_day + datetime.timedelta(days= x) for x in range(days)]:
+            #lmtn trong ngay
+            lmtns = self.qlcl_db.fetchall("""select name
+                                from lmtn where day = ? order by id
+                                """, (d.strftime(format),))  
+            #ntvl trong ngay
+            ntvls = self.qlcl_db.fetchall("""select name
+                                from ntvl where day = ? order by id
+                                """, (d.strftime(format),))  
+            #ntcv trong ngay
+            ntcvs = self.qlcl_db.fetchall("""select name
+                                from ntcv where day = ? order by id
+                                """, (d.strftime(format),))  
+            # cong viec trong ngay
+            works = self.qlcl_db.fetchall("""select name, norm_id, (amount / (julianday(end)- julianday(start)))
+                                from work where start <= ? and end >= ? order by id
+                                """, (d.strftime(format), d.strftime(format)))
+            # danh sach norm id
+            norm_id = [work[1] for work in works]
+            machine_name = ''.join((name for sub in self.norm_db.fetchall(f"""SELECT name FROM machine where id in 
+                                                (select m.id from machine_norm m 
+                                                left join norm n on m.norm_id = n.id 
+                                                where n.id in ({','.join(list('?' * len(norm_id)))}))""", norm_id)
+                                    for name in sub))
+            worker_amount = 0
+            for work in works:
+                worker_amount += self.norm_db.fetchone("""select worker_norm.amount
+                                from worker_norm inner join norm 
+                                on worker_norm.norm_id = norm.id 
+                                where norm.id = ?""", (work[1],))[0] * work[2]
+
+            nktcs.append((d,
+                        worker_amount,
+                        machine_name.replace('\* - ',', '),
+                        ', '.join([sub[0] for sub in works]),
+                        ', '.join([sub[0] for sub in lmtns]),
+                        ', '.join([sub[0] for sub in ntcvs]),
+                        ', '.join([sub[0] for sub in ntvls])))
+        return nktcs      
 
 def main():
     normDB = norm_db('norm.db')
@@ -472,27 +529,105 @@ def main():
     normDB.disconect()
     qlclDB.disconect()
 
+class nktc:
+    def __init__(self, day, worker_amount, machine_name, work_name, lmtn, ntcv, ntvl) -> None:
+        self.day = day
+        self.worker_amount = worker_amount
+        self.machine_name = machine_name
+        self.work_name = work_name
+        self.lmtn = lmtn
+        self.ntcv = ntcv
+        self.ntvl = ntvl
+        
+    def to_list(self):
+        return (self.day, self.worker_amount, self.machine_name, self.work_name, self.lmtn, self.ntcv, self.ntvl)
+
 def main1():
-    # normDB = norm_db('norm.db')
-    # normDB.connect()
+    norm_conn = sqlite3.connect('norm.db')
+    norm_cur = norm_conn.cursor()
+    
     conn = sqlite3.connect('qlcl.db')
     cur = conn.cursor()
-    # norm_id = ["AB.25111", "AB.25111","AB.11321"]
-    norm_id = "AB.25111"
-    day = "2022-01-03 00:00:00"
-    sql = """select name from work where start <= ? and end >= ? order by id"""
-    parameter = (day,day)
+    format = r'%Y-%m-%d %H:%M:%S'
 
-    # cur.execute(f"""SELECT name FROM machine where id in 
-    #                                         (select m.id from machine_norm m 
-    #                                         left join norm n on m.norm_id = n.id 
-    #                                         where n.id in ({','.join(list('?'*len(norm_id)))}))""", norm_id)
-    cur.execute(sql,parameter)
-    work_name = cur.fetchall()
-    print(', '.join((name for sub in work_name for name in sub)))    
+    min_day = cur.execute('select min(start) from work')
+    min_day = datetime.datetime.strptime(cur.fetchone()[0], format)
+    
+    max_day = cur.execute('select max(start) from work')
+    max_day = datetime.datetime.strptime(cur.fetchone()[0], format)
+    
+    # so ngay lam viec    
+    days = (max_day - min_day).days
+    
+    nktcs = []
+    
+    for d in [min_day + datetime.timedelta(days= x) for x in range(days)]:
+        #lmtn trong ngay
+        cur.execute("""select name
+                            from lmtn where day = ? order by id
+                            """, (d.strftime(format),))
+        lmtns = cur.fetchall()  
+        
+        #ntvl trong ngay
+        cur.execute("""select name
+                            from ntvl where day = ? order by id
+                            """, (d.strftime(format),))
+        ntvls = cur.fetchall() 
+
+        #ntcv trong ngay
+        cur.execute("""select name
+                            from ntcv where day = ? order by id
+                            """, (d.strftime(format),))
+        ntcvs = cur.fetchall() 
+                      
+        # cong viec trong ngay
+        cur.execute("""select name, norm_id, (amount / (julianday(end)- julianday(start)))
+                            from work where start <= ? and end >= ? order by id
+                            """, (d.strftime(format), d.strftime(format)))
+        works = cur.fetchall()
+        
+        norm_id = [work[1] for work in works]
+        norm_cur.execute(f"""SELECT name FROM machine where id in 
+                                            (select m.id from machine_norm m 
+                                            left join norm n on m.norm_id = n.id 
+                                            where n.id in ({','.join(list('?' * len(norm_id)))}))""", norm_id)
+        machine_name = ''.join((name for sub in norm_cur.fetchall() for name in sub))
+        
+        worker_amount = 0
+        for work in works:
+            norm_cur.execute("""select worker_norm.amount
+                              from worker_norm inner join norm 
+                              on worker_norm.norm_id = norm.id 
+                              where norm.id = ?""", (work[1],))
+            worker_amount += norm_cur.fetchone()[0] * work[2]
+
+           
+        # nktcs.append(nktc(
+        #     day = d,
+        #     worker_amount= worker_amount,
+        #     machine_name= machine_name.replace('\* - ',', '),
+        #     work_name= ', '.join([sub[0] for sub in works]),
+        #     lmtn= ', '.join([sub[0] for sub in lmtns]),
+        #     ntcv= ', '.join([sub[0] for sub in ntcvs]),
+        #     ntvl= ', '.join([sub[0] for sub in ntvls])
+        # ))
+        
+        nktcs.append(
+            (d,
+            worker_amount,
+            machine_name.replace('\* - ',', '),
+            ', '.join([sub[0] for sub in works]),
+            ', '.join([sub[0] for sub in lmtns]),
+            ', '.join([sub[0] for sub in ntcvs]),
+            ', '.join([sub[0] for sub in ntvls]))
+        )
+        
+        df = pd.DataFrame(nktcs,columns=['day','worker_amount','machine_name','work','lmtn','ntcv','ntvl'])
+        df.fillna(value="",axis=1,inplace=True)
+        df.to_excel('nktc.xlsx')
+    
     conn.close()
-    # normDB.disconect()
-
+    norm_conn.close()
 if __name__ == "__main__":
     start = time.time()
     main1()

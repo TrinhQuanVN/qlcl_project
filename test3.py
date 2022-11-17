@@ -129,18 +129,8 @@ def main():
     
     # print(a)
     
-
-    hm = Models.phan_viec('hang muc 1',1)
-    hm.update({'name':'hang muc an lon'})
-    # print(hm.name)
-    
-    a = data_access()
-    a.items['worker'].append('a')
-    # print(a.items)
-    
-    key = GUI.KeyGUI
-    print(key.norm_delete)
-    print(type(hm.__class__.__name__))
+    a = (1,2,3,4)
+    print(len(a))
     
         
         
