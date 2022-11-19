@@ -529,19 +529,6 @@ def main():
     normDB.disconect()
     qlclDB.disconect()
 
-class nktc:
-    def __init__(self, day, worker_amount, machine_name, work_name, lmtn, ntcv, ntvl) -> None:
-        self.day = day
-        self.worker_amount = worker_amount
-        self.machine_name = machine_name
-        self.work_name = work_name
-        self.lmtn = lmtn
-        self.ntcv = ntcv
-        self.ntvl = ntvl
-        
-    def to_list(self):
-        return (self.day, self.worker_amount, self.machine_name, self.work_name, self.lmtn, self.ntcv, self.ntvl)
-
 def main1():
     norm_conn = sqlite3.connect('norm.db')
     norm_cur = norm_conn.cursor()
@@ -600,29 +587,16 @@ def main1():
                               on worker_norm.norm_id = norm.id 
                               where norm.id = ?""", (work[1],))
             worker_amount += norm_cur.fetchone()[0] * work[2]
-
            
-        # nktcs.append(nktc(
-        #     day = d,
-        #     worker_amount= worker_amount,
-        #     machine_name= machine_name.replace('\* - ',', '),
-        #     work_name= ', '.join([sub[0] for sub in works]),
-        #     lmtn= ', '.join([sub[0] for sub in lmtns]),
-        #     ntcv= ', '.join([sub[0] for sub in ntcvs]),
-        #     ntvl= ', '.join([sub[0] for sub in ntvls])
-        # ))
-        
-        nktcs.append(
-            (d,
+        nktcs.append((d,
             worker_amount,
             machine_name.replace('\* - ',', '),
             ', '.join([sub[0] for sub in works]),
             ', '.join([sub[0] for sub in lmtns]),
             ', '.join([sub[0] for sub in ntcvs]),
-            ', '.join([sub[0] for sub in ntvls]))
-        )
+            ', '.join([sub[0] for sub in ntvls])))
         
-        df = pd.DataFrame(nktcs,columns=['day','worker_amount','machine_name','work','lmtn','ntcv','ntvl'])
+        df = pd.DataFrame(nktcs,columns=['day', 'worker_amount', 'machine_name', 'work', 'lmtn', 'ntcv', 'ntvl'])
         df.fillna(value="",axis=1,inplace=True)
         df.to_excel('nktc.xlsx')
     
