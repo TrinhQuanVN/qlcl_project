@@ -13,16 +13,16 @@ class data_access:
         try:
             self.conn = sqlite3.connect(self.path)
             self.cur = self.conn.cursor()
-        except Error:
-            print(f'Error on {self.__class__.__name__}.connect: ',Error)
+        except Error as e:
+            print(f'Error on {self.__class__.__name__}.connect: ',e)
             return 0 
 
     def disconect(self):
         try:
             self.conn.close()
             return 1
-        except Error:
-            print(f'Erroron {self.__class__.__name__}.disconect: ',Error)
+        except Error as e:
+            print(f'Erroron {self.__class__.__name__}.disconect: ',e)
             return 0         
                
     def execute(self,sql, parameter=None):
@@ -30,8 +30,9 @@ class data_access:
             self.cur.execute(sql) if not parameter else self.cur.execute(sql, parameter)
             self.conn.commit()
             return 1
-        except Error:
-            print(f'Error {self.__class__.__name__}.execute: {Error}')
+        except Error as e:
+            print('sql: ',sql)
+            print(f'Error {self.__class__.__name__}.execute: {e}')
             return 0
 
     def fetchall(self, sql, parameter=None):
@@ -119,17 +120,17 @@ class qlcl_db(data_access):
             self.execute("""CREATE TABLE IF NOT EXISTS ntcv (
                             id text PRIMARY KEY,
                             name text,
-                            day datetime,
+                            day datetime
                         )""")
             self.execute("""CREATE TABLE IF NOT EXISTS ntvl (
                             id text PRIMARY KEY,
                             name text,
-                            day datetime,
+                            day datetime
                         )""")
             self.execute("""CREATE TABLE IF NOT EXISTS lmtn (
                             id text PRIMARY KEY,
                             name text,
-                            day datetime,
+                            day datetime
                         )""")                        
             return 1
         except Error:

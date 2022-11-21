@@ -604,5 +604,5 @@ def main1():
     norm_conn.close()
 if __name__ == "__main__":
     start = time.time()
-    main1()
+    main()
     print('time exe: ', round((time.time()-start)*10**3,2),' ms')
