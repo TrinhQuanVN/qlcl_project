@@ -29,6 +29,7 @@ class KeyGUI(Enum):
     phan_viec_edit_on_menu_bar = 'Sửa phần việc', #ok
     
     norm_search_input = '-norm search input-'
+    norm_search_input_enter = '-norm search input-' + ' enter'
     norm_count_text = '-norm count text-'
     norm_search_btn = '-norm search button-' #ok
     norm_tree = '-norm tree-'
@@ -90,6 +91,8 @@ class KeyGUI(Enum):
     nktc_edit = '-nktc edit button-'
     nktc_copy = '-nktc copy button-'
     nktc_delete = '-nktc delete button-'
+    nktc_export_excel = '-nktc export excel-'
+    
     
     norm_tab = '-norm tab-'
     work_tab = '-work tab-'
@@ -136,19 +139,21 @@ class layout(Enum):
                         right_click_menu= right_click_menu_tab_norm,
                         expand_x=True, expand_y= True,
                         select_mode= sg.TABLE_SELECT_MODE_EXTENDED,
-                        enable_events=True,)]
+                        enable_events=True,
+                        font=font11)]
     
     work_tree_element = [sg.Tree(data=sg.TreeData(),
-                        headings=['work','norm_id','unit','amount','start','end'],
+                        headings=['norm_id','work','unit','amount','start','end'],
                         k= KeyGUI.work_tree.value,
                         col0_heading='ID',
                         col0_width=6,
-                        col_widths=[40,6,6,6,6,6],
+                        col_widths=[6,40,6,6,6,6],
                         auto_size_columns=False,
                         right_click_menu= right_click_menu_tab_work,
                         select_mode=sg.TABLE_SELECT_MODE_EXTENDED,
                         expand_x=True, expand_y= True,
-                        enable_events=True)]    
+                        enable_events=True,
+                        font=font11)]    
 
     lmtn_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name','SLTM','SLM','KTM','YC'],
@@ -160,7 +165,8 @@ class layout(Enum):
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
-                        enable_events=True)]
+                        enable_events=True,
+                        font=font11)]
     
     ntvl_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name'],
@@ -172,7 +178,8 @@ class layout(Enum):
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
-                        enable_events=True)]
+                        enable_events=True,
+                        font=font11)]
 
     ntcv_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name'],
@@ -184,19 +191,21 @@ class layout(Enum):
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
-                        enable_events=True)]
+                        enable_events=True,
+                        font=font11)]
 
     nktc_tree_element = [sg.Tree(data=sg.TreeData(),
-                        headings=['DateNT','DateYC','Name'],
+                        headings=['work','lmtn','ntcv','ntvl'],
                         k= KeyGUI.nktc_tree.value,
-                        col0_heading='ID',
-                        col0_width=2,
-                        col_widths=[4,4,50],
+                        col0_heading='Date',
+                        col0_width=15,
+                        col_widths=[15,15,15,15],
                         auto_size_columns=False,
                         justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
-                        enable_events=True)]
+                        enable_events=True,
+                        font=('Any',11))]
    
     norm_tab_layout = [
                     [sg.Input(s= input_size20,k=KeyGUI.norm_search_input.value), 
@@ -282,6 +291,7 @@ class layout(Enum):
                     nktc_tree_element,
                     
                     [sg.Push(),
+                     sg.Button('Export Excel',s= button_size10,k= KeyGUI.nktc_export_excel.value),
                     sg.Button('Create',s= button_size10,k= KeyGUI.nktc_create.value),
                     sg.Button('Edit',s= button_size10,k= KeyGUI.nktc_edit.value),
                     sg.Button('Create copy',s= button_size10,k= KeyGUI.nktc_copy.value),
@@ -315,11 +325,17 @@ class QLCL:
         
         self.norm_tree = self.window[KeyGUI.norm_tree.value]
         self.work_tree = self.window[KeyGUI.work_tree.value]
+        self.lmtn_tree = self.window[KeyGUI.lmtn_tree.value]
+        self.ntcv_tree = self.window[KeyGUI.ntcv_tree.value]
+        self.ntvl_tree = self.window[KeyGUI.ntvl_tree.value]
+        self.nktc_tree = self.window[KeyGUI.nktc_tree.value]
         
         
     def handling_event(self,event,values):
         event_dict = {KeyGUI.group_tab.value: self.show,
-                      KeyGUI.work_add_from_excel_btn.value: self.qlcl_add_from_excel_btn_click}
+                      KeyGUI.work_add_from_excel_btn.value: self.qlcl_add_from_excel_btn_click,
+                      KeyGUI.nktc_export_excel.value: self.export_nktc_to_excel,
+                      KeyGUI.norm_search_input_enter.value: self.show_tree_norm,}
         self.values = values
         if event in event_dict:
             event_dict[event]()
@@ -328,7 +344,12 @@ class QLCL:
         # display tree
         tree_name = self.values[KeyGUI.group_tab.value]
         display_dict = {KeyGUI.norm_tab.value: self.show_tree_norm,
-                        KeyGUI.work_tab.value: self.show_tree_work,}
+                        KeyGUI.work_tab.value: self.show_tree_work,
+                        KeyGUI.lmtn_tab.value: self.show_tree_lmtn,
+                        KeyGUI.ntcv_tab.value: self.show_tree_ntcv,
+                        KeyGUI.ntvl_tab.value: self.show_tree_ntvl,
+                        KeyGUI.nktc_tab.value: self.show_tree_nktc,
+                        }
         if tree_name in display_dict:
             display_dict[tree_name]()
             
@@ -379,10 +400,114 @@ class QLCL:
     def event_create_norm_from_du_toan(self,path):
         pass
     
+    def show_tree_lmtn(self):
+        lmtn = self.qlcl_db.fetchall("SELECT * FROM lmtn ORDER BY id")
+        if lmtn:
+            self._lmtn_tree_display(lmtn)        
+
+    def _lmtn_tree_display(self, lmtn):
+        treedata = sg.TreeData()
+        for item in lmtn:
+            treedata.Insert('',item[0],item[0],[item[1],item[2]])
+        self.lmtn_tree.update(treedata)
+
+    def show_tree_ntcv(self):
+        ntcv = self.qlcl_db.fetchall("SELECT * FROM ntcv ORDER BY id")
+        if ntcv:
+            self._ntcv_tree_display(ntcv)        
+
+    def _ntcv_tree_display(self, ntcv):
+        treedata = sg.TreeData()
+        for item in ntcv:
+            treedata.Insert('',item[0],item[0],[item[1],item[2]])
+        self.ntcv_tree.update(treedata)
+
+    def show_tree_ntvl(self):
+        ntvl = self.qlcl_db.fetchall("SELECT * FROM ntvl ORDER BY id")
+        if ntvl:
+            self._ntvl_tree_display(ntvl)        
+
+    def _ntvl_tree_display(self, ntvl):
+        treedata = sg.TreeData()
+        for item in ntvl:
+            treedata.Insert('',item[0],item[0],[item[1],item[2]])
+        self.ntvl_tree.update(treedata)
+
+    def show_tree_nktc(self):
+        treedata = sg.TreeData()
+        format = r'%Y-%m-%d %H:%M:%S'
+        # ngay dau tien lam viec
+        min_day = datetime.datetime.strptime(self.qlcl_db.fetchone('select min(start) from work')[0], format)
+        # ngay ket thuc lam viec
+        max_day = datetime.datetime.strptime(self.qlcl_db.fetchone('select max(end) from work')[0], format)
+        # so ngay lam viec    
+        days = (max_day - min_day).days
+        
+        key = 0
+        for d in [min_day + datetime.timedelta(days= x) for x in range(days)]:
+            #lmtn trong ngay
+            lmtns = self.qlcl_db.fetchall("""select name
+                                from lmtn where day = ? order by id
+                                """, (d.strftime(format),))  
+            lmtn = [sub[0] for sub in lmtns]
+            
+            #ntvl trong ngay
+            ntvls = self.qlcl_db.fetchall("""select name
+                                from ntvl where day = ? order by id
+                                """, (d.strftime(format),))
+            ntvl = [sub[0] for sub in ntvls]
+              
+            #ntcv trong ngay
+            ntcvs = self.qlcl_db.fetchall("""select name
+                                from ntcv where day = ? order by id
+                                """, (d.strftime(format),)) 
+            ntcv = [sub[0] for sub in ntcvs]
+             
+            # cong viec trong ngay
+            works = self.qlcl_db.fetchall("""select name
+                                from work where start <= ? and end >= ? order by id
+                                """, (d.strftime(format), d.strftime(format)))
+            work = [sub[0] for sub in works]
+            max_len = max([len(work), len(lmtn), len(ntcv), len(ntvl)])
+            temp = []
+            for i in range(max_len):
+                temp.append(
+                    (work[i] if i<len(work) else "", 
+                     lmtn[i] if i<len(lmtn) else "",
+                     ntcv[i] if i<len(ntcv) else "",
+                     ntvl[i] if i<len(ntvl) else "")
+                )
+            treedata.insert('',d,d,[len(work), len(lmtn), len(ntcv), len(ntvl)])
+            
+            for i in range(len(temp)):
+                treedata.insert(d,key,"",values=temp[i])
+                key +=1
+            
+        
+        self.nktc_tree.update(treedata)
+            
+            # # danh sach norm id
+            # norm_id = [work[1] for work in works]
+            # machine_names = ''.join((name for sub in self.norm_db.fetchall(f"""SELECT name FROM machine where id in 
+            #                                     (select m.id from machine_norm m 
+            #                                     left join norm n on m.norm_id = n.id 
+            #                                     where n.id in ({','.join(list('?' * len(norm_id)))}))""", norm_id)
+            #                         for name in sub))       
+
+    def _nktc_tree_display(self, nktc):
+        treedata = sg.TreeData()
+        for item in nktc:
+            treedata.Insert('',item[0],item[0],[item[1],item[2]])
+        self.nktc_tree.update(treedata)
+    
     def show_tree_norm(self):
-        norm = self.norm_db.fetchall("SELECT * FROM norm ORDER BY id")
-        if norm:
-            self._norm_tree_display(norm)
+        key = self.values[KeyGUI.norm_search_input.value]
+        if not key:
+            norm = self.norm_db.fetchall("SELECT * FROM norm ORDER BY id")
+        else:
+            norm = self.norm_db.fetchall('SELECT * from norm where lower(name) like ? or lower(id) like ?',
+                                         ('%'+ key.lower()+'%',key.lower()+'%'))
+        self._norm_tree_display(norm)
 
     def show_tree_work(self):
         work = self.qlcl_db.fetchall("SELECT * FROM work ORDER BY id")
@@ -466,7 +591,7 @@ class QLCL:
         # ngay dau tien lam viec
         min_day = datetime.datetime.strptime(self.qlcl_db.fetchone('select min(start) from work')[0], format)
         # ngay ket thuc lam viec
-        max_day = datetime.datetime.strptime(self.qlcl_db.fetchone('select max(start) from work')[0], format)
+        max_day = datetime.datetime.strptime(self.qlcl_db.fetchone('select max(end) from work')[0], format)
         # so ngay lam viec    
         days = (max_day - min_day).days
         
@@ -498,25 +623,52 @@ class QLCL:
                                     for name in sub))
             worker_amount = 0
             for work in works:
-                worker_amount += self.norm_db.fetchone("""select worker_norm.amount
+                if not work[1]:
+                    continue
+                a = self.norm_db.fetchone("""select worker_norm.amount
                                 from worker_norm inner join norm 
                                 on worker_norm.norm_id = norm.id 
-                                where norm.id = ?""", (work[1],))[0] * work[2]
+                                where norm.id = ?""", (work[1],))
+                if not a:
+                    continue
+                try:
+                    worker_amount += a[0] * work[2]
+                except:
+                    print(worker_amount, a)
 
+            # nktcs.append((d,
+            #             worker_amount,
+            #             machine_name.replace('\* - ',', '),
+            #             '; '.join([sub[0] for sub in works]),
+            #             '; '.join([sub[0] for sub in lmtns]),
+            #             '; '.join([sub[0] for sub in ntcvs]),
+            #             '; '.join([sub[0] for sub in ntvls])))
+            
             nktcs.append((d,
                         worker_amount,
                         machine_name.replace('\* - ',', '),
-                        ', '.join([sub[0] for sub in works]),
-                        ', '.join([sub[0] for sub in lmtns]),
-                        ', '.join([sub[0] for sub in ntcvs]),
-                        ', '.join([sub[0] for sub in ntvls])))
-        return nktcs      
+                        r' - '.join([sub[0] for sub in works]),
+                        r' - '.join([sub[0] for sub in lmtns]),
+                        r' - '.join([sub[0] for sub in ntcvs]),
+                        r' - '.join([sub[0] for sub in ntvls])))            
+            
+        return nktcs
+    
+    def export_nktc_to_excel(self,path=None):
+        try:
+            df = pd.DataFrame(self._summary_nktc(),columns=['day','worker_amount','machine_name','work','lmtn','ntcv','ntvl'])
+            df.fillna("",inplace=True)
+            df.to_excel('nktc.xlsx',index=None)
+            print('exported successfully')  
+        except PermissionError:
+            sg.popup(f'Please close nktc file!!. Path: {path}')    
 
 def main():
     normDB = norm_db('norm.db')
     qlclDB = qlcl_db('qlcl.db')
     
     window = sg.Window('Quản lý chất lượng công trình', layout.main_layout.value, finalize=True, resizable=True, margins=(0, 0))
+    window[KeyGUI.norm_search_input.value].bind('<Return>', ' enter')
     qlcl = QLCL(window, normDB, qlclDB)
     while True:
         event, values = window.read()

@@ -12,7 +12,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS work (
 
 layout = [
     [sg.Input(k='search input'), sg.Button('Search',k='search button'),],
-    [sg.Table([],['name','start','end'],k='table',col_widths=[70,15,15],expand_x=True, expand_y=True,auto_size_columns=False)],
+    [sg.Table([],['name','start','end'],k='table',col_widths=[70,15,15],expand_x=True, expand_y=True,auto_size_columns=False,font=('Any',15))],
     [sg.Push(), sg.FileBrowse(k='browse button'), sg.Button('Load')]
 ]
 window = sg.Window('SEARCH TEXT', layout, finalize=True,resizable=True)
@@ -24,7 +24,7 @@ def get_work_from_db(text:str=None):
     if not text:
         cur.execute('select * from work')
         return cur.fetchall()
-    cur.execute('select * from work where lower(name) like ?', ('%'+ text.lower()+'%',))
+    cur.execute('select * from work where lower(name) like ? or lower(name) like ? order by name', ('%'+ text.lower()+'%',text.lower()+'%'))
     return cur.fetchall()
 
 def show(fetchall):

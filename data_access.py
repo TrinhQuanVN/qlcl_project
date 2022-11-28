@@ -108,7 +108,7 @@ class qlcl_db(data_access):
     def create_database(self):
         try:
             self.execute("""CREATE TABLE IF NOT EXISTS work (
-                            id text PRIMARY KEY,
+                            id INTEGER PRIMARY KEY,
                             norm_id text,
                             name text,
                             unit text,
@@ -131,7 +131,12 @@ class qlcl_db(data_access):
                             id text PRIMARY KEY,
                             name text,
                             day datetime
-                        )""")                        
+                        )""")
+            # self.execute("""CREATE TABLE IF NOT EXISTS nktc_work (
+            #                 id INTEGER PRIMARY KEY,
+            #                 day datetime,
+            #                 work_id INTEGER
+            #             )""")                         
             return 1
         except Error:
             print(f'Error {self.__class__.__name__}.create_database: ',Error)
