@@ -140,6 +140,7 @@ class layout(Enum):
                         expand_x=True, expand_y= True,
                         select_mode= sg.TABLE_SELECT_MODE_EXTENDED,
                         enable_events=True,
+                        justification='left',
                         font=font11)]
     
     work_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -153,7 +154,9 @@ class layout(Enum):
                         select_mode=sg.TABLE_SELECT_MODE_EXTENDED,
                         expand_x=True, expand_y= True,
                         enable_events=True,
-                        font=font11)]    
+                        font=font11,
+                        justification='left',
+                        vertical_scroll_only=False)]    
 
     lmtn_tree_element = [sg.Tree(data=sg.TreeData(),
                         headings=['DateNT','DateYC','Name','SLTM','SLM','KTM','YC'],
@@ -162,10 +165,10 @@ class layout(Enum):
                         col0_width= 6,
                         col_widths= [6,6,30,6,6,6,6],
                         auto_size_columns=False,
-                        justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
                         enable_events=True,
+                        justification='left',
                         font=font11)]
     
     ntvl_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -175,10 +178,10 @@ class layout(Enum):
                         col0_width=2,
                         col_widths=[4,4,50],
                         auto_size_columns=False,
-                        justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
                         enable_events=True,
+                        justification='left',
                         font=font11)]
 
     ntcv_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -188,10 +191,10 @@ class layout(Enum):
                         col0_width=2,
                         col_widths=[4,4,50],
                         auto_size_columns=False,
-                        justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
                         enable_events=True,
+                        justification='left',
                         font=font11)]
 
     nktc_tree_element = [sg.Tree(data=sg.TreeData(),
@@ -201,10 +204,10 @@ class layout(Enum):
                         col0_width=15,
                         col_widths=[15,15,15,15],
                         auto_size_columns=False,
-                        justification='l',
                         select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                         expand_x=True, expand_y= True,
                         enable_events=True,
+                        justification='left',
                         font=('Any',11))]
    
     norm_tab_layout = [
@@ -658,8 +661,9 @@ class QLCL:
         try:
             df = pd.DataFrame(self._summary_nktc(),columns=['day','worker_amount','machine_name','work','lmtn','ntcv','ntvl'])
             df.fillna("",inplace=True)
-            df.to_excel('nktc.xlsx',index=None)
-            print('exported successfully')  
+            with pd.ExcelWriter(r'nktc.xlsx', engine='xlsxwriter') as writer:
+                df.to_excel(writer,'nktc',index=None)
+                print('exported successfully')  
         except PermissionError:
             sg.popup(f'Please close nktc file!!. Path: {path}')    
 
